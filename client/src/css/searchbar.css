@@ -1,0 +1,46 @@
+.dashboard__searchbar {
+    position: relative;
+}
+
+.dashboard__searchbar input {
+    width: 23px;
+    height: 24px;
+    border: 0.5px solid #f0f2f5;
+    padding: 0px 10px 0px 10px;
+    border-radius: 50px;
+    outline: none;
+    color: #1c3f95;
+    font-weight: 300;
+    font-size: 15px;
+    transition: all 0.5s linear;
+}
+
+.dashboard__searchbar button {
+    position: absolute;
+    top: 0;
+    right: -1px;
+    background-color: #ffffff;
+    color: #1c3f95;
+    width: 24px;
+    height: 24px;
+    border-radius: 50px;
+    transition: all 0.5s linear;
+    border: none;
+}
+
+.dashboard__searchbar .dashboard__search--invert {
+    color: #ffffff;
+    background-color: #1c3f95;
+    transition: all 0.2s linear;
+}
+
+.dashboard__searchbar .fas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dashboard__searchbar .dashboard__search--expand {
+    width: 250px;
+}

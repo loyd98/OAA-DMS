@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>OAA: Donor Management System</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+    <link rel="stylesheet" href="../build/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+</head>
+<body class="flex-horizontal pad-15" style="justify-content: space-evenly;">
+
+<div class="popup flex-horizontal hidden">
+    Test
+</div>
+
+<nav class="nav flex-vertical">
+    <div class="nav__container flex-horizontal">
+        <div class="nav__logo"><p>OAA<br>DMS</p></div>
+        <button class="nav__menubtn" id="navmenubtn"><i class="white fas fa-bars fa-lg"></i></button>
+    </div>
+    <div class="nav__btns flex-vertical">
+        <button class="nav__btn flex-horizontal active-yellow" id="homebtn"><i
+                class="fas fa-home mr-10"></i><span>Home</span></button>
+        <button class="nav__btn flex-horizontal " id="historybtn"><i
+                class="fas fa-history mr-10"></i><span>History</span></button>
+        <button class="nav__btn flex-horizontal" id="analyticsbtn"><i class="fas fa-chart-line mr-10"></i><span>Analytics</span>
+        </button>
+        <button class="nav__btn flex-horizontal" id="settingsbtn"><i
+                class="fas fa-sliders-h mr-10"></i><span>Settings</span></button>
+    </div>
+</nav>
+
+<section class="dashboard">
+
+    <div class="dashboard__bar1 flex-horizontal">
+        <div class="dashboard__searchbar">
+            <input type="text" placeholder="Search">
+            <button id="searchbtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="dashboard__user blue flex-horizontal">
+            <i class="fas fa-user-circle"></i>
+            <h1>Loyd</h1>
+        </div>
+    </div>
+
+    <div class="dashboard__bar2 flex-horizontal">
+        <button class="dashboard__menubtn flex-horizontal" id="coldropdownbtn"><h1>Donors</h1><i
+                class="fas fa-list-ul fa-lg"></i></i></button>
+        <div class="dashboard__pagecontainer flex-horizontal ">
+            <span class="m-3" id="totalModels">Total of Error entries</span>
+            <div class="dashboard__separator "></div>
+            <button class="btn-white m-3" id="leftPageBtn"><i class="fas fa-arrow-left"></i></button>
+            <div class="btn-white m-3"><span id="pageNum">1</span></div>
+            <button class="btn-white m-3" id="rightPageBtn"><i class="fas fa-arrow-right"></i></button>
+            <span class="m-3" id="totalPages">of Error pages</span>
+        </div>
+    </div>
+
+    <div>
+
+        <div class="table__container" style="justify-content: center;">
+            <table>
+                <thead class="dashboard__bar3 flex-horizontal">
+                    <tr>
+                        <td>
+                            <div class="dashboard__import_export flex-horizontal">
+                                <button class="btn-import" id="btn--import"><i class="fas fa-file-import"></i></button>
+                                <button class="btn-export" id=btn--export><i class="fas fa-file-download"></i></button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="dashboard__sort container flex-horizontal">
+                                <div class="dashboard__sortbtn flex-horizontal">
+                                    <span>Sort by:</span>
+                                    <span id="sortBy">Error</span>
+                                    <button class="flex-vertical" id="btn--sort"><i class="fas fa-sort-down"></i></button>
+                                </div>
+                                <button class="btn--normal" id="btn--asc"><i class="fas fa-long-arrow-alt-up"></i></button>
+                                <button class="btn--normal" id="btn--desc"> <i class="fas fa-long-arrow-alt-down"></i></button>
+                            </div>
+                        </td>
+                    </tr>        
+               </thead >
+                <thead id="header">
+                     <tr></tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+            
+        </div>
+    </div>
+
+    
+    
+
+    <div></div>
+</section>
+
+
+
+
+
+<script async type="module" src="../build/js/scripts.js"></script>
+</body>
+</html>

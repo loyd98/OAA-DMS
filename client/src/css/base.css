@@ -1,0 +1,125 @@
+/* ///////////////////////////////// */
+/* ///////////// Reset ///////////// */
+/* ///////////////////////////////// */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default padding */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  background-color: #f0f2f5;
+  color: #192a3e;
+}
+
+main {
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.flex-horizontal {
+  display: flex;
+  align-items: center;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.white {
+  color: #ffffff !important;
+}
+
+.blue {
+  color: #1c3f95 !important;
+}
+
+.grey {
+  color: #f0f2f5 !important;
+}
+
+.black {
+  color: #192a3e !important;
+}
+
+.green {
+  color: #2ed47a !important;
+}
+
+.red {
+  color: #f7685b !important;
+}
+
+.pad-10 {
+  padding: 10px;
+}
+
+.pad-15 {
+  padding: 15px;
+}
+
+.active-white {
+  background-color: #ffffff !important;
+  color: #192a3e !important;
+}
+
+.active-blue {
+  background-color: #1c3f95 !important;
+  color: #ffffff !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.m-3 {
+  margin: 3px;
+}
+
+.btn-white {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 0;
+  text-align: center;
+}

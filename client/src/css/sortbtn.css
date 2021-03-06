@@ -1,0 +1,47 @@
+.dashboard__sortbtn {
+  margin: 0 10px;
+  height: 30px;
+  padding-left: 15px;
+  background-color: #f0f2f5;
+  border: 0;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.dashboard__sortbtn span:first-child {
+  color: #192a3e;
+  font-weight: 500;
+  margin-right: 8px;
+  display: block;
+  font-weight: 14px;
+}
+
+.dashboard__sortbtn #sortby {
+  font-weight: 500;
+  margin-right: 10px !important;
+  display: block;
+}
+
+.dashboard__sortbtn button {
+  background-color: #1c3f95;
+  color: #ffffff;
+  border: 0;
+  width: 20px;
+  height: 30px;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-left: 10px;
+}
+
+.dashboard__sortbtn button i {
+  margin-top: 5px;
+}
+
+.btn--normal {
+  width: 30px;
+  height: 30px;
+  background-color: #f0f2f5;
+  margin-right: 5px;
+  border: 0;
+  border-radius: 4px;
+}
