@@ -9,5 +9,5 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
     Donor findByAccountName(String accountName);
     List<Donor> findAllByOrderByIdAsc();
     List<Donor> findAllByOrderByAccountNameAsc();
-    List<Donor> findAllByOOrderByAccountNameDesc(); // Todo
+    List<Donor> findAllByOrderByAccountNameDesc(); // Todo
 }
