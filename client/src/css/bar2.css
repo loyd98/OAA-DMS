@@ -3,6 +3,8 @@
   width: 98%;
   justify-content: space-between;
   margin-left: 2%;
+  position: absolute;
+  top: 50px;
 }
 
 .dashboard__pagecontainer {

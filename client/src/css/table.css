@@ -1,4 +1,5 @@
 .table__container {
+  margin-top: 30px;
   margin-left: 2%;
   height: 100vh;
   transition: all 0.2s linear;
@@ -64,19 +65,18 @@ tfoot {
 }
 
 .table__action--width {
-  width: 150px;
+  width: 100px;
 }
 
 .table__actionbtns div {
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .table__btn {
-  border-radius: 5px;
-  height: 35px;
+  height: 40px;
+  width: 40px;
   border: 0;
   padding: 0 7px;
-}
-.table__btn i {
-  margin-right: 5px;
+  flex-direction: column;
+  justify-content: center;
 }

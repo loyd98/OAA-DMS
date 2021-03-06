@@ -46,8 +46,7 @@
     </div>
 
     <div class="dashboard__bar2 flex-horizontal">
-        <button class="dashboard__menubtn flex-horizontal" id="coldropdownbtn"><h1>Donors</h1><i
-                class="fas fa-list-ul fa-lg"></i></i></button>
+        <div></div>
         <div class="dashboard__pagecontainer flex-horizontal ">
             <span class="m-3" id="totalModels">Total of Error entries</span>
             <div class="dashboard__separator "></div>
@@ -62,6 +61,25 @@
 
         <div class="table__container" style="justify-content: center;">
             <table>
+                <thead id="dashboard__table_selection">
+                    <tr class="dashboard__selection_row">
+                        <td>
+                            <div class="flex-horizontal">
+                                <button class="dashboard__selection_btn flex-vertical dashboard__selection_btn--active"><h1>Donors</h1></button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class=" flex-horizontal">
+                                <button class="dashboard__selection_btn flex-vertical"><h1>Scholarships</h1></button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class=" flex-horizontal">
+                                <button class="dashboard__selection_btn flex-vertical"><h1>MOAs</h1></button>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
                 <thead class="dashboard__bar3 flex-horizontal">
                     <tr>
                         <td>

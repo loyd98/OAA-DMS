@@ -50,8 +50,8 @@ function displayRows(result, widths, wrapper) {
       "beforeend",
       `<tr>${content}${`<td class="table__action--width table__actionbtns">
       <div class=" flex-horizontal">
-          <button class="table__view table__btn flex-horizontal" id="table__view" data-id="${data["id"]}"><i class="fas fa-table" id="table__view--icon" data-id="${data["id"]}"></i>View</button>
-          <button class="table__delete table__btn flex-horizontal" id="table_delete" data-id="${data["id"]}""><i class="far fa-trash-alt" data-id="${data["id"]}"></i>Delete</button>
+          <button class="btn-import table__btn flex-horizontal" id="table__view" data-id="${data["id"]}"><i class="fas fa-table" id="table__view--icon" data-id="${data["id"]}"></i></button>
+          <button class="btn-export table__btn flex-horizontal" id="table_delete" data-id="${data["id"]}""><i class="far fa-trash-alt" data-id="${data["id"]}"></i></button>
       </div>
   </td>`}</tr>`
     );
@@ -91,7 +91,7 @@ function getRequiredPages(viewableHeight) {
 }
 
 function getViewableHeight() {
-  return window.innerHeight - 340;
+  return window.innerHeight - 310;
 }
 
 function displayColumnsSelection(columns, otherColumns) {

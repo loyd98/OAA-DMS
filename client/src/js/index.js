@@ -6,11 +6,11 @@ const url = "http://127.0.0.1:8080";
 
 const columns = [
   "id",
+  "salutation",
   "accountName",
   "accountNumber",
   "cellphoneNumber",
   "emailAddress",
-  "salutation",
 ];
 
 const otherColumns = [
