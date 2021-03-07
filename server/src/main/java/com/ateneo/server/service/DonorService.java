@@ -24,8 +24,12 @@ public class DonorService {
     }
 
     //GET
-    public List<Donor> getDonors() {
+    public List<Donor> getDonorsAsc() {
         return donorRepository.findAllByOrderByIdAsc();
+    }
+
+    public List<Donor> getDonorsDesc() {
+        return donorRepository.findAllByOrderByIdDesc();
     }
 
     public Donor getDonorById(Long id) {
@@ -75,6 +79,7 @@ public class DonorService {
         return donorRepository.findAllByOrderByAccountNameAsc();
     }
 
+    public List<Donor> sortByNameDesc() { return donorRepository.findAllByOrderByAccountNameDesc();}
 
 
 }

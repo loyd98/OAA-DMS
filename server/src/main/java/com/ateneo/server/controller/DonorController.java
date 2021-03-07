@@ -25,13 +25,23 @@ public class DonorController {
     }
 
     @GetMapping("/donors")
-    public List<Donor> findAllDonors() {
-        return donorService.getDonors();
+    public List<Donor> findAllDonorsAsc() {
+        return donorService.getDonorsAsc();
     }
 
-    @GetMapping("/donors/byname")
-    public List<Donor> findAllDonorsByName() {
+    @GetMapping("/donors/desc")
+    public List<Donor> findAllDonorsDesc() {
+        return donorService.getDonorsDesc();
+    }
+
+    @GetMapping("/donors/byname/asc")
+    public List<Donor> findAllDonorsByNameAsc() {
         return donorService.sortByNameAsc();
+    }
+
+    @GetMapping("/donors/byname/desc")
+    public List<Donor> findAllDonorsByNameDesc() {
+        return donorService.sortByNameDesc();
     }
 
     @GetMapping("/donor/{id}")
