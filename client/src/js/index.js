@@ -32,4 +32,34 @@ const otherColumns = [
   "birthDate",
 ];
 
-let currentSortItem;
+// View Controller
+
+function render(currentView, sortedAt, asc) {
+  if (currentView === "donors") {
+    if (sortedAt === "#") {
+      if (asc === true) {
+        getDonorsAsc();
+      } else {
+        getDonorsDesc();
+      }
+    }
+
+    if (sortedAt === "accountName") {
+      if (asc === true) {
+        getDonorsSortedByNameAsc();
+      } else {
+        getDonorsSortedByNameDesc();
+      }
+    }
+  }
+}
+
+const sortMenuOptions = ["#", "accountName"];
+
+let currentView = "donors";
+let currentlySortedAt = "#";
+let isAsc = true;
+
+window.addEventListener("load", () => {
+  render(currentView, currentlySortedAt, isAsc);
+});

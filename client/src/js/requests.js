@@ -187,16 +187,8 @@ function initView(result) {
   });
 }
 
-const getDonors = () => {
-  currentSortItem = "#";
-  sortBySpan.textContent = currentSortItem;
-  axios
-    .get(`${url}/donors`)
-    .then((response) => response.data)
-    .then((result) => initView(result))
-    .catch((error) => console.log(error));
-};
-
-window.addEventListener("load", () => {
-  getDonors();
-});
+function setView(currentView, sortedAt) {
+  currentView = currentView;
+  currentlySortedAt = sortedAt;
+  sortBySpan.textContent = currentlySortedAt;
+}

@@ -11,7 +11,7 @@ module.exports = function (grunt) {
           "src/js/searchbar.js",
           "src/js/pagebtn.js",
           "src/js/popup.js",
-          "src/js/table.js",
+          "src/js/sortmodal.js",
           "src/js/document.js",
           "src/js/sortrequests.js",
         ],

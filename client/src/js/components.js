@@ -33,6 +33,11 @@ const currentPageNumEL = document.querySelector("#pageNum");
 const selectViewBtn = document.querySelector("#selectViewBtn");
 const selectViewMenu = document.querySelector(".dahsboard__select-view-menu");
 const sortBySpan = document.querySelector("#sortBy");
+const sortByMenu = document.querySelector(".dashboard__sortbtn");
+const sortByBtn = document.querySelector(".dashboard__sortbtn button");
+const sortByModal = document.querySelector(".dahsboard__sortbtn--modal");
+const ascBtn = document.querySelector("#btn--asc");
+const descBtn = document.querySelector("#btn--desc");
 
 let isCollapsed = false;
 let activeButton = document.querySelector("#homebtn");

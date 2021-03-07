@@ -45,3 +45,28 @@
   border: 0;
   border-radius: 4px;
 }
+
+.dahsboard__sortbtn--modal {
+  border-radius: 8px;
+  margin: 5px 0;
+  padding: 15px;
+  background-color: #f0f2f5;
+  position: fixed;
+  align-items: flex-start;
+}
+
+.dahsboard__sortbtn--modal button {
+  margin: 5px 0;
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+  text-align: left;
+}
+
+.dahsboard__sortbtn--modal button:hover {
+  width: 100%;
+  background-color: #1c3f95;
+  color: #ffffff;
+  text-align: left;
+  border: 0;
+}

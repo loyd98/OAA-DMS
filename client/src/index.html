@@ -48,12 +48,12 @@
     <div class="dashboard__bar2 flex-horizontal">
         <div></div>
         <div class="dashboard__pagecontainer flex-horizontal ">
-            <span class="m-3" id="totalModels">Total of Error entries</span>
+            <span class="m-3" id="totalModels">Total of Loading entries</span>
             <div class="dashboard__separator "></div>
             <button class="btn-white m-3" id="leftPageBtn"><i class="fas fa-arrow-left"></i></button>
             <div class="btn-white m-3"><span id="pageNum">1</span></div>
             <button class="btn-white m-3" id="rightPageBtn"><i class="fas fa-arrow-right"></i></button>
-            <span class="m-3" id="totalPages">of Error pages</span>
+            <span class="m-3" id="totalPages">of Loading pages</span>
         </div>
     </div>
 
@@ -92,8 +92,11 @@
                             <div class="dashboard__sort container flex-horizontal">
                                 <div class="dashboard__sortbtn flex-horizontal">
                                     <span>Sort by:</span>
-                                    <span id="sortBy">Error</span>
+                                    <span id="sortBy">Loading</span>
                                     <button class="flex-vertical" id="btn--sort"><i class="fas fa-sort-down"></i></button>
+                                </div>
+                                <div class="dahsboard__sortbtn--modal flex-vertical hidden">
+
                                 </div>
                                 <button class="btn--normal" id="btn--asc"><i class="fas fa-long-arrow-alt-up"></i></button>
                                 <button class="btn--normal" id="btn--desc"> <i class="fas fa-long-arrow-alt-down"></i></button>
