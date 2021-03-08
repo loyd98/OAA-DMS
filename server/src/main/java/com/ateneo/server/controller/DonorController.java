@@ -2,7 +2,6 @@ package com.ateneo.server.controller;
 
 import com.ateneo.server.domain.Donor;
 import com.ateneo.server.service.DonorService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
