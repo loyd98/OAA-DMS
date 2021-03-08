@@ -1,9 +1,9 @@
-form {
-  padding: 30px;
+.login form {
+  /* padding: 30px; */
 }
 
-input[type="text"],
-input[type="password"] {
+.login input[type="text"],
+.login input[type="password"] {
   width: 100%;
   height: 50px;
   padding: 12px 20px;
@@ -15,13 +15,14 @@ input[type="password"] {
 
 .login__container {
   width: 400px;
-  height: 300px;
+  height: 350px;
   border-radius: 20px;
   background-color: #ffffff;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
+  padding: 30px;
 }
 
 .login__container button {
@@ -34,4 +35,10 @@ input[type="password"] {
   font-weight: 900;
   font-size: 20px;
   margin: 20px 0;
+}
+
+.login__container a {
+  cursor: pointer;
+  margin: 8px 0;
+  display: block;
 }

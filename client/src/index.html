@@ -15,7 +15,35 @@
     Test
 </div>
 
-<nav class="nav flex-vertical">
+<div class="register hidden">
+    <div class="register__container">
+        <h1 class="blue">Register</h1>
+        <form>
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Email">
+            <input type="password" placeholder="Confirm Email">
+            <input type="password" placeholder="Password">
+            <input type="password" placeholder="Confirm Password">
+            <button>Submit</button>
+            <a class="blue" id="registerReturnBtn">Return to log-in screen</a>
+        </form>
+    </div>
+</div>
+
+<div class="login">
+    <div class="login__container">
+        <h1 class="blue">Log-in</h1>
+        <form>
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <button>Proceed</button>
+            <a class="blue" id="createNewUserbtn">Create new User</a>
+            <a class="blue">Forgot Password?</a>
+        </form>
+    </div>
+</div>
+
+<nav class="nav flex-vertical hidden">
     <div class="nav__container flex-horizontal">
         <div class="nav__logo"><p>OAA<br>DMS</p></div>
         <button class="nav__menubtn" id="navmenubtn"><i class="white fas fa-bars fa-lg"></i></button>
@@ -32,7 +60,7 @@
     </div>
 </nav>
 
-<section class="dashboard">
+<section class="dashboard hidden">
 
     <div class="dashboard__bar1 flex-horizontal">
         <div class="dashboard__searchbar">
