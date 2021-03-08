@@ -33,10 +33,11 @@
 <div class="login">
     <div class="login__container">
         <h1 class="blue">Log-in</h1>
-        <form>
-            <input type="text" placeholder="Username">
-            <input type="password" placeholder="Password">
-            <button>Proceed</button>
+        <form id="login__form">
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button id="login__proceed--btn">Proceed</button>
+            <div class="red flex-vertical hidden" id="login__error">Invalid username or password.</div>
             <a class="blue" id="createNewUserbtn">Create new User</a>
             <a class="blue">Forgot Password?</a>
         </form>

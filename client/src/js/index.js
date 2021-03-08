@@ -59,7 +59,3 @@ const sortMenuOptions = ["#", "accountName"];
 let currentView = "donors";
 let currentlySortedAt = "#";
 let isAsc = true;
-
-window.addEventListener("load", () => {
-  render(currentView, currentlySortedAt, isAsc);
-});

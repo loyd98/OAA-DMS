@@ -56,7 +56,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
         try {
             UserDetails user = customUserDetailsService.loadUserByUsername(authRequest.getUsername());

@@ -38,8 +38,14 @@ const sortByBtn = document.querySelector(".dashboard__sortbtn button");
 const sortByModal = document.querySelector(".dahsboard__sortbtn--modal");
 const ascBtn = document.querySelector("#btn--asc");
 const descBtn = document.querySelector("#btn--desc");
+
 const loginPage = document.querySelector(".login");
 const createNewUserBtn = document.querySelector("#createNewUserbtn");
+const proceedBtn = document.querySelector("#login__proceed--btn");
+
+const loginForm = document.querySelector("#login__form");
+const loginError = document.querySelector("#login__error");
+
 const registerPage = document.querySelector(".register");
 const registerReturnBtn = document.querySelector("#registerReturnBtn");
 
