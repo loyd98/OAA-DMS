@@ -1,0 +1,110 @@
+.view {
+  width: 90%;
+  margin-left: 10px;
+  height: 95vh;
+  margin-right: 15px;
+  position: relative;
+  padding: 20px;
+}
+
+.view__container {
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.view__left {
+  width: 49%;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.view__right {
+  width: 49%;
+  height: 100%;
+}
+
+.view__details {
+  background-color: #fff;
+  width: 100%;
+  height: 60%;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.view__scholarships {
+  background-color: #fff;
+  width: 100%;
+  height: 30%;
+  border-radius: 10px;
+}
+
+.view__donor__title {
+  width: 100%;
+  height: 5%;
+}
+
+.view__scholarships__title {
+  width: 100%;
+  height: 3%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.view__donor__title span {
+  font-size: 30px;
+  font-weight: 700;
+  color: #192a3e;
+}
+
+.view__donor__title span:nth-child(3) {
+  color: #1c3f95;
+}
+
+.view__scholarships__title span {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1c3f95;
+}
+
+.view__donations {
+  background-color: #fff;
+  width: 100%;
+  height: 94.5%;
+  border-radius: 10px;
+}
+
+.view__donations__title {
+  height: 5.5%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.view__donations__title span {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1c3f95;
+}
+
+.view__input {
+  height: 40px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #1c3f95;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.view__input__container {
+  width: 100%;
+  align-items: flex-start;
+  margin: 10px;
+}
+
+.height--100 {
+  height: 100px;
+}

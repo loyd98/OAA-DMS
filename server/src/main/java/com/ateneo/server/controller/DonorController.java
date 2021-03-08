@@ -23,7 +23,7 @@ public class DonorController {
         return  donorService.saveDonors(donors);
     }
 
-    @GetMapping("/donors")
+    @GetMapping("/donors/asc")
     public List<Donor> findAllDonorsAsc() {
         return donorService.getDonorsAsc();
     }
@@ -43,7 +43,7 @@ public class DonorController {
         return donorService.sortByNameDesc();
     }
 
-    @GetMapping("/donor/{id}")
+    @GetMapping("/donor/id/{id}")
     public Donor findDonorById(@PathVariable  Long id) {
         return donorService.getDonorById(id);
     }

@@ -3,6 +3,7 @@ document.addEventListener("click", (e) => {
     (e.target && e.target.id == "table__view") ||
     (e.target && e.target.id == "table__view--icon")
   ) {
-    console.log(e.target.dataset.id);
+    const id = e.target.dataset.id;
+    getDonorById(id);
   }
 });
