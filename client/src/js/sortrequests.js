@@ -14,9 +14,9 @@ const getDonorsSortedByNameAsc = () => {
 };
 
 const getDonorsSortedByNameDesc = () => {
-  setView("donors", "accountName", config);
+  setView("donors", "accountName");
   axios
-    .get(`${url}/donors/byname/desc`)
+    .get(`${url}/donors/byname/desc`, config)
     .then((response) => response.data)
     .then((result) => initView(result))
     .catch((error) => console.log(error));
@@ -32,9 +32,9 @@ const getDonorsAsc = () => {
 };
 
 const getDonorsDesc = () => {
-  setView("donors", "#", config);
+  setView("donors", "#");
   axios
-    .get(`${url}/donors/desc`)
+    .get(`${url}/donors/desc`, config)
     .then((response) => response.data)
     .then((result) => initView(result))
     .catch((error) => console.log(error));

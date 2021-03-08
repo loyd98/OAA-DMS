@@ -15,6 +15,7 @@ module.exports = function (grunt) {
           "src/js/document.js",
           "src/js/sortrequests.js",
           "src/js/login.js",
+          "src/js/sortbuttons.js",
         ],
         dest: "build/js/scripts.js",
       },
