@@ -81,5 +81,13 @@ public class DonorService {
 
     public List<Donor> sortByNameDesc() { return donorRepository.findAllByOrderByAccountNameDesc();}
 
+    // Search
+    public List<Donor> search(String keyword) {
+        if (keyword != null) {
+            return donorRepository.search(keyword);
+        }
+
+        return donorRepository.findAll();
+    }
 
 }

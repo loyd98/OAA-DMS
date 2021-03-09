@@ -1,88 +1,118 @@
-const donors = [
-  {
-    createdBy: null,
-    creationDate: null,
-    lastModifiedBy: null,
-    lastModifiedDate: null,
-    id: 3,
-    accountNumber: "59-9844462",
-    accountName: "Merci Dunsmuir",
-    companyTIN: 1234556,
-    companyAddress: "624 Moland Parkway",
-    address1: "El Paso",
-    address2: "El Paso",
-    address3: "El Paso",
-    address4: "Texas",
-    address5: "Texas88558",
-    phone1: "915-174-7474",
-    phone2: "816-912-1922",
-    faxNumber: "713-582-5831",
-    cellphoneNumber: "540-555-4392",
-    emailAddress: "mdunsmuir0@devhub.com",
-    salutation: "Mr.",
-    birthDate: "09/20/2019",
-    notes: null,
-  },
-  {
-    createdBy: null,
-    creationDate: null,
-    lastModifiedBy: null,
-    lastModifiedDate: null,
-    id: 4,
-    accountNumber: "15-8663613",
-    accountName: "Britt Sebley",
-    companyTIN: null,
-    companyAddress: "9296 Prairieview Trail",
-    address1: "Roanoke",
-    address2: "Roanoke",
-    address3: "Roanoke",
-    address4: "Virginia",
-    address5: "Virginia24034",
-    phone1: "540-800-0769",
-    phone2: "646-468-4595",
-    faxNumber: "323-249-7179",
-    cellphoneNumber: "518-198-0666",
-    emailAddress: "bsebley1@ted.com",
-    salutation: "Mr.",
-    birthDate: "11/17/2019",
-    notes: null,
-  },
-  {
-    createdBy: null,
-    creationDate: null,
-    lastModifiedBy: null,
-    lastModifiedDate: null,
-    id: 5,
-    accountNumber: "43-7576607",
-    accountName: "Antonio Meindl",
-    companyTIN: null,
-    companyAddress: "7210 Grayhawk Point",
-    address1: "Albuquerque",
-    address2: "Albuquerque",
-    address3: "Albuquerque",
-    address4: "New Mexico",
-    address5: "New Mexico87140",
-    phone1: "505-749-3211",
-    phone2: "772-245-4495",
-    faxNumber: "910-877-9762",
-    cellphoneNumber: "212-873-6025",
-    emailAddress: "ameindl2@phoca.cz",
-    salutation: "Mr.",
-    birthDate: "03/09/2020",
-    notes: null,
-  },
-];
+//////////////////////////////////////////////////////////////////
+// View Page
+//////////////////////////////////////////////////////////////////
 
-const viewDetails = document.querySelectorAll(
-  ".view__details .view__input__container"
-);
+let isEditing = false;
 
-const donor = donors[0];
+viewEditBtn.addEventListener("click", () => {
+  if (!isEditing) {
+    isEditing = true;
 
-viewDetails.forEach((view) => {
-  const span = view.children[0];
-  const input = view.children[1];
-  const id = input.dataset.id;
-  span.textContent = id;
-  input.value = donor[id];
+    // Display the cancel button
+    document
+      .querySelector(".view__cancel__container")
+      .classList.remove("hidden");
+
+    // Scroll to the top
+    document.querySelector(".view__details").scroll(0, 0);
+
+    // Add borders to the inouts
+    document
+      .querySelectorAll(".view__input")
+      .forEach((input) => input.classList.add("view__input--edit"));
+
+    // Change the edit button into a submit button
+    viewEditBtn.style.backgroundColor = "#fa983a";
+    viewEditBtn.textContent = "Submit";
+
+    // Make the inputs editablee except for the stated fields
+    document.querySelectorAll(".view__details input").forEach((input) => {
+      const id = input.dataset.id;
+      if (
+        id !== "createdBy" &&
+        id !== "lastModifiedBy" &&
+        id !== "creationDate" &&
+        id !== "lastModifiedDate"
+      ) {
+        input.disabled = false;
+      }
+    });
+  } else {
+    console.log("Submit");
+    isEditing = false;
+
+    // Hide the cancel button
+    document.querySelector(".view__cancel__container").classList.add("hidden");
+
+    // Scroll to the top
+    document.querySelector(".view__details").scroll(0, 0);
+
+    // Change the submit button back into an edit button
+    viewEditBtn.style.backgroundColor = "#1c3f95";
+    viewEditBtn.textContent = "Edit";
+
+    const data = {};
+    // Get all inputs and compile into an object
+    // Disable all inputs
+    document.querySelectorAll(".view__details input").forEach((input) => {
+      const id = input.dataset.id;
+
+      if (
+        id !== "createdBy" &&
+        id !== "lastModifiedBy" &&
+        id !== "creationDate" &&
+        id !== "lastModifiedDate"
+      ) {
+        data[input.dataset.id] = input.value;
+      }
+
+      input.disabled = true;
+    });
+
+    console.log(data);
+
+    // Call API
+    // Add to History
+    // Rerender
+  }
+});
+
+viewCancelBtn.addEventListener("click", () => {
+  isEditing = false;
+
+  // Hide the cancel button
+  document.querySelector(".view__cancel__container").classList.add("hidden");
+
+  // Scroll to the top
+  document.querySelector(".view__details").scroll(0, 0);
+
+  // Change the text and color of the Edit button
+  viewEditBtn.style.backgroundColor = "#1c3f95";
+  viewEditBtn.textContent = "Edit";
+
+  // Remove borders from inputs
+  document
+    .querySelectorAll(".view__input")
+    .forEach((input) => input.classList.remove("view__input--edit"));
+
+  // Disable inputs
+  document.querySelectorAll(".view__details input").forEach((input) => {
+    input.disabled = true;
+  });
+});
+
+viewCancelBtn.addEventListener("click", () => {
+  if (isEditing) {
+    // todo
+    // prompt(
+    //   "Changes have not been finalized. Either submit to make new changes or cancel to retain old data."
+    // );
+  } else {
+    document.querySelectorAll(".view__details input").forEach((input) => {
+      input.disabled = true;
+    });
+    viewPage.classList.toggle("hidden");
+    dashboard.classList.remove("hidden");
+    render(currentView, currentlySortedAt, isAsc);
+  }
 });

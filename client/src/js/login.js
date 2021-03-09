@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////
+// Log-in Page
+//////////////////////////////////////////////////////////////////
+
 createNewUserBtn.addEventListener("click", () => {
   loginPage.classList.add("hidden");
   registerPage.classList.remove("hidden");
@@ -42,3 +46,11 @@ proceedBtn.addEventListener("click", (e) => {
       });
   }
 });
+
+// Edit
+// window.addEventListener("load", () => {
+//   setTimeout(() => {
+//     document.querySelector(".loader").classList.toggle("hidden");
+//   }, 3000);
+//   document.querySelector(".loader").classList.toggle("hidden");
+// });

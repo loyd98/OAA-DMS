@@ -49,5 +49,15 @@ const loginError = document.querySelector("#login__error");
 const registerPage = document.querySelector(".register");
 const registerReturnBtn = document.querySelector("#registerReturnBtn");
 
+const viewPage = document.querySelector(".view");
+const viewDetails = document.querySelectorAll(
+  ".view__details .view__input__container"
+);
+const viewEditBtn = document.querySelector(".view__edit__btn");
+const viewCancelBtn = document.querySelector(".view__back__btn");
+
+const dashboardAddBtn = document.querySelector("#dashboard__addbtn");
+const addPage = document.querySelector(".add");
+
 let isCollapsed = false;
 let activeButton = document.querySelector("#homebtn");

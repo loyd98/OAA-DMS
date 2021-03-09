@@ -125,6 +125,7 @@ function clear() {
 }
 
 function initView(result) {
+  window.sessionStorage.setItem("path", "/dashboard");
   clear();
   const totalEntries = result.length;
 
@@ -191,4 +192,64 @@ function setView(currentView, sortedAt) {
   currentView = currentView;
   currentlySortedAt = sortedAt;
   sortBySpan.textContent = currentlySortedAt;
+}
+
+function initViewPage(donor) {
+  window.sessionStorage.setItem("path", "/view");
+  dashboard.classList.toggle("hidden");
+  document.querySelector("#view__accountname").textContent = donor.accountName;
+  viewPage.classList.toggle("hidden");
+  viewDetails.forEach((view) => {
+    const span = view.children[0];
+    const input = view.children[1];
+    const id = input.dataset.id;
+    span.textContent = id;
+    if (id === "creationDate" || id === "lastModifiedDate") {
+      const date = new Date(donor[id]);
+      const formattedDate = formatDate(date);
+      input.value = formattedDate;
+    } else {
+      input.value = donor[id];
+    }
+  });
+}
+
+function formatDate(dateVal) {
+  var newDate = new Date(dateVal);
+
+  var sMonth = padValue(newDate.getMonth() + 1);
+  var sDay = padValue(newDate.getDate());
+  var sYear = newDate.getFullYear();
+  var sHour = newDate.getHours();
+  var sMinute = padValue(newDate.getMinutes());
+  var sAMPM = "AM";
+
+  var iHourCheck = parseInt(sHour);
+
+  if (iHourCheck > 12) {
+    sAMPM = "PM";
+    sHour = iHourCheck - 12;
+  } else if (iHourCheck === 0) {
+    sHour = "12";
+  }
+
+  sHour = padValue(sHour);
+
+  return (
+    sMonth +
+    "-" +
+    sDay +
+    "-" +
+    sYear +
+    " " +
+    sHour +
+    ":" +
+    sMinute +
+    " " +
+    sAMPM
+  );
+}
+
+function padValue(value) {
+  return value < 10 ? "0" + value : value;
 }

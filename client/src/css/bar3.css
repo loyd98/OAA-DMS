@@ -12,17 +12,17 @@
 }
 
 .dashboard__selection_btn {
-  background-color: #ffffff;
   border: 0;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   height: 30px;
-  background-color: #1c3f95;
-  color: #ffffff;
+  background-color: #dfe4ea;
+  color: #2f3542;
+  padding: 0 15px;
 }
 
 .dashboard__selection_btn h1 {
-  margin-top: 7px;
+  margin-top: 4px;
 }
 
 #dashboard__table_selection {

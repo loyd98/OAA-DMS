@@ -45,6 +45,15 @@ const getDonorById = (id) => {
   axios
     .get(`${url}/donor/id/${id}`, config)
     .then((response) => response.data)
-    .then((result) => console.log(result))
+    .then((result) => initViewPage(result))
+    .catch((error) => console.log(error));
+};
+
+const searchDonorsByAccountName = (accountName) => {
+  setView("donor", "#");
+  axios
+    .get(`${url}/donor/id/${id}`, config)
+    .then((response) => response.data)
+    .then((result) => initViewPage(result))
     .catch((error) => console.log(error));
 };

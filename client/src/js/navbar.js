@@ -44,7 +44,7 @@ function select(e, activeButton) {
   }
 }
 
-timedCollapse();
+// timedCollapse();
 
 navHomeBtn.classList.add("active-white");
 

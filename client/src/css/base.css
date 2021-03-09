@@ -88,6 +88,10 @@ main {
   color: #f7685b !important;
 }
 
+.orange {
+  color: #fa983a !important;
+}
+
 .pad-10 {
   padding: 10px;
 }
@@ -122,4 +126,17 @@ main {
   border-radius: 5px;
   border: 0;
   text-align: center;
+}
+
+.btn {
+  padding: 0 15px;
+  border: 0;
+  height: 30px;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+.bg--blue {
+  background-color: #1c3f95;
+  color: #fff;
 }

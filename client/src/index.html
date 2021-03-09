@@ -15,6 +15,16 @@
     Test
 </div>
 
+<section class="loader hidden">
+    <div class="loader__container flex-vertical">
+        <img src="./static/images/1200px-Ateneo_de_Manila_University_seal.svg.png" alt="Ateneo de Manila Logo" class="loader__logo">
+        <span>Ateneo de Manila University</span>
+        <span>Office of Admission and Aid</span>
+        <span>Donor Management System</span>
+        <img src="./static/images/giphy.gif" alt="Loading GIF" class="loader__loading">
+    </div>
+</section>
+
 <div class="register hidden">
     <div class="register__container">
         <h1 class="blue">Register</h1>
@@ -31,7 +41,7 @@
 </div>
 
 <div class="login">
-    <div class="login__container hidden">
+    <div class="login__container">
         <h1 class="blue">Log-in</h1>
         <form id="login__form">
             <input type="text" name="username" placeholder="Username">
@@ -44,7 +54,7 @@
     </div>
 </div>
 
-<nav class="nav flex-vertical">
+<nav class="nav flex-vertical hidden">
     <div class="nav__container flex-horizontal">
         <div class="nav__logo"><p>OAA<br>DMS</p></div>
         <button class="nav__menubtn" id="navmenubtn"><i class="white fas fa-bars fa-lg"></i></button>
@@ -110,26 +120,27 @@
                     </tr>
                 </thead>
                 <thead class="dashboard__bar3 flex-horizontal">
-                    <tr>
-                        <td>
+                    <tr class="dashboard__bar3__row flex-horizontal">
+                        <td class=" dashboard__sort container flex-horizontal">
                             <div class="dashboard__import_export flex-horizontal">
                                 <button class="btn-import" id="btn--import"><i class="fas fa-file-import"></i></button>
                                 <button class="btn-export" id=btn--export><i class="fas fa-file-download"></i></button>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="dashboard__sort container flex-horizontal">
+                            </div>  
                                 <div class="dashboard__sortbtn flex-horizontal">
                                     <span>Sort by:</span>
                                     <span id="sortBy">Loading</span>
                                     <button class="flex-vertical" id="btn--sort"><i class="fas fa-sort-down"></i></button>
                                 </div>
                                 <div class="dahsboard__sortbtn--modal flex-vertical hidden">
-
                                 </div>
                                 <button class="btn--normal" id="btn--asc"><i class="fas fa-long-arrow-alt-up"></i></button>
                                 <button class="btn--normal" id="btn--desc"> <i class="fas fa-long-arrow-alt-down"></i></button>
-                            </div>
+                                
+                        </td>
+                        <td>
+                            <button class="btn bg--blue" id="dashboard__addbtn">
+                                <i class="fas fa-plus"></i> Add Donor
+                            </button>
                         </td>
                     </tr>        
                </thead >
@@ -146,10 +157,10 @@
     <div></div>
 </section>
 
-<section class="view">
+<section class="view page hidden">
     <div class="view__container flex-horizontal">
         <div class="view__left flex-vertical">
-            <div class="view__donor__title"><span>Donor</span><span> | </span><span>John Doe</span></div>
+            <div class="view__donor__title"><span>Donor</span><span> | </span><span id="view__accountname">John Doe</span></div>
             <div class="view__details">
                 <div class="view__row flex-horizontal">
                     <div class="view__input__container flex-vertical">
@@ -216,7 +227,7 @@
                 <div class="view__row flex-horizontal">
                     <div class="view__input__container flex-vertical">
                         <span></span>
-                        <input disabled type="text" class="view__input" data-id="addres1">
+                        <input disabled type="text" class="view__input" data-id="address1">
                     </div>
                 </div>
                 <div class="view__row flex-horizontal">
@@ -232,6 +243,7 @@
                     </div>
                 </div>
                 <div class="view__row flex-horizontal">
+                
                     <div class="view__input__container flex-vertical">
                         <span></span>
                         <input disabled type="text" class="view__input" data-id="address4">
@@ -249,13 +261,45 @@
                         <input disabled type="text" class="view__input height--100" data-id="notes">
                     </div>
                 </div>
+                <div class="view__row flex-horizontal">
+                    <div class="view__input__container flex-vertical">
+                        <span></span>
+                        <input disabled type="text" class="view__input" data-id="createdBy">
+                    </div>
+                    <div class="view__input__container flex-vertical">
+                        <span></span>
+                        <input disabled type="text" class="view__input" data-id="creationDate">
+                    </div>
+                </div>
+                <div class="view__row flex-horizontal">
+                    <div class="view__input__container flex-vertical">
+                        <span></span>
+                        <input disabled type="text" class="view__input" data-id="lastModifiedBy">
+                    </div>
+                    <div class="view__input__container flex-vertical">
+                        <span></span>
+                        <input disabled type="text" class="view__input" data-id="lastModifiedDate">
+                    </div>
+                </div>
+                <div class="view__cancel__container hidden">
+                    <button class="view__cancel__btn">Cancel</button>
+                </div>
+                <div class="view__edit__container">
+                    <button class="view__edit__btn">Edit</button>
+                </div>
+                
             </div>
+
             <div class="view__scholarships__title"><span>Scholarships</span></div>
             <div class="view__scholarships"></div>
         </div>
         <div class="view__right">
-            <div class="view__donations__title">
+            <div class="view__donations__title flex-horizontal">
                 <span>Donations</span>
+                <button class="btn bg--blue flex-horizontal view__back__btn">
+                    <i class="fas fa-long-arrow-alt-left"></i>
+                    Back
+                </button>  
             </div>
             <div class="view__donations">
 
@@ -264,7 +308,18 @@
     </div>
 </section>
 
-
+<section class="add page flex-horizontal hidden">
+    <h1 class="add__title">Add Donor</h1>
+    <!-- <button class="add__backbtn">
+        <i class="fas fa-long-arrow-alt-left"></i>
+        Back
+    </button> -->
+    <div class="add__container">
+        <div class="add view__edit__container">
+            <button class="view__edit__btn">Submit</button>
+        </div>
+    </div>
+</section>
 
 
 
