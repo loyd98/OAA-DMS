@@ -54,6 +54,7 @@ public class DonorService {
     //PUT
     public Donor updateDonor(Donor donor) {
         Donor existingDonor = donorRepository.findById(donor.getId()).orElse(null);
+        existingDonor.setDonorName(donor.getDonorName());
         existingDonor.setAccountNumber(donor.getAccountNumber());
         existingDonor.setAccountName(donor.getAccountName());
         existingDonor.setCompanyTIN(donor.getCompanyTIN());
@@ -75,11 +76,19 @@ public class DonorService {
     }
 
     // Sort
-    public List<Donor> sortByNameAsc() {
+    public List<Donor> getAllByAccountNameAsc() {
         return donorRepository.findAllByOrderByAccountNameAsc();
     }
 
-    public List<Donor> sortByNameDesc() { return donorRepository.findAllByOrderByAccountNameDesc();}
+    public List<Donor> getAllByAccountNameDesc() { return donorRepository.findAllByOrderByAccountNameDesc();}
+
+    public List<Donor> getAllByDonorNameAsc() {
+        return donorRepository.findAllByOrderByDonorNameAsc();
+    }
+
+    public List<Donor> getAllByDonorNameDesc() {
+        return donorRepository.findAllByOrderByDonorNameDesc();
+    }
 
     // Search
     public List<Donor> search(String keyword) {

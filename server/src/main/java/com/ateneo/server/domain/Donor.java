@@ -18,6 +18,7 @@ public class Donor extends Auditable{
     @Id
     @GeneratedValue
     private Long id;
+    private String donorName;
     private String accountNumber;
     private String accountName;
     private String companyTIN;

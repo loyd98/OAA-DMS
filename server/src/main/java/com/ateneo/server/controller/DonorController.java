@@ -20,29 +20,39 @@ public class DonorController {
         return  donorService.saveDonor(donor);
     }
 
-    @PostMapping("/donors/add")
+    @PostMapping("/donor/add/many")
     public List<Donor> addDonors(@RequestBody List<Donor> donors) {
         return  donorService.saveDonors(donors);
     }
 
-    @GetMapping("/donors/asc")
+    @GetMapping("/donor/asc")
     public List<Donor> findAllDonorsAsc() {
         return donorService.getDonorsAsc();
     }
 
-    @GetMapping("/donors/desc")
+    @GetMapping("/donor/desc")
     public List<Donor> findAllDonorsDesc() {
         return donorService.getDonorsDesc();
     }
 
-    @GetMapping("/donors/byname/asc")
-    public List<Donor> findAllDonorsByNameAsc() {
-        return donorService.sortByNameAsc();
+    @GetMapping("/donor/account/asc")
+    public List<Donor> sortAllByAccountNameAsc() {
+        return donorService.getAllByAccountNameDesc();
     }
 
-    @GetMapping("/donors/byname/desc")
-    public List<Donor> findAllDonorsByNameDesc() {
-        return donorService.sortByNameDesc();
+    @GetMapping("/donor/account/desc")
+    public List<Donor> sortAllByAccountNameDesc() {
+        return donorService.getAllByDonorNameDesc();
+    }
+
+    @GetMapping("/donor/name/asc")
+    public List<Donor> sortAllByDonorNameAsc() {
+        return donorService.getAllByDonorNameAsc();
+    }
+
+    @GetMapping("/donor/name/desc")
+    public List<Donor> sortAllByDonorNameDesc () {
+        return donorService.getAllByDonorNameDesc();
     }
 
     @GetMapping("/donor/id/{id}")
@@ -55,15 +65,26 @@ public class DonorController {
         return donorService.getDonorByAccountName(accountName);
     }
 
-    @DeleteMapping("/donors")
+    @DeleteMapping(value = "/donor/delete/id", consumes = {"application/json"})
+    public List<Donor> deleteDonorById(@RequestBody Long id) {
+        donorService.deleteDonor(id);
+        return donorService.getDonorsAsc();
+    }
+
+    @DeleteMapping("/donor")
     public String deleteAllDonors() {
         return donorService.deleteAllDonors();
     }
 
-    @RequestMapping ("/donors/search")
+    @RequestMapping ("/donor/search")
     public List<Donor> search(Model model, @Param("keyword") String keyword) {
         model.addAttribute("keyword", keyword);
         return donorService.search(keyword);
+    }
+
+    @PatchMapping("/donor/update")
+    public Donor updateDonor(@RequestBody Donor donor) {
+        return donorService.updateDonor(donor);
     }
 
 }

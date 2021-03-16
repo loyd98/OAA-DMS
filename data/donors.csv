@@ -1,0 +1,4 @@
+id,salutation,donorName,accountNumber,accountName,cellphoneNumber,emailAddress,address1,address2,address3,address4,address5,birthDate,phone1,phone2,faxNumber,companyAddress,companyTIN,notes
+1,Mr.,Francis Xavier,a1234,MVP,09175556666,charles@gmail.com,23 F I B M Plaza Building,Eastwood City,Quezon City,,,1/2/1800,,,1234-5678,Makati City,000845543-000,
+2,Mr.,Ignatius Loyola,a5678,Faber,09361236543,albert@yahoo.com,F dela Rosa St.,Brgy. Loyola Heights,Quezon City,,,1/3/1900,7234-1231,,,San Juan City,000865743-000,
+3,Mr.,Peter Faber,a9101,Xavier,09278901234,isaac@icloud.com,Ateneo de Manila University,Brgy. Loyola Heights,Quezon City,,,2/4/2000,8450-1234,7890-6543,,Taguig City,000123543-000,
