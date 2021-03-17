@@ -1,0 +1,2 @@
+donationId,donorId,accountNumber,accountName,scholarshipId,orNumber,date,amount,notes,orFiles,tyFiles,codFiles,needCertificate,purposeOfDonation
+1,,123456,Ateneo,,654321,1/22/21,20000,nothing,,,,yes,test

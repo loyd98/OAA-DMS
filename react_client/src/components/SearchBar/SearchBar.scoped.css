@@ -1,0 +1,36 @@
+.search {
+  height: 45px;
+  width: 100%;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  padding: 0 15px;
+  justify-content: space-between;
+}
+
+.search__container {
+  border: 1px solid var(--blue);
+}
+
+.search button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+}
+
+.search input {
+  height: 20px;
+  width: 250px;
+  border: 0;
+}
+
+.search input:focus {
+  outline: 0;
+}
+
+.username svg {
+  margin-right: 10px;
+}
+
+
+
