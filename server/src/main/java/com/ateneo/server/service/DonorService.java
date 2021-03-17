@@ -1,7 +1,10 @@
 package com.ateneo.server.service;
 
+import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.DonorRepository;
+import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,9 @@ public class DonorService {
 
     @Autowired
     private DonorRepository donorRepository;
+
+    @Autowired
+    private DonationRepository donationRepository;
 
     //POST
     public Donor saveDonor(Donor donor) {
@@ -99,4 +105,8 @@ public class DonorService {
         return donorRepository.findAll();
     }
 
+    public List<Donation> getAllDonationsFromDonor(Long id) {
+        Donor donor = donorRepository.findById(id).orElse(null);
+        return donor.getDonations();
+    }
 }

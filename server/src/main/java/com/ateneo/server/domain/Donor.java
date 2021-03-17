@@ -1,13 +1,12 @@
 package com.ateneo.server.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -37,4 +36,15 @@ public class Donor extends Auditable{
     private String birthDate;
     private String notes;
 
+    @ManyToMany()
+    @JoinTable(
+            name = "donor_donation",
+            joinColumns = @JoinColumn(name = "donor_id"),
+            inverseJoinColumns = @JoinColumn(name = "donation_id")
+    )
+    private List<Donation> donations = new ArrayList<>();
+
+    public void addDonation(Donation donation) {
+        donations.add(donation);
+    }
 }

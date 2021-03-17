@@ -1,7 +1,9 @@
 package com.ateneo.server.controller;
 
+import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import com.ateneo.server.service.DonorService;
+import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.ui.Model;
@@ -55,8 +57,8 @@ public class DonorController {
         return donorService.getAllByDonorNameDesc();
     }
 
-    @GetMapping("/donor/id/{id}")
-    public Donor findDonorById(@PathVariable  Long id) {
+    @GetMapping("/donor/{id}")
+    public Donor findDonorById(@PathVariable Long id) {
         return donorService.getDonorById(id);
     }
 
@@ -85,6 +87,11 @@ public class DonorController {
     @PatchMapping("/donor/update")
     public Donor updateDonor(@RequestBody Donor donor) {
         return donorService.updateDonor(donor);
+    }
+
+    @GetMapping("/donor/donations/{id}")
+    public List<Donation> getDonorDonations(@PathVariable Long id) {
+        return donorService.getAllDonationsFromDonor(id);
     }
 
 }
