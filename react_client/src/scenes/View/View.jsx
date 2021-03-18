@@ -16,19 +16,20 @@ class View extends Component {
 
     this.state = {
       isEditing: false,
-      editForm: {},
     };
   }
 
-  componentDidMount() {
-    console.log('mount');
-    const { handleCurrentView, currentId, currentView } = this.props;
-    handleCurrentView('http://localhost:8080', `/donor/${currentId}`);
-    this.setState({ editForm: currentView });
+  componentDidUpdate(prevProps, prevState) {
+    const { handleEditForm, currentView } = this.props;
+    if (prevProps.currentView !== this.props.currentView) {
+      handleEditForm(currentView);
+    }
   }
 
-  handleIsEditing = (isEditing) => {
-    this.setState({ isEditing });
+  handleCancel = () => {
+    const { handleEditForm, currentView } = this.props;
+    this.handleIsEditing(false);
+    handleEditForm(currentView);
   };
 
   handleReturn = () => {
@@ -36,18 +37,24 @@ class View extends Component {
     history.push('/dashboard');
   };
 
+  handleSubmit = () => {
+    const { handleUpdate } = this.props;
+    handleUpdate();
+    this.handleIsEditing(false);
+  };
+
+  handleIsEditing = (isEditing) => this.setState({ isEditing });
+
   render() {
-    const { isEditing, editForm } = this.state;
-    const { config, currentTable, currentView } = this.props;
-    const currentString =
-      currentTable.toString()[0].toUpperCase() +
-      currentTable.toString().slice(1);
+    console.log('view render');
+    const { isEditing } = this.state;
+    const { config, currentTable, editForm, handleEditFormField } = this.props;
+
+    if (!editForm || !currentTable) return <div>Loading...</div>;
 
     let button;
     let inputs;
 
-    console.log(currentView);
-    console.log(editForm);
     inputs = config.ordering[currentTable].map((key) => (
       <div key={key.key} className="view__detailContainer">
         <div className="view__detailTitle">{key.name}</div>
@@ -56,7 +63,7 @@ class View extends Component {
           name={key.key}
           type="text"
           value={editForm[key.key] == null ? '' : editForm[key.key]}
-          onChange={(e) => setEditFormField(e.target.name, e.target.value)}
+          onChange={(e) => handleEditFormField(e.target.name, e.target.value)}
         />
       </div>
     ));
@@ -79,7 +86,7 @@ class View extends Component {
             isTransparent
             message="Submit"
             type="rigth"
-            onClick={(e) => this.handleSubmitClick(e)}
+            onClick={this.handleSubmit}
           >
             <FontAwesomeIcon icon="share-square" />
           </Button>
@@ -87,7 +94,7 @@ class View extends Component {
             isTransparent
             message="Cancel"
             type="right"
-            onClick={() => this.handleIsEditing(false)}
+            onClick={this.handleCancel}
           >
             <FontAwesomeIcon icon="times" />
           </Button>
@@ -129,7 +136,7 @@ class View extends Component {
           <div className="view__right">
             <div className="view__titlebar flex--horizontal">
               <div className="flex--horizontal">
-                <p>{currentString}</p>
+                <p>Table</p>
                 <Button
                   isTransparent
                   message={`Add ${currentTable}`}

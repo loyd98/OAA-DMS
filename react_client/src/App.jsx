@@ -28,12 +28,15 @@ class App extends Component {
       showAdd: false,
       currentId: null,
       addForm: {},
+      editForm: {},
     };
     this.url = config.URL;
   }
 
   componentDidMount() {
+    console.log('APP');
     const currentTable = sessionStorage.getItem('currentTable');
+    console.log(currentTable);
     if (currentTable) {
       this.setState({ currentTable });
     }
@@ -52,6 +55,7 @@ class App extends Component {
   handleCurrentData = (currentData) => this.setState({ currentData });
   handleShowAdd = (showAdd) => this.setState({ showAdd });
   handleCurrentId = (currentId) => this.setState({ currentId });
+  handleEditForm = (editForm) => this.setState({ editForm });
 
   handleCurrentView = async (url, path) => {
     try {
@@ -83,8 +87,9 @@ class App extends Component {
     }));
   };
 
-  handleAddFormSubmit = async (url, path) => {
+  handleAddFormSubmit = async () => {
     const { addForm } = this.state;
+    const currentTable = sessionStorage.getItem('currentTable');
     const token = sessionStorage.getItem('token');
     const options = {
       headers: {
@@ -93,18 +98,44 @@ class App extends Component {
       },
     };
 
-    try {
-      const res = await axios.post(`${url}${path}`, addForm, options);
-      this.handleRead(this.url, '/donor/asc');
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
+    if (currentTable === 'donors') {
+      try {
+        const res = await axios.post(`${this.url}/donor/add`, addForm, options);
+        this.handleRead(this.url, '/donor/asc');
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
     }
   };
 
   // Read
-  handleRead = async (url, pathParameter, id) => {
+  handleRead = async () => {
+    const currentTable = sessionStorage.getItem('currentTable');
+
+    if (currentTable === 'donors') {
+      try {
+        const token = sessionStorage.getItem('token');
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const res = await axios.get(`${this.url}/donor/asc`, options);
+        console.log('fetch');
+        this.setState({ currentData: res.data });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
+  };
+
+  handleReadIndividual = async (id) => {
     try {
       const token = sessionStorage.getItem('token');
       const options = {
@@ -114,9 +145,10 @@ class App extends Component {
         },
       };
 
-      const res = await axios.get(`${url}${pathParameter}`, options);
+      const res = await axios.get(`${this.url}/donor/${id}`, options);
       console.log('fetch');
-      this.setState({ currentData: res.data });
+      this.setState({ currentView: res.data });
+      this.setState({ editForm: res.data });
       return true;
     } catch (err) {
       console.log(err);
@@ -125,6 +157,38 @@ class App extends Component {
     return false;
   };
 
+  // Update
+  handleEditFormField = (name, value) => {
+    this.setState((prevProps) => ({
+      editForm: {
+        ...prevProps.editForm,
+        [name]: value,
+      },
+    }));
+
+    console.log(this.state.editForm);
+  };
+
+  handleUpdate = () => {
+    const { editForm } = this.state;
+    const token = sessionStorage.getItem('token');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    axios
+      .patch(`${this.url}/donor/update`, editForm, options)
+      .then((res) => {
+        this.handleRead();
+        this.handleReadIndividual(this.state.currentId);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // delete
   handleDelete = (id) => {
     const token = sessionStorage.getItem('token');
     const options = {
@@ -148,6 +212,7 @@ class App extends Component {
       showAdd,
       currentId,
       currentView,
+      editForm,
     } = this.state;
 
     return (
@@ -194,6 +259,7 @@ class App extends Component {
                       handleCurrentData={this.handleCurrentData}
                       handleShowAdd={this.handleShowAdd}
                       handleCurrentId={this.handleCurrentId}
+                      handleReadIndividual={this.handleReadIndividual}
                     />
                   </>
                 </>
@@ -210,6 +276,10 @@ class App extends Component {
                   config={config}
                   currentView={currentView}
                   handleCurrentView={this.handleCurrentView}
+                  editForm={editForm}
+                  handleEditFormField={this.handleEditFormField}
+                  handleEditForm={this.handleEditForm}
+                  handleUpdate={this.handleUpdate}
                 />
               )}
             />

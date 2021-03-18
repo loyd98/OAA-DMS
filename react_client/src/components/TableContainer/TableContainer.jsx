@@ -25,7 +25,7 @@ class TableContainer extends Component {
   componentDidMount() {
     console.log('TABLE MOUTN');
     const { handleRead } = this.props;
-    handleRead('http://localhost:8080', '/donor/asc', '');
+    handleRead();
 
     const temp = sessionStorage.getItem('pageDetails');
     const loadedData = JSON.parse(temp);
@@ -124,10 +124,9 @@ class TableContainer extends Component {
   };
 
   handleRedirect = (id) => {
-    console.log(id);
-    const { history, handleCurrentId } = this.props;
+    const { history, handleReadIndividual, handleCurrentId } = this.props;
     handleCurrentId(id);
-    history.push('/view');
+    handleReadIndividual(id).then((res) => history.push('/view'));
   };
 
   render() {

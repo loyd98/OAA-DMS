@@ -15,10 +15,8 @@ class Add extends Component {
   componentDidMount = () => {};
 
   handleSubmit = (setShowAdd, handleAddFormSubmit) => {
-    const { config } = this.props;
-
     setShowAdd(false);
-    handleAddFormSubmit(config.URL, '/donor/add');
+    handleAddFormSubmit();
   };
 
   render() {
