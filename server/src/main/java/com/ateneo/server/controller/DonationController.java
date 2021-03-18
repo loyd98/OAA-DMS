@@ -16,15 +16,31 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
+    @PostMapping("/add/many")
+    public List<Donation> addManyDonations(List<Donation> donations) {
+        return donationService.addManyDonations(donations);
+    }
+
     @GetMapping("/asc")
     public List<Donation> getAllDonationsAsc() {
         return donationService.getAllDonationsAsc();
     }
 
+    @GetMapping("/{id}")
+    public Donation getDonation(@PathVariable Long id) {
+        return donationService.getDonationById(id);
+    }
+
+
+    @GetMapping("/donors/{id}")
+    public List<Donor> getDonorsWithDonation(@PathVariable Long id) {
+        return donationService.getDonorsWithDonation(id);
+    }
+
     // Not working
     @PostMapping("/add")
-    public List<Donation> addDonation(@RequestBody DonorDonationContext donorDonationContext) {
-        return donationService.saveDonation(donorDonationContext);
+    public List<Donation> addDonation(@RequestBody Donation donation) {
+        return donationService.saveDonation(donation);
     }
 
     @PatchMapping("/update")

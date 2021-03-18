@@ -23,14 +23,22 @@ public class DonationService {
         return donationRepository.findAllByOrderByIdAsc();
     }
 
-    public List<Donation> saveDonation(DonorDonationContext donorDonationContext) {
-        Donor currentDonor = donorRepository.findById(donorDonationContext.getId()).orElse(null);
+    public List<Donation> saveDonation(Donation donation) {
+       Donor donor = donorRepository.findById(donation.getDonorId()).orElse(null);
 
-        Donation donation = donorDonationContext.getDonation();
-        currentDonor.addDonation(donation);
-        donationRepository.save(donation);
-        return currentDonor.getDonations();
+       donor.addDonation(donation);
+       donationRepository.save(donation);
+       return donor.getDonations();
     }
+
+//    public List<Donation> saveDonation(DonorDonationContext donorDonationContext) {
+//        Donor currentDonor = donorRepository.findById(donorDonationContext.getId()).orElse(null);
+//
+//        Donation donation = donorDonationContext.getDonation();
+//        currentDonor.addDonation(donation);
+//        donationRepository.save(donation);
+//        return currentDonor.getDonations();
+//    }
 
     public Donation updateDonation(Donation donation) {
         Donation currentDonation = donationRepository.findById(donation.getId()).orElse(null);
@@ -46,5 +54,18 @@ public class DonationService {
     public String deleteDonation(Long id) {
         donationRepository.deleteById(id);
         return "Donation removed " + id;
+    }
+
+    public Donation getDonationById(Long id) {
+        return donationRepository.findById(id).orElse(null);
+    }
+
+    public List<Donor> getDonorsWithDonation(Long id) {
+        Donation donation = donationRepository.findById(id).orElse(null);
+        return donation.getDonors();
+    }
+
+    public List<Donation> addManyDonations(List<Donation> donations) {
+        return donationRepository.saveAll(donations);
     }
 }

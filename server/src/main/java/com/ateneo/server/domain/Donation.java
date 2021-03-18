@@ -17,8 +17,8 @@ public class Donation extends Auditable {
     @Id
     @GeneratedValue
     private Long id;
-//    private Long donorId;
-//    private Long scholarshipId;
+    private Long donorId;
+    private Long scholarshipId;
     private String accountNumber;
     private String accountName;
     private String orNumber;

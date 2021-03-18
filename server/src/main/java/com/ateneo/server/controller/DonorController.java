@@ -12,84 +12,85 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/donor")
 public class DonorController {
 
     @Autowired
     private DonorService donorService;
 
-    @PostMapping("/donor/add")
+    @PostMapping("/add")
     public Donor addDonor(@RequestBody Donor donor) {
         return  donorService.saveDonor(donor);
     }
 
-    @PostMapping("/donor/add/many")
+    @PostMapping("add/many")
     public List<Donor> addDonors(@RequestBody List<Donor> donors) {
         return  donorService.saveDonors(donors);
     }
 
-    @GetMapping("/donor/asc")
+    @GetMapping("/asc")
     public List<Donor> findAllDonorsAsc() {
         return donorService.getDonorsAsc();
     }
 
-    @GetMapping("/donor/desc")
+    @GetMapping("/desc")
     public List<Donor> findAllDonorsDesc() {
         return donorService.getDonorsDesc();
     }
 
-    @GetMapping("/donor/account/asc")
+    @GetMapping("/account/asc")
     public List<Donor> sortAllByAccountNameAsc() {
         return donorService.getAllByAccountNameDesc();
     }
 
-    @GetMapping("/donor/account/desc")
+    @GetMapping("/account/desc")
     public List<Donor> sortAllByAccountNameDesc() {
         return donorService.getAllByDonorNameDesc();
     }
 
-    @GetMapping("/donor/name/asc")
+    @GetMapping("/name/asc")
     public List<Donor> sortAllByDonorNameAsc() {
         return donorService.getAllByDonorNameAsc();
     }
 
-    @GetMapping("/donor/name/desc")
+    @GetMapping("/name/desc")
     public List<Donor> sortAllByDonorNameDesc () {
         return donorService.getAllByDonorNameDesc();
     }
 
-    @GetMapping("/donor/{id}")
+    @GetMapping("/{id}")
     public Donor findDonorById(@PathVariable Long id) {
         return donorService.getDonorById(id);
     }
 
-    @GetMapping("/donor/accname/{accountName}")
+    @GetMapping("/accname/{accountName}")
     public Donor findDonorByAccountName(@PathVariable String accountName) {
         return donorService.getDonorByAccountName(accountName);
     }
 
-    @DeleteMapping(value = "/donor/{id}")
+    @DeleteMapping(value = "/{id}")
     public List<Donor> deleteDonorById(@PathVariable Long id) {
         donorService.deleteDonor(id);
         return donorService.getDonorsAsc();
     }
 
-    @DeleteMapping("/donor")
+    @DeleteMapping("/")
     public String deleteAllDonors() {
         return donorService.deleteAllDonors();
     }
 
-    @GetMapping ("/donor/search")
+    @GetMapping ("/search")
     public List<Donor> search(Model model, @RequestParam("q") String keyword) {
         model.addAttribute("keyword", keyword);
         return donorService.search(keyword);
     }
 
-    @PatchMapping("/donor/update")
+    @PatchMapping("/update")
     public Donor updateDonor(@RequestBody Donor donor) {
         return donorService.updateDonor(donor);
     }
 
-    @GetMapping("/donor/donations/{id}")
+    @GetMapping("/donations/{id}")
     public List<Donation> getDonorDonations(@PathVariable Long id) {
         return donorService.getAllDonationsFromDonor(id);
     }
