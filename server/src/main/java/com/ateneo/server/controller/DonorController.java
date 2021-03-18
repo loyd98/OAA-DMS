@@ -78,8 +78,8 @@ public class DonorController {
         return donorService.deleteAllDonors();
     }
 
-    @RequestMapping ("/donor/search")
-    public List<Donor> search(Model model, @Param("keyword") String keyword) {
+    @GetMapping ("/donor/search")
+    public List<Donor> search(Model model, @RequestParam("q") String keyword) {
         model.addAttribute("keyword", keyword);
         return donorService.search(keyword);
     }
