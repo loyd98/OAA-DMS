@@ -67,8 +67,8 @@ public class DonorController {
         return donorService.getDonorByAccountName(accountName);
     }
 
-    @DeleteMapping(value = "/donor/delete/id", consumes = {"application/json"})
-    public List<Donor> deleteDonorById(@RequestBody Long id) {
+    @DeleteMapping(value = "/donor/{id}")
+    public List<Donor> deleteDonorById(@PathVariable Long id) {
         donorService.deleteDonor(id);
         return donorService.getDonorsAsc();
     }
