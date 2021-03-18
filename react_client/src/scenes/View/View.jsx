@@ -14,34 +14,52 @@ class View extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      isEditing: false,
+      editForm: {},
+    };
   }
 
-  render() {
+  componentDidMount() {
     const { currentData } = this.props;
-    // const currentString =
-    //   currentTable.toString()[0].toUpperCase() +
-    //   currentTable.toString().slice(1);
+    this.setState({ editForm: { ...currentData[0] } });
+  }
 
-    console.log(currentData);
+  handleIsEditing = (isEditing) => {
+    this.setState({ isEditing });
+  };
+
+  handleReturn = () => {
+    const { history, handleRead } = this.props;
+
+    handleRead('http://localhost:8080', 'donor/asc', '');
+    history.push('/dashboard');
+  };
+
+  render() {
+    console.log('render');
+    const { isEditing, editForm } = this.state;
+    const { currentData, config, currentTable } = this.props;
+    const currentString =
+      currentTable.toString()[0].toUpperCase() +
+      currentTable.toString().slice(1);
 
     let button;
     let inputs;
 
-    inputs = config.ordering[currentTable].map((key) => {
-      return (
-        <div key={key.key} className="view__detailContainer">
-          <div className="view__detailTitle">{key.name}</div>
-          <input
-            disabled={!isEditing}
-            name={key.key}
-            type="text"
-            value={editForm[key.key] == null ? '' : editForm[key.key]}
-            onChange={(e) => setEditFormField(e.target.name, e.target.value)}
-          />
-        </div>
-      );
-    });
+    console.log(editForm);
+    inputs = config.ordering[currentTable].map((key) => (
+      <div key={key.key} className="view__detailContainer">
+        <div className="view__detailTitle">{key.name}</div>
+        <input
+          disabled={!isEditing}
+          name={key.key}
+          type="text"
+          value={editForm[key.key] == null ? '' : editForm[key.key]}
+          onChange={(e) => setEditFormField(e.target.name, e.target.value)}
+        />
+      </div>
+    ));
 
     if (!isEditing) {
       button = (
@@ -49,7 +67,7 @@ class View extends Component {
           isTransparent
           message="Edit"
           type="right"
-          onClick={this.handleEditToggle}
+          onClick={() => this.handleIsEditing(true)}
         >
           <FontAwesomeIcon icon="edit" />
         </Button>
@@ -69,7 +87,7 @@ class View extends Component {
             isTransparent
             message="Cancel"
             type="right"
-            onClick={this.handleCancelClick}
+            onClick={() => this.handleIsEditing(false)}
           >
             <FontAwesomeIcon icon="times" />
           </Button>
@@ -79,7 +97,7 @@ class View extends Component {
 
     return (
       <>
-        {showAdd && (
+        {/* {showAdd && (
           <Add
             currentTable={tableInView}
             setShowAdd={this.handleShowAdd}
@@ -87,8 +105,8 @@ class View extends Component {
             config={config}
             handleAddFormSubmit={handleAddFormSubmit}
           />
-        )}
-        {showModal && (
+        )} */}
+        {/* {showModal && (
           <Modal
             title="Discard your changes?"
             message="The changes in the form have not been submitted yet. Would you like to discard them and return to the Dashboard page, or cancel and return to the form?"
@@ -98,7 +116,7 @@ class View extends Component {
             leftBtnOnClick={() => this.setShowModal(false)}
             rightBtnOnClick={this.handleDiscardClick}
           />
-        )}
+        )} */}
         <Navigation />
         <div className="view flex--horizontal">
           <div className="view__left">
@@ -126,17 +144,17 @@ class View extends Component {
                 isTransparent
                 message="Return to Dashboard"
                 type="right"
-                onClick={() => this.handleReturnToDashboard()}
+                onClick={this.handleReturn}
               >
                 <FontAwesomeIcon icon="arrow-left" />
               </Button>
             </div>
-            <Table
+            {/* <Table
               fields={config.ordering[currentTable]}
               items={dataInView}
               colLimit={5}
               handleDelete={console.log}
-            />
+            /> */}
           </div>
         </div>
       </>

@@ -98,7 +98,14 @@ class App extends Component {
             <Route
               exact
               path-="view/1?id=:id"
-              render={(props) => <View currentData={currentData} />}
+              render={() => (
+                <View
+                  currentData={currentData}
+                  currentTable={currentTable}
+                  handleRead={this.handleRead}
+                  config={config}
+                />
+              )}
             />
           </Switch>
         </HashRouter>

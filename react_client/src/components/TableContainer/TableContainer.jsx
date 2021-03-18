@@ -129,7 +129,6 @@ class TableContainer extends Component {
   render() {
     const { config, currentTable, currentData } = this.props;
     const { currentPage, numOfPages, itemsPerPage } = this.state;
-    console.log(currentData);
     const tables = config.tables;
     const fields = config.ordering[currentTable];
     const items = this.sliceItems(currentData, itemsPerPage, currentPage);
