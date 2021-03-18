@@ -21,7 +21,7 @@ export default class Table extends Component {
     } = this.props;
 
     return (
-      <table>
+      <>
         <thead id="table__bottom">
           <tr className="table__bottomRow">
             {fields.slice(0, colLimit).map((col) => (
@@ -74,7 +74,7 @@ export default class Table extends Component {
             </tr>
           ))}
         </tbody>
-      </table>
+      </>
     );
   }
 }
