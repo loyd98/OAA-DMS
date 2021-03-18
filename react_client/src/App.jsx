@@ -53,16 +53,6 @@ class App extends Component {
   handleShowAdd = (showAdd) => this.setState({ showAdd });
   handleCurrentId = (currentId) => this.setState({ currentId });
 
-  handleAddFormField = (name, value) => {
-    this.setState((prevState) => ({
-      addForm: {
-        ...prevState.addForm,
-        [name]: value,
-      },
-    }));
-    console.log(this.state.addForm);
-  };
-
   handleCurrentView = async (url, path) => {
     try {
       const token = sessionStorage.getItem('token');
@@ -81,6 +71,36 @@ class App extends Component {
     }
 
     return false;
+  };
+
+  // Create
+  handleAddFormField = (name, value) => {
+    this.setState((prevState) => ({
+      addForm: {
+        ...prevState.addForm,
+        [name]: value,
+      },
+    }));
+  };
+
+  handleAddFormSubmit = async (url, path) => {
+    const { addForm } = this.state;
+    const token = sessionStorage.getItem('token');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await axios.post(`${url}${path}`, addForm, options);
+      this.handleRead(this.url, '/donor/asc');
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   };
 
   // Read
@@ -103,28 +123,6 @@ class App extends Component {
     }
 
     return false;
-  };
-
-  handleAddFormSubmit = async (url, path) => {
-    const { addForm } = this.state;
-    const token = sessionStorage.getItem('token');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    };
-
-    console.log(this.state.addForm);
-
-    try {
-      const res = await axios.post(`${url}${path}`, addForm, options);
-      console.log(res);
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
   };
 
   render() {
