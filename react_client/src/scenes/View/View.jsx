@@ -16,6 +16,8 @@ class View extends Component {
 
     this.state = {
       isEditing: false,
+      showModal: false,
+      index: 0,
     };
   }
 
@@ -26,6 +28,8 @@ class View extends Component {
     }
   }
 
+  handleShowModal = (showModal) => this.setState({ showModal });
+
   handleCancel = () => {
     const { handleEditForm, currentView } = this.props;
     this.handleIsEditing(false);
@@ -33,8 +37,14 @@ class View extends Component {
   };
 
   handleReturn = () => {
+    const { isEditing } = this.state;
     const { history } = this.props;
-    history.push('/dashboard');
+
+    if (isEditing) {
+      this.handleShowModal(true);
+    } else {
+      history.push('/dashboard');
+    }
   };
 
   handleSubmit = () => {
@@ -43,14 +53,62 @@ class View extends Component {
     this.handleIsEditing(false);
   };
 
+  handleDiscard = () => {
+    console.log('hit');
+    const { history } = this.props;
+    this.handleIsEditing(false);
+    this.handleShowModal(false);
+    history.push('/dashboard');
+  };
+
   handleIsEditing = (isEditing) => this.setState({ isEditing });
+
+  handleIndexInc = () => {
+    const { config, currentTable } = this.props;
+
+    const end = config.innerTables[currentTable].length;
+
+    this.setState((prevState) => ({
+      index: prevState.index < end - 1 ? prevState.index + 1 : end - 1,
+    }));
+  };
+
+  handleIndexDec = () => {
+    this.setState((prevState) => ({
+      index: prevState.index > 0 ? prevState.index - 1 : 0,
+    }));
+  };
+
+  handleRedirect = (id) => {
+    const { index } = this.state;
+    const {
+      history,
+      handleReadIndividual,
+      handleCurrentId,
+      handleReadInnerTable,
+      handleCurrentTable,
+      currentTable,
+      config,
+    } = this.props;
+    handleCurrentId(id);
+    handleCurrentTable(config.innerTables[currentTable][index]).then((res) =>
+      handleReadInnerTable(id).then((res) =>
+        handleReadIndividual(id).then((res) => history.push('/view')),
+      ),
+    );
+  };
 
   render() {
     console.log('view render');
-    const { isEditing } = this.state;
-    const { config, currentTable, editForm, handleEditFormField } = this.props;
-
-    if (!editForm || !currentTable) return <div>Loading...</div>;
+    const { isEditing, showModal, index } = this.state;
+    const {
+      config,
+      currentTable,
+      editForm,
+      handleEditFormField,
+      currentInnerTable,
+      innerTable,
+    } = this.props;
 
     let button;
     let inputs;
@@ -102,6 +160,10 @@ class View extends Component {
       );
     }
 
+    const tableTitle =
+      config.innerTables[currentTable][index][0].toUpperCase() +
+      config.innerTables[currentTable][index].slice(1);
+
     return (
       <>
         {/* {showAdd && (
@@ -113,17 +175,17 @@ class View extends Component {
             handleAddFormSubmit={handleAddFormSubmit}
           />
         )} */}
-        {/* {showModal && (
+        {showModal && (
           <Modal
             title="Discard your changes?"
-            message="The changes in the form have not been submitted yet. Would you like to discard them and return to the Dashboard page, or cancel and return to the form?"
+            message="The changes in the form have not been submitted yet. Would you like to discard them and return to the Dashboard page?"
             leftBtnName="Cancel"
             rightBtnName="Discard"
-            exitOnClick={() => this.setShowModal(false)}
-            leftBtnOnClick={() => this.setShowModal(false)}
-            rightBtnOnClick={this.handleDiscardClick}
+            exitOnClick={() => this.handleShowModal(false)}
+            leftBtnOnClick={() => this.handleShowModal(false)}
+            rightBtnOnClick={this.handleDiscard}
           />
-        )} */}
+        )}
         <Navigation />
         <div className="view flex--horizontal">
           <div className="view__left">
@@ -136,14 +198,30 @@ class View extends Component {
           <div className="view__right">
             <div className="view__titlebar flex--horizontal">
               <div className="flex--horizontal">
-                <p>Table</p>
+                <p>{tableTitle}</p>
                 <Button
                   isTransparent
-                  message={`Add ${currentTable}`}
+                  message={`Add ${config.innerTables[currentTable][index]}`}
                   type="right"
                   onClick={() => this.handleShowAdd(true)}
                 >
                   <FontAwesomeIcon icon="plus" />
+                </Button>
+                <Button
+                  isTransparent
+                  message={`Prev table`}
+                  type="right"
+                  onClick={this.handleIndexDec}
+                >
+                  <FontAwesomeIcon icon="arrow-left" />
+                </Button>
+                <Button
+                  isTransparent
+                  message={`Next table`}
+                  type="right"
+                  onClick={this.handleIndexInc}
+                >
+                  <FontAwesomeIcon icon="arrow-right" />
                 </Button>
               </div>
 
@@ -156,12 +234,17 @@ class View extends Component {
                 <FontAwesomeIcon icon="arrow-left" />
               </Button>
             </div>
-            {/* <Table
-              fields={config.ordering[currentTable]}
-              items={dataInView}
-              colLimit={5}
-              handleDelete={console.log}
-            /> */}
+            <table>
+              <Table
+                fields={
+                  config.ordering[config.innerTables[currentTable][index]]
+                }
+                items={innerTable}
+                colLimit={6}
+                handleDelete={console.log}
+                redirectToView={this.handleRedirect}
+              />
+            </table>
           </div>
         </div>
       </>

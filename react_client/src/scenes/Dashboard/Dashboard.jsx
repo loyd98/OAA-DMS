@@ -28,6 +28,8 @@ export default class Dashboard extends Component {
       username,
       searchQuery,
       handleDoSearch,
+      handleTabClick,
+      handleReadInnerTable,
     } = this.props;
 
     return (
@@ -49,6 +51,8 @@ export default class Dashboard extends Component {
           handleDelete={handleDelete}
           handleCurrentView={handleCurrentView}
           handleReadIndividual={handleReadIndividual}
+          handleTabClick={handleTabClick}
+          handleReadInnerTable={handleReadInnerTable}
         />
       </div>
     );

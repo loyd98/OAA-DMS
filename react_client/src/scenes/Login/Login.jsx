@@ -18,7 +18,7 @@ class Login extends Component {
 
   handleSubmit = async (e, url, username, password) => {
     e.preventDefault();
-    const { history, handleCurrentTable } = this.props;
+    const { history, handleCurrentTable, handleCurrentInnerTable } = this.props;
     const loginUser = async (credentials) => {
       try {
         const resp = await axios.post(`${url}/login`, credentials);
@@ -38,6 +38,7 @@ class Login extends Component {
     if (token) {
       sessionStorage.setItem('token', token.data);
       handleCurrentTable('donors');
+      handleCurrentInnerTable('donations');
       history.push('/dashboard');
     }
 

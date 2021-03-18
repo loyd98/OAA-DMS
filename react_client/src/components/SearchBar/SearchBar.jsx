@@ -16,7 +16,7 @@ export default class SearchBar extends Component {
   };
 
   render() {
-    const { username, searchQuery, handleSearchQuery } = this.props;
+    const { username, searchQuery } = this.props;
 
     return (
       <div className="search flex--horizontal">

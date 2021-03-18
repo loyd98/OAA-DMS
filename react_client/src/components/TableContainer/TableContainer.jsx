@@ -23,7 +23,6 @@ class TableContainer extends Component {
   }
 
   componentDidMount() {
-    console.log('TABLE MOUTN');
     const { handleRead } = this.props;
     handleRead();
 
@@ -124,24 +123,32 @@ class TableContainer extends Component {
   };
 
   handleRedirect = (id) => {
-    const { history, handleReadIndividual, handleCurrentId } = this.props;
+    const {
+      history,
+      handleReadIndividual,
+      handleCurrentId,
+      handleReadInnerTable,
+    } = this.props;
     handleCurrentId(id);
+    handleReadInnerTable(id);
     handleReadIndividual(id).then((res) => history.push('/view'));
   };
 
   render() {
     const {
       config,
-      currentTable,
+      // currentTable,
       currentData,
       handleShowAdd,
       handleDelete,
+      handleTabClick,
     } = this.props;
     const { currentPage, numOfPages, itemsPerPage } = this.state;
 
-    if (currentData.length === 0 || !currentData) {
+    if (!currentData) {
       return <div>Loading ...</div>;
     } else {
+      const currentTable = sessionStorage.getItem('currentTable');
       const tables = config.tables;
       const fields = config.ordering[currentTable];
       const items = this.sliceItems(currentData, itemsPerPage, currentPage);
@@ -171,7 +178,7 @@ class TableContainer extends Component {
                           data-id={table}
                           key={table}
                           className="table__flag flex--horizontal"
-                          onClick={(e) => this.handleTabClick(e)}
+                          onClick={(e) => handleTabClick(e)}
                         >
                           <span>{table}</span>
                         </div>

@@ -4,7 +4,7 @@ module.exports = {
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
       { key: 'id', name: 'Donor ID', width: '50px' },
-      { key: 'salutation', name: 'Salutation', width: '50px' },
+      { key: 'salutation', name: 'Salutation', width: '60px' },
       { key: 'donorName', name: 'Donor Name', width: '70px' },
       { key: 'accountNumber', name: 'Account Number', width: '70px' },
       { key: 'accountName', name: 'Account Name', width: '70px' },
@@ -29,7 +29,7 @@ module.exports = {
     donations: [
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
-      { key: 'id', name: 'Donation ID', width: '50px' },
+      { key: 'id', name: 'Donation ID', width: '60px' },
       { key: 'accountNumber', name: 'Account Number', width: '70px' },
       { key: 'accountName', name: 'Account Name', width: '60px' },
       { key: 'orNumber', name: 'OR Number', width: '70px' },
@@ -45,6 +45,16 @@ module.exports = {
       { key: 'creationDate', name: 'Creation Date', width: '100px' },
       { key: 'lastModifiedBy', name: 'Last Modified By', width: '100px' },
       { key: 'lastModifiedDate', name: 'Last Modified Date', width: '100px' },
+      { key: 'donorId', name: 'Donor ID', width: '60px' },
+      { key: 'scholarshipId', name: 'Scholarship ID', width: '60px' },
+    ],
+    scholars: [
+      // width refers to column width
+      // { key: '#', name: '#', width: '20px' },
+      { key: 'id', name: 'Scholar ID', width: '50px' },
+      { key: 'name', name: 'Name', width: '70px' },
+      { key: 'course', name: 'Course', width: '70px' },
+      { key: 'batchGraduated', name: 'Batch Graduated', width: '70px' },
     ],
   },
   tables: [
@@ -55,8 +65,9 @@ module.exports = {
     'MOAs',
     'Documents',
   ],
-  tablesInView: {
-    donors: ['donations'],
+  innerTables: {
+    donors: ['donations', 'scholars'],
+    donations: ['donors', 'scholars'],
   },
   dropdowns: {
     donors: [

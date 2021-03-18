@@ -23,6 +23,8 @@ class App extends Component {
       currentData: [],
       currentTable: '',
       currentView: [],
+      innerTable: [],
+      currentInnerTable: '',
       username: '',
       password: '',
       config,
@@ -38,28 +40,48 @@ class App extends Component {
 
   componentDidMount() {
     console.log('APP');
+
     const currentTable = sessionStorage.getItem('currentTable');
     console.log(currentTable);
     if (currentTable) {
       this.setState({ currentTable });
     }
+
+    const currentData = JSON.parse(sessionStorage.getItem('currentData'));
+    if (currentData) {
+      this.setState({ currentData });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { currentTable } = this.state;
+    const { currentTable, currentData } = this.state;
     if (prevState.currentTable !== currentTable) {
+      console.log('CURRENT TABLE CHANGED');
       sessionStorage.setItem('currentTable', currentTable);
+    }
+
+    if (prevState.currentData !== currentData) {
+      console.log('CURRENT DATA CHANGED');
+      const temp = JSON.stringify(currentData);
+      sessionStorage.setItem('currentData', temp);
     }
   }
 
   handleUsername = (username) => this.setState({ username });
   handlePassword = (password) => this.setState({ password });
-  handleCurrentTable = (currentTable) => this.setState({ currentTable });
   handleCurrentData = (currentData) => this.setState({ currentData });
   handleShowAdd = (showAdd) => this.setState({ showAdd });
   handleCurrentId = (currentId) => this.setState({ currentId });
   handleEditForm = (editForm) => this.setState({ editForm });
   handleSearchQuery = (searchQuery) => this.setState({ searchQuery });
+  handleCurrentInnerTable = (currentInnerTable) =>
+    this.setState({ currentInnerTable });
+
+  handleCurrentTable = (currentTable) => {
+    return new Promise((resolve) => {
+      this.setState({ currentTable }, resolve);
+    });
+  };
 
   handleDoSearch = debounce((e) => {
     const token = sessionStorage.getItem('token');
@@ -75,7 +97,7 @@ class App extends Component {
       .get(`${this.url}/donor/search?q=${searchQuery}`, options)
       .then((res) => this.setState({ currentData: res.data }))
       .catch((err) => console.log(err));
-  }, 1000);
+  }, 500);
 
   handleCurrentView = async (url, path) => {
     try {
@@ -128,6 +150,27 @@ class App extends Component {
         return false;
       }
     }
+
+    if (currentTable === 'donations') {
+      try {
+        const res = await axios.post(
+          `${this.url}/donation/add`,
+          addForm,
+          options,
+        );
+        this.handleRead(this.url, '/donation/asc');
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
+  };
+
+  handleTabClick = (e) => {
+    const currentTable = e.currentTarget.dataset.id.toLowerCase();
+
+    this.setState({ currentTable }, this.handleRead);
   };
 
   // Read
@@ -153,28 +196,123 @@ class App extends Component {
         return false;
       }
     }
+
+    if (currentTable === 'donations') {
+      try {
+        const token = sessionStorage.getItem('token');
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const res = await axios.get(`${this.url}/donation/asc`, options);
+        console.log('fetch');
+        this.setState({ currentData: res.data });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
+  };
+
+  handleReadInnerTable = async (id) => {
+    const { currentTable } = this.state;
+
+    if (currentTable === 'donations') {
+      try {
+        const token = sessionStorage.getItem('token');
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const res = await axios.get(
+          `${this.url}/donation/donors/${id}`,
+          options,
+        );
+        console.log('fetch');
+        this.setState({ innerTable: res.data });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
+
+    if (currentTable === 'donors') {
+      try {
+        const token = sessionStorage.getItem('token');
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const res = await axios.get(
+          `${this.url}/donor/donations/${id}`,
+          options,
+        );
+        console.log('fetch');
+        this.setState({ innerTable: res.data });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
   };
 
   handleReadIndividual = async (id) => {
-    try {
-      const token = sessionStorage.getItem('token');
-      const options = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      };
+    const { currentTable } = this.state;
 
-      const res = await axios.get(`${this.url}/donor/${id}`, options);
-      console.log('fetch');
-      this.setState({ currentView: res.data });
-      this.setState({ editForm: res.data });
-      return true;
-    } catch (err) {
-      console.log(err);
+    if (currentTable === 'donors') {
+      try {
+        const token = sessionStorage.getItem('token');
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const res = await axios.get(`${this.url}/donor/${id}`, options);
+        console.log('fetch');
+        this.setState({ currentView: res.data });
+        this.setState({ editForm: res.data });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
     }
 
-    return false;
+    if (currentTable === 'donations') {
+      console.log('REACHED DONATIONS');
+      try {
+        const token = sessionStorage.getItem('token');
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const res = await axios.get(`${this.url}/donation/${id}`, options);
+        console.log('fetch');
+        this.setState({ currentView: res.data });
+        this.setState({ editForm: res.data });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
   };
 
   // Update
@@ -223,6 +361,14 @@ class App extends Component {
       .catch((err) => console.log(err));
   };
 
+  handleInnerDelete = (table, id) => {
+    if (table === 'donors') {
+    }
+
+    if (table === 'donations') {
+    }
+  };
+
   render() {
     const {
       username,
@@ -234,6 +380,8 @@ class App extends Component {
       currentView,
       editForm,
       searchQuery,
+      currentInnerTable,
+      innerTable,
     } = this.state;
 
     return (
@@ -261,6 +409,7 @@ class App extends Component {
                   handleCurrentTable={this.handleCurrentTable}
                   handleUsername={this.handleUsername}
                   handlePassword={this.handlePassword}
+                  handleCurrentInnerTable={this.handleCurrentInnerTable}
                 />
               )}
             />
@@ -285,6 +434,8 @@ class App extends Component {
                       handleReadIndividual={this.handleReadIndividual}
                       handleSearchQuery={this.handleSearchQuery}
                       handleDoSearch={this.handleDoSearch}
+                      handleTabClick={this.handleTabClick}
+                      handleReadInnerTable={this.handleReadInnerTable}
                     />
                   </>
                 </>
@@ -305,6 +456,12 @@ class App extends Component {
                   handleEditFormField={this.handleEditFormField}
                   handleEditForm={this.handleEditForm}
                   handleUpdate={this.handleUpdate}
+                  currentInnerTable={currentInnerTable}
+                  innerTable={innerTable}
+                  handleCurrentTable={this.handleCurrentTable}
+                  handleCurrentId={this.handleCurrentId}
+                  handleReadInnerTable={this.handleReadInnerTable}
+                  handleReadIndividual={this.handleReadIndividual}
                 />
               )}
             />
