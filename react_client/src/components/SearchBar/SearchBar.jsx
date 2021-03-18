@@ -9,16 +9,19 @@ export default class SearchBar extends Component {
     this.state = {};
   }
 
+  handleOnChange = (e) => {
+    const { handleSearchQuery, handleDoSearch } = this.props;
+    handleSearchQuery(e.target.value);
+    handleDoSearch();
+  };
+
   render() {
-    const { username, searchQuery, handleSearch } = this.props;
+    const { username, searchQuery, handleSearchQuery } = this.props;
 
     return (
       <div className="search flex--horizontal">
         <div className="search__container flex--horizontal">
-          <input
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
+          <input value={searchQuery} onChange={(e) => this.handleOnChange(e)} />
           <button type="button">
             <FontAwesomeIcon icon="search" />
           </button>

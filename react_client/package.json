@@ -18,6 +18,7 @@
     "bootstrap": "^4.6.0",
     "craco-plugin-scoped-css": "^1.1.1",
     "css-loader": "^5.1.2",
+    "lodash.debounce": "^4.0.8",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.1",

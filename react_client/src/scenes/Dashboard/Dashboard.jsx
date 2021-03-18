@@ -24,11 +24,20 @@ export default class Dashboard extends Component {
       handleDelete,
       handleCurrentView,
       handleReadIndividual,
+      handleSearchQuery,
+      username,
+      searchQuery,
+      handleDoSearch,
     } = this.props;
 
     return (
       <div className="dashboard flex--vertical">
-        <SearchBar />
+        <SearchBar
+          username={username}
+          searchQuery={searchQuery}
+          handleSearchQuery={handleSearchQuery}
+          handleDoSearch={handleDoSearch}
+        />
         <TableContainer
           config={config}
           currentData={currentData}

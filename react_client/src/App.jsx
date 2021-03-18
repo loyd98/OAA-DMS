@@ -14,6 +14,7 @@ import Add from './scenes/Add/Add';
 
 const axios = require('axios');
 const config = require('./data.config');
+const debounce = require('lodash.debounce');
 
 class App extends Component {
   constructor(props) {
@@ -29,6 +30,8 @@ class App extends Component {
       currentId: null,
       addForm: {},
       editForm: {},
+      searchQuery: '',
+      searchTimeout: 0,
     };
     this.url = config.URL;
   }
@@ -56,6 +59,23 @@ class App extends Component {
   handleShowAdd = (showAdd) => this.setState({ showAdd });
   handleCurrentId = (currentId) => this.setState({ currentId });
   handleEditForm = (editForm) => this.setState({ editForm });
+  handleSearchQuery = (searchQuery) => this.setState({ searchQuery });
+
+  handleDoSearch = debounce((e) => {
+    const token = sessionStorage.getItem('token');
+    const { searchQuery } = this.state;
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    axios
+      .get(`${this.url}/donor/search?q=${searchQuery}`, options)
+      .then((res) => this.setState({ currentData: res.data }))
+      .catch((err) => console.log(err));
+  }, 1000);
 
   handleCurrentView = async (url, path) => {
     try {
@@ -213,6 +233,7 @@ class App extends Component {
       currentId,
       currentView,
       editForm,
+      searchQuery,
     } = this.state;
 
     return (
@@ -251,6 +272,8 @@ class App extends Component {
                   <>
                     <Navigation />
                     <Dashboard
+                      username={username}
+                      searchQuery={searchQuery}
                       config={config}
                       currentData={currentData}
                       currentTable={currentTable}
@@ -260,6 +283,8 @@ class App extends Component {
                       handleShowAdd={this.handleShowAdd}
                       handleCurrentId={this.handleCurrentId}
                       handleReadIndividual={this.handleReadIndividual}
+                      handleSearchQuery={this.handleSearchQuery}
+                      handleDoSearch={this.handleDoSearch}
                     />
                   </>
                 </>
