@@ -16,16 +16,9 @@ class Login extends Component {
     this.nameAutoFocus = false;
   }
 
-  handleSubmit = async (
-    e,
-    url,
-    username,
-    password,
-    handleCurrentData,
-    handleCurrentTable,
-  ) => {
+  handleSubmit = async (e, url, username, password) => {
     e.preventDefault();
-
+    const { history, handleCurrentTable } = this.props;
     const loginUser = async (credentials) => {
       try {
         const resp = await axios.post(`${url}/login`, credentials);
@@ -44,17 +37,8 @@ class Login extends Component {
 
     if (token) {
       sessionStorage.setItem('token', token.data);
-      try {
-        const res = await axios.get(`${url}/donor/asc`, {
-          headers: { Authorization: `Bearer ${token.data}` },
-        });
-
-        handleCurrentData(res.data);
-        handleCurrentTable('donors');
-        return true;
-      } catch (err) {
-        console.log(err);
-      }
+      handleCurrentTable('donors');
+      history.push('/dashboard');
     }
 
     return false;

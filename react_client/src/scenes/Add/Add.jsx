@@ -15,15 +15,17 @@ class Add extends Component {
   componentDidMount = () => {};
 
   handleSubmit = (setShowAdd, handleAddFormSubmit) => {
+    const { config } = this.props;
+
     setShowAdd(false);
-    handleAddFormSubmit();
+    handleAddFormSubmit(config.URL, '/donor/add');
   };
 
   render() {
     const {
       currentTable,
-      setShowAdd,
-      setAddFormField,
+      handleShowAdd,
+      handleAddFormField,
       config,
       handleAddFormSubmit,
     } = this.props;
@@ -31,7 +33,7 @@ class Add extends Component {
     return (
       <div className="add__background">
         <form className="add">
-          <Button isTransparent onClick={() => setShowAdd(false)}>
+          <Button isTransparent onClick={() => handleShowAdd(false)}>
             Cancel
           </Button>
           {config.ordering[currentTable].map((key) => {
@@ -51,7 +53,7 @@ class Add extends Component {
                   type="text"
                   value={this.state[key.key]}
                   onChange={(e) =>
-                    setAddFormField(e.target.name, e.target.value)
+                    handleAddFormField(e.target.name, e.target.value)
                   }
                 />
               </div>
@@ -59,7 +61,9 @@ class Add extends Component {
           })}
           <Button
             isTransparent
-            onClick={() => this.handleSubmit(setShowAdd, handleAddFormSubmit)}
+            onClick={() =>
+              this.handleSubmit(handleShowAdd, handleAddFormSubmit)
+            }
           >
             Submit
           </Button>

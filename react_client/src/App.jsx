@@ -20,18 +20,68 @@ class App extends Component {
     super(props);
     this.state = {
       currentData: [],
-      currentTable: [],
+      currentTable: '',
+      currentView: [],
       username: '',
       password: '',
       config,
+      showAdd: false,
+      currentId: null,
+      addForm: {},
     };
     this.url = config.URL;
+  }
+
+  componentDidMount() {
+    const currentTable = sessionStorage.getItem('currentTable');
+    if (currentTable) {
+      this.setState({ currentTable });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { currentTable } = this.state;
+    if (prevState.currentTable !== currentTable) {
+      sessionStorage.setItem('currentTable', currentTable);
+    }
   }
 
   handleUsername = (username) => this.setState({ username });
   handlePassword = (password) => this.setState({ password });
   handleCurrentTable = (currentTable) => this.setState({ currentTable });
   handleCurrentData = (currentData) => this.setState({ currentData });
+  handleShowAdd = (showAdd) => this.setState({ showAdd });
+  handleCurrentId = (currentId) => this.setState({ currentId });
+
+  handleAddFormField = (name, value) => {
+    this.setState((prevState) => ({
+      addForm: {
+        ...prevState.addForm,
+        [name]: value,
+      },
+    }));
+    console.log(this.state.addForm);
+  };
+
+  handleCurrentView = async (url, path) => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const options = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const res = await axios.get(`${url}${path}`, options);
+      this.setState({ currentView: res.data });
+      return true;
+    } catch (err) {
+      console.log(err);
+    }
+
+    return false;
+  };
 
   // Read
   handleRead = async (url, pathParameter, id) => {
@@ -45,7 +95,8 @@ class App extends Component {
       };
 
       const res = await axios.get(`${url}${pathParameter}`, options);
-      this.setState({ currentData: [res.data] });
+      console.log('fetch');
+      this.setState({ currentData: res.data });
       return true;
     } catch (err) {
       console.log(err);
@@ -54,13 +105,51 @@ class App extends Component {
     return false;
   };
 
+  handleAddFormSubmit = async (url, path) => {
+    const { addForm } = this.state;
+    const token = sessionStorage.getItem('token');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    console.log(this.state.addForm);
+
+    try {
+      const res = await axios.post(`${url}${path}`, addForm, options);
+      console.log(res);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   render() {
-    const { username, password, currentData, currentTable } = this.state;
+    const {
+      username,
+      password,
+      currentData,
+      currentTable,
+      showAdd,
+      currentId,
+      currentView,
+    } = this.state;
 
     return (
       <div className="App">
         <HashRouter>
-          {/* {showAdd && <Add />} */}
+          {showAdd && (
+            <Add
+              config={config}
+              handleAddFormField={this.handleAddFormField}
+              handleShowAdd={this.handleShowAdd}
+              currentTable={currentTable}
+              handleAddFormSubmit={this.handleAddFormSubmit}
+            />
+          )}
           <Switch>
             <Route
               exact
@@ -90,6 +179,8 @@ class App extends Component {
                       currentTable={currentTable}
                       handleRead={this.handleRead}
                       handleCurrentData={this.handleCurrentData}
+                      handleShowAdd={this.handleShowAdd}
+                      handleCurrentId={this.handleCurrentId}
                     />
                   </>
                 </>
@@ -100,10 +191,12 @@ class App extends Component {
               path-="view/1?id=:id"
               render={() => (
                 <View
-                  currentData={currentData}
                   currentTable={currentTable}
+                  currentId={currentId}
                   handleRead={this.handleRead}
                   config={config}
+                  currentView={currentView}
+                  handleCurrentView={this.handleCurrentView}
                 />
               )}
             />

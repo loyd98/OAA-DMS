@@ -23,6 +23,10 @@ class TableContainer extends Component {
   }
 
   componentDidMount() {
+    console.log('TABLE MOUTN');
+    const { handleRead } = this.props;
+    handleRead('http://localhost:8080', '/donor/asc', '');
+
     const temp = sessionStorage.getItem('pageDetails');
     const loadedData = JSON.parse(temp);
 
@@ -120,106 +124,111 @@ class TableContainer extends Component {
   };
 
   handleRedirect = (id) => {
-    const { history, handleRead } = this.props;
-    handleRead('http://localhost:8080', `/donor/${id}`)
-      .then((res) => history.push('/view'))
-      .catch((err) => console.log(err));
+    console.log(id);
+    const { history, handleCurrentId } = this.props;
+    handleCurrentId(id);
+    history.push('/view');
   };
 
   render() {
-    const { config, currentTable, currentData } = this.props;
+    const { config, currentTable, currentData, handleShowAdd } = this.props;
     const { currentPage, numOfPages, itemsPerPage } = this.state;
-    const tables = config.tables;
-    const fields = config.ordering[currentTable];
-    const items = this.sliceItems(currentData, itemsPerPage, currentPage);
-    const colLimit = 7;
-    // const dropdownItems = config.dropdowns[currentTable];
 
-    return (
-      <table className="table">
-        <thead id="table__top">
-          <tr className="table__topRow flex--horizontal">
-            <td className="flex--horizontal">
-              <div className="table__flags flex--horizontal">
-                {tables.map((table) => {
-                  if (table.toLowerCase() === currentTable) {
-                    return (
-                      <div
-                        data-id={table}
-                        key={table}
-                        className="table__flag flex--horizontal flag--active"
-                      >
-                        <span>{table}</span>
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div
-                        data-id={table}
-                        key={table}
-                        className="table__flag flex--horizontal"
-                        onClick={(e) => this.handleTabClick(e)}
-                      >
-                        <span>{table}</span>
-                      </div>
-                    );
-                  }
-                })}
-              </div>
-            </td>
-            <td className="table__pagination flex--horizontal">
-              <Button isTransparent onClick={this.handleLeftClick}>
-                <FontAwesomeIcon icon="arrow-left" />
-              </Button>
-              <span>
-                <sup>{currentPage}</sup>&frasl;<sub>{numOfPages}</sub>
-              </span>
-              <Button isTransparent onClick={this.handleRightClick}>
-                <FontAwesomeIcon icon="arrow-right" />
-              </Button>
-            </td>
-          </tr>
-        </thead>
-        <thead id="table__middle" className="flex--horizontal">
-          <tr>
-            <td className="flex--horizontal">
-              <div className="flex--horizontal">
-                <Button isTransparent message="Import" type="left">
-                  <FontAwesomeIcon icon="file-upload" />
+    if (currentData.length === 0 || !currentData) {
+      return <div>Loading ...</div>;
+    } else {
+      const tables = config.tables;
+      const fields = config.ordering[currentTable];
+      const items = this.sliceItems(currentData, itemsPerPage, currentPage);
+      const colLimit = 7;
+      // const dropdownItems = config.dropdowns[currentTable];
+
+      return (
+        <table className="table">
+          <thead id="table__top">
+            <tr className="table__topRow flex--horizontal">
+              <td className="flex--horizontal">
+                <div className="table__flags flex--horizontal">
+                  {tables.map((table) => {
+                    if (table.toLowerCase() === currentTable) {
+                      return (
+                        <div
+                          data-id={table}
+                          key={table}
+                          className="table__flag flex--horizontal flag--active"
+                        >
+                          <span>{table}</span>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          data-id={table}
+                          key={table}
+                          className="table__flag flex--horizontal"
+                          onClick={(e) => this.handleTabClick(e)}
+                        >
+                          <span>{table}</span>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              </td>
+              <td className="table__pagination flex--horizontal">
+                <Button isTransparent onClick={this.handleLeftClick}>
+                  <FontAwesomeIcon icon="arrow-left" />
                 </Button>
-                <Button isTransparent message="Export" type="left">
-                  <FontAwesomeIcon icon="file-download" />
+                <span>
+                  <sup>{currentPage}</sup>&frasl;<sub>{numOfPages}</sub>
+                </span>
+                <Button isTransparent onClick={this.handleRightClick}>
+                  <FontAwesomeIcon icon="arrow-right" />
                 </Button>
-                {/* <Dropdown
-                  title="Dropdown"
-                  list={dropdownItems.map((i) => i.name)}
-                /> */}
-                <Button isTransparent message="Sort" type="center">
-                  <FontAwesomeIcon icon="sort" />
-                </Button>
-              </div>
-              <div className="flex--horizontal">
-                <Button
-                  isTransparent
-                  message="Add Entry"
-                  type="right"
-                  onClick={this.handleAddClick}
-                >
-                  <FontAwesomeIcon icon="plus" />
-                </Button>
-              </div>
-            </td>
-          </tr>
-        </thead>
-        <Table
-          fields={fields}
-          items={items}
-          redirectToView={this.handleRedirect}
-          colLimit={7}
-          handleDelete={this.handleDeleteClick}
-        />
-      </table>
-    );
+              </td>
+            </tr>
+          </thead>
+          <thead id="table__middle" className="flex--horizontal">
+            <tr>
+              <td className="flex--horizontal">
+                <div className="flex--horizontal">
+                  <Button isTransparent message="Import" type="left">
+                    <FontAwesomeIcon icon="file-upload" />
+                  </Button>
+                  <Button isTransparent message="Export" type="left">
+                    <FontAwesomeIcon icon="file-download" />
+                  </Button>
+                  {/* <Dropdown
+                    title="Dropdown"
+                    list={dropdownItems.map((i) => i.name)}
+                  /> */}
+                  <Button isTransparent message="Sort" type="center">
+                    <FontAwesomeIcon icon="sort" />
+                  </Button>
+                </div>
+                <div className="flex--horizontal">
+                  <Button
+                    isTransparent
+                    message="Add Entry"
+                    type="right"
+                    onClick={handleShowAdd}
+                  >
+                    <FontAwesomeIcon icon="plus" />
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          </thead>
+          <Table
+            fields={fields}
+            items={items}
+            redirectToView={this.handleRedirect}
+            colLimit={7}
+            handleDelete={this.handleDeleteClick}
+          />
+        </table>
+      );
+    }
   }
 }
 

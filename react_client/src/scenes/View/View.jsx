@@ -21,8 +21,10 @@ class View extends Component {
   }
 
   componentDidMount() {
-    const { currentData } = this.props;
-    this.setState({ editForm: { ...currentData[0] } });
+    console.log('mount');
+    const { handleCurrentView, currentId, currentView } = this.props;
+    handleCurrentView('http://localhost:8080', `/donor/${currentId}`);
+    this.setState({ editForm: currentView });
   }
 
   handleIsEditing = (isEditing) => {
@@ -30,16 +32,13 @@ class View extends Component {
   };
 
   handleReturn = () => {
-    const { history, handleRead } = this.props;
-
-    handleRead('http://localhost:8080', 'donor/asc', '');
+    const { history } = this.props;
     history.push('/dashboard');
   };
 
   render() {
-    console.log('render');
     const { isEditing, editForm } = this.state;
-    const { currentData, config, currentTable } = this.props;
+    const { config, currentTable, currentView } = this.props;
     const currentString =
       currentTable.toString()[0].toUpperCase() +
       currentTable.toString().slice(1);
@@ -47,6 +46,7 @@ class View extends Component {
     let button;
     let inputs;
 
+    console.log(currentView);
     console.log(editForm);
     inputs = config.ordering[currentTable].map((key) => (
       <div key={key.key} className="view__detailContainer">
