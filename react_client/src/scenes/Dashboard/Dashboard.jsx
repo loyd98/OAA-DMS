@@ -21,6 +21,7 @@ export default class Dashboard extends Component {
       handleCurrentData,
       handleShowAdd,
       handleCurrentId,
+      handleDelete,
     } = this.props;
 
     return (
@@ -34,6 +35,7 @@ export default class Dashboard extends Component {
           handleCurrentData={handleCurrentData}
           handleShowAdd={handleShowAdd}
           handleCurrentId={handleCurrentId}
+          handleDelete={handleDelete}
         />
       </div>
     );

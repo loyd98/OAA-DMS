@@ -125,6 +125,20 @@ class App extends Component {
     return false;
   };
 
+  handleDelete = (id) => {
+    const token = sessionStorage.getItem('token');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    axios
+      .delete(`${this.url}/donor/${id}`, options)
+      .then((res) => this.handleRead(this.url, '/donor/asc'))
+      .catch((err) => console.log(err));
+  };
+
   render() {
     const {
       username,
@@ -176,6 +190,7 @@ class App extends Component {
                       currentData={currentData}
                       currentTable={currentTable}
                       handleRead={this.handleRead}
+                      handleDelete={this.handleDelete}
                       handleCurrentData={this.handleCurrentData}
                       handleShowAdd={this.handleShowAdd}
                       handleCurrentId={this.handleCurrentId}

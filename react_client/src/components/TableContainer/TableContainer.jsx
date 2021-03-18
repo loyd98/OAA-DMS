@@ -131,7 +131,13 @@ class TableContainer extends Component {
   };
 
   render() {
-    const { config, currentTable, currentData, handleShowAdd } = this.props;
+    const {
+      config,
+      currentTable,
+      currentData,
+      handleShowAdd,
+      handleDelete,
+    } = this.props;
     const { currentPage, numOfPages, itemsPerPage } = this.state;
 
     if (currentData.length === 0 || !currentData) {
@@ -224,7 +230,7 @@ class TableContainer extends Component {
             items={items}
             redirectToView={this.handleRedirect}
             colLimit={7}
-            handleDelete={this.handleDeleteClick}
+            handleDelete={handleDelete}
           />
         </table>
       );
