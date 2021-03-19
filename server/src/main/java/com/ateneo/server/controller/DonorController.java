@@ -29,42 +29,42 @@ public class DonorController {
     }
 
     @GetMapping("/asc")
-    public List<Donor> findAllDonorsAsc() {
+    public List<Donor> getAllDonorsAsc() {
         return donorService.getDonorsAsc();
     }
 
     @GetMapping("/desc")
-    public List<Donor> findAllDonorsDesc() {
+    public List<Donor> getAllDonorsDesc() {
         return donorService.getDonorsDesc();
     }
 
     @GetMapping("/account/asc")
-    public List<Donor> sortAllByAccountNameAsc() {
-        return donorService.getAllByAccountNameDesc();
+    public List<Donor> getAllByAccountNameAsc() {
+        return donorService.getAllByAccountNameAsc();
     }
 
     @GetMapping("/account/desc")
-    public List<Donor> sortAllByAccountNameDesc() {
-        return donorService.getAllByDonorNameDesc();
+    public List<Donor> getAllByAccountNameDesc() {
+        return donorService.getAllByAccountNameDesc();
     }
 
     @GetMapping("/name/asc")
-    public List<Donor> sortAllByDonorNameAsc() {
+    public List<Donor> getAllByDonorNameAsc() {
         return donorService.getAllByDonorNameAsc();
     }
 
     @GetMapping("/name/desc")
-    public List<Donor> sortAllByDonorNameDesc () {
+    public List<Donor> getAllByDonorNameDesc () {
         return donorService.getAllByDonorNameDesc();
     }
 
     @GetMapping("/{id}")
-    public Donor findDonorById(@PathVariable Long id) {
+    public Donor getDonorById(@PathVariable Long id) {
         return donorService.getDonorById(id);
     }
 
     @GetMapping("/accname/{accountName}")
-    public Donor findDonorByAccountName(@PathVariable String accountName) {
+    public Donor getDonorByAccountName(@PathVariable String accountName) {
         return donorService.getDonorByAccountName(accountName);
     }
 
@@ -91,7 +91,7 @@ public class DonorController {
     }
 
     @GetMapping("/donations/{id}")
-    public List<Donation> getDonorDonations(@PathVariable Long id) {
+    public List<Donation> getDonationsOfDonor(@PathVariable Long id) {
         return donorService.getAllDonationsFromDonor(id);
     }
 

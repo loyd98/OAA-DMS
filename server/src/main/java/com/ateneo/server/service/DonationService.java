@@ -23,32 +23,16 @@ public class DonationService {
         return donationRepository.findAllByOrderByIdAsc();
     }
 
-    public List<Donation> saveDonation(Donation donation) {
-       Donor donor = donorRepository.findById(donation.getDonorId()).orElse(null);
-
-       donor.addDonation(donation);
-       donationRepository.save(donation);
-       return donor.getDonations();
+    public List<Donation> getAllDonationsDesc() {
+        return donationRepository.findAllByOrderByIdDesc();
     }
 
-//    public List<Donation> saveDonation(DonorDonationContext donorDonationContext) {
-//        Donor currentDonor = donorRepository.findById(donorDonationContext.getId()).orElse(null);
-//
-//        Donation donation = donorDonationContext.getDonation();
-//        currentDonor.addDonation(donation);
-//        donationRepository.save(donation);
-//        return currentDonor.getDonations();
-//    }
+    public List<Donation> saveDonation(Donation donation) {
+        Donor donor = donorRepository.findById(donation.getDonorId()).orElse(null);
 
-    public Donation updateDonation(Donation donation) {
-        Donation currentDonation = donationRepository.findById(donation.getId()).orElse(null);
-        currentDonation.setAccountNumber(donation.getAccountNumber());
-        currentDonation.setAccountName(donation.getAccountName());
-        currentDonation.setOrNumber(donation.getOrNumber());
-        currentDonation.setDate(donation.getDate());
-        currentDonation.setAmount(donation.getAmount());
-        currentDonation.setNotes(donation.getNotes());
-        return currentDonation;
+        donor.addDonation(donation);
+        donationRepository.save(donation);
+        return donor.getDonations();
     }
 
     public String deleteDonation(Long id) {
@@ -65,7 +49,21 @@ public class DonationService {
         return donation.getDonors();
     }
 
-    public List<Donation> addManyDonations(List<Donation> donations) {
+    public List<Donation> saveDonations(List<Donation> donations) {
         return donationRepository.saveAll(donations);
+    }
+
+    public Donation updateDonation(Donation donation) {
+        Donation existingDonation = donationRepository.findById(donation.getId()).orElse(null);
+        existingDonation.setAccountNumber(donation.getAccountNumber());
+        existingDonation.setAccountName(donation.getAccountName());
+        existingDonation.setScholarshipId(donation.getScholarshipId());
+        existingDonation.setDonorId(donation.getDonorId());
+        existingDonation.setOrNumber(donation.getOrNumber());
+        existingDonation.setDate(donation.getDate());
+        existingDonation.setAmount(donation.getAmount());
+        existingDonation.setNotes(donation.getNotes());
+        existingDonation.setNeedCertificate(donation.getNeedCertificate());
+        existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
     }
 }

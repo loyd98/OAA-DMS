@@ -16,15 +16,23 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
+    @PostMapping("/add")
+    public List<Donation> addDonation(@RequestBody Donation donation) {
+        return donationService.saveDonation(donation);
+    }
+
     @PostMapping("/add/many")
-    public List<Donation> addManyDonations(List<Donation> donations) {
-        return donationService.addManyDonations(donations);
+    public List<Donation> addDonations(List<Donation> donations) {
+        return donationService.saveDonations(donations);
     }
 
     @GetMapping("/asc")
     public List<Donation> getAllDonationsAsc() {
         return donationService.getAllDonationsAsc();
     }
+
+    @GetMapping("/desc")
+    public List<Donation> getAllDonationsDesc() {return donationService.getAllDonationsDesc();}
 
     @GetMapping("/{id}")
     public Donation getDonation(@PathVariable Long id) {
@@ -37,19 +45,13 @@ public class DonationController {
         return donationService.getDonorsWithDonation(id);
     }
 
-    // Not working
-    @PostMapping("/add")
-    public List<Donation> addDonation(@RequestBody Donation donation) {
-        return donationService.saveDonation(donation);
-    }
-
     @PatchMapping("/update")
     public Donation updateDonation(@RequestBody Donation donation) {
         return donationService.updateDonation(donation);
     }
 
-    @DeleteMapping(value = "/delete/id", consumes = {"application/json"})
-    public List<Donation> deleteDonorById(@RequestBody Long id) {
+    @DeleteMapping(value = "/{id}")
+    public List<Donation> deleteDonorById(@PathVariable Long id) {
         donationService.deleteDonation(id);
         return donationService.getAllDonationsAsc();
     }
