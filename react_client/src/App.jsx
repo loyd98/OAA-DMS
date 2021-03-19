@@ -39,8 +39,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('APP');
-
     const currentTable = sessionStorage.getItem('currentTable');
     console.log(currentTable);
     if (currentTable) {
@@ -78,9 +76,7 @@ class App extends Component {
     this.setState({ currentInnerTable });
 
   handleCurrentTable = (currentTable) => {
-    return new Promise((resolve) => {
-      this.setState({ currentTable }, resolve);
-    });
+    this.setState({ currentTable });
   };
 
   handleDoSearch = debounce((e) => {
@@ -93,10 +89,12 @@ class App extends Component {
       },
     };
 
-    axios
-      .get(`${this.url}/donor/search?q=${searchQuery}`, options)
-      .then((res) => this.setState({ currentData: res.data }))
-      .catch((err) => console.log(err));
+    if (currentTable === 'donors') {
+      axios
+        .get(`${this.url}/donor/search?q=${searchQuery}`, options)
+        .then((res) => this.setState({ currentData: res.data }))
+        .catch((err) => console.log(err));
+    }
   }, 500);
 
   handleCurrentView = async (url, path) => {
@@ -127,6 +125,7 @@ class App extends Component {
         [name]: value,
       },
     }));
+    console.log(this.state.addForm);
   };
 
   handleAddFormSubmit = async () => {
@@ -165,6 +164,47 @@ class App extends Component {
         return false;
       }
     }
+
+    this.setState({ addForm: {} });
+  };
+
+  handleInnerSubmit = async (table) => {
+    const { addForm } = this.state;
+    const token = sessionStorage.getItem('token');
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    if (table === 'donors') {
+      try {
+        const res = await axios.post(`${this.url}/donor/add`, addForm, options);
+        this.handleRead(this.url, '/donor/asc');
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
+
+    if (table === 'donations') {
+      try {
+        const res = await axios.post(
+          `${this.url}/donation/add`,
+          addForm,
+          options,
+        );
+        this.handleRead(this.url, '/donation/asc');
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }
+
+    this.setState({ addForm: {} });
   };
 
   handleTabClick = (e) => {
@@ -231,6 +271,7 @@ class App extends Component {
           },
         };
 
+        // load all donors connected to donation
         const res = await axios.get(
           `${this.url}/donation/donors/${id}`,
           options,
@@ -462,6 +503,8 @@ class App extends Component {
                   handleCurrentId={this.handleCurrentId}
                   handleReadInnerTable={this.handleReadInnerTable}
                   handleReadIndividual={this.handleReadIndividual}
+                  handleInnerSubmit={this.handleInnerSubmit}
+                  handleAddFormField={this.handleAddFormField}
                 />
               )}
             />

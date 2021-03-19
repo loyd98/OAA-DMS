@@ -80,13 +80,3 @@
 .view__right {
     padding: 10px;
 }
-
-.view__fileBtn {
-    display: block;
-    height: 40px;
-    width: 100%;
-    margin-bottom: 30px;
-    border: 0;
-    color: var(--white);
-    background-color: var(--blue);
-}

@@ -138,59 +138,25 @@ class View extends Component {
       editForm,
       handleEditFormField,
       innerTable,
+      handleInnerSubmit,
       handleAddFormField,
     } = this.props;
 
     let button;
     let inputs;
 
-    if (currentTable === 'donations') {
-      inputs = config.ordering[currentTable].map((key) => {
-        if (key.name.includes('Files')) {
-          return (
-            <button
-              className="view__fileBtn"
-              key={key.key}
-              data-id={key.key}
-              onClick={(e) => {
-                e.preventDefault();
-                console.log(e.currentTarget.dataset.id);
-              }}
-            >
-              {key.name}
-            </button>
-          );
-        } else {
-          return (
-            <div key={key.key} className="view__detailContainer">
-              <div className="view__detailTitle">{key.name}</div>
-              <input
-                disabled={!isEditing}
-                name={key.key}
-                type="text"
-                value={editForm[key.key] == null ? '' : editForm[key.key]}
-                onChange={(e) =>
-                  handleEditFormField(e.target.name, e.target.value)
-                }
-              />
-            </div>
-          );
-        }
-      });
-    } else if (currentTable === 'donors') {
-      inputs = config.ordering[currentTable].map((key) => (
-        <div key={key.key} className="view__detailContainer">
-          <div className="view__detailTitle">{key.name}</div>
-          <input
-            disabled={!isEditing}
-            name={key.key}
-            type="text"
-            value={editForm[key.key] == null ? '' : editForm[key.key]}
-            onChange={(e) => handleEditFormField(e.target.name, e.target.value)}
-          />
-        </div>
-      ));
-    }
+    inputs = config.ordering[currentTable].map((key) => (
+      <div key={key.key} className="view__detailContainer">
+        <div className="view__detailTitle">{key.name}</div>
+        <input
+          disabled={!isEditing}
+          name={key.key}
+          type="text"
+          value={editForm[key.key] == null ? '' : editForm[key.key]}
+          onChange={(e) => handleEditFormField(e.target.name, e.target.value)}
+        />
+      </div>
+    ));
 
     if (!isEditing) {
       button = (
