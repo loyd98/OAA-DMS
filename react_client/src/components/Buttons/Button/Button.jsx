@@ -67,10 +67,3 @@ export default class Button extends Component {
     );
   }
 }
-
-Button.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({})]),
-  isTransparent: PropTypes.bool.isRequired,
-  message: PropTypes.string,
-  type: PropTypes.string,
-};

@@ -4,55 +4,79 @@ import './Dashboard.scoped.css';
 
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TableContainer from '../../components/TableContainer/TableContainer';
+import axios from 'axios';
+import Add from '../Add/Add';
 
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      data: [],
+      showAdd: false,
+    };
   }
 
+  componentDidMount() {
+    this.read();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { currentTable } = this.props;
+    if (prevProps.currentTable !== currentTable) {
+      this.read();
+    }
+  }
+
+  handleShowAdd = (showAdd) => this.setState({ showAdd });
+
+  create = () => {};
+
+  read = () => {
+    const { currentTable, url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+
+    switch (currentTable) {
+      case 'donors':
+        axios
+          .get(`${url}/donor/asc`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
+      case 'donations':
+        axios
+          .get(`${url}/donation/asc`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
+    }
+  };
+
   render() {
-    const {
-      config,
-      currentTable,
-      currentData,
-      handleRead,
-      handleCurrentData,
-      handleShowAdd,
-      handleCurrentId,
-      handleDelete,
-      handleCurrentView,
-      handleReadIndividual,
-      handleSearchQuery,
-      username,
-      searchQuery,
-      handleDoSearch,
-      handleTabClick,
-      handleReadInnerTable,
-    } = this.props;
+    const { data, showAdd } = this.state;
+    const { config, onTabClick, currentTable, url } = this.props;
 
     return (
       <div className="dashboard flex--vertical">
-        <SearchBar
-          username={username}
-          searchQuery={searchQuery}
-          handleSearchQuery={handleSearchQuery}
-          handleDoSearch={handleDoSearch}
-        />
+        {showAdd && (
+          <Add
+            url={url}
+            config={config}
+            currentTable={currentTable}
+            onCancel={this.handleShowAdd}
+            onSubmit={this.read}
+          />
+        )}
+        <SearchBar />
         <TableContainer
-          config={config}
-          currentData={currentData}
+          url={url}
+          data={data}
           currentTable={currentTable}
-          handleRead={handleRead}
-          handleCurrentData={handleCurrentData}
-          handleShowAdd={handleShowAdd}
-          handleCurrentId={handleCurrentId}
-          handleDelete={handleDelete}
-          handleCurrentView={handleCurrentView}
-          handleReadIndividual={handleReadIndividual}
-          handleTabClick={handleTabClick}
-          handleReadInnerTable={handleReadInnerTable}
+          config={config}
+          onTabClick={onTabClick}
+          onAddClick={this.handleShowAdd}
+          onDelete={this.read}
         />
       </div>
     );

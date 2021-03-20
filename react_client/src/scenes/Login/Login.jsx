@@ -18,7 +18,7 @@ class Login extends Component {
 
   handleSubmit = async (e, url, username, password) => {
     e.preventDefault();
-    const { history, handleCurrentTable, handleCurrentInnerTable } = this.props;
+    const { history, onSubmit } = this.props;
     const loginUser = async (credentials) => {
       try {
         const resp = await axios.post(`${url}/login`, credentials);
@@ -37,8 +37,7 @@ class Login extends Component {
 
     if (token) {
       sessionStorage.setItem('token', token.data);
-      handleCurrentTable('donors');
-      handleCurrentInnerTable('donations');
+      onSubmit('donors');
       history.push('/dashboard');
     }
 
@@ -51,10 +50,8 @@ class Login extends Component {
       history,
       username,
       password,
-      handleUsername,
-      handlePassword,
-      handleCurrentData,
-      handleCurrentTable,
+      onPasswordChange,
+      onUsernameChange,
     } = this.props;
 
     return (
@@ -67,26 +64,19 @@ class Login extends Component {
               name="username"
               value={username}
               placeholder="Username"
-              onChange={(e) => handleUsername(e.target.value)}
+              onChange={(e) => onUsernameChange(e.target.value)}
             />
             <input
               type="password"
               name="password"
               value={password}
               placeholder="Password"
-              onChange={(e) => handlePassword(e.target.value)}
+              onChange={(e) => onPasswordChange(e.target.value)}
             />
             <button
               id="login__proceed--btn"
               onClick={(e) => {
-                this.handleSubmit(
-                  e,
-                  url,
-                  username,
-                  password,
-                  handleCurrentData,
-                  handleCurrentTable,
-                ).then((resp) => {
+                this.handleSubmit(e, url, username, password).then((resp) => {
                   if (resp) history.push('/dashboard');
                 });
               }}

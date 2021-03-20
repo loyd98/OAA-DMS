@@ -7,6 +7,7 @@ import Button from '../Buttons/Button/Button';
 import Dropdown from '../Dropdown/Dropdown';
 import { Redirect, withRouter } from 'react-router';
 import Table from '../Table/Table';
+import axios from 'axios';
 
 const config = require('../../data.config');
 
@@ -23,9 +24,6 @@ class TableContainer extends Component {
   }
 
   componentDidMount() {
-    const { handleRead } = this.props;
-    handleRead();
-
     const temp = sessionStorage.getItem('pageDetails');
     const loadedData = JSON.parse(temp);
 
@@ -38,10 +36,10 @@ class TableContainer extends Component {
       const itemsPerPage = Math.floor((height - 250) / 40);
       let numOfPages;
 
-      if (this.props.currentData.length === 0) {
+      if (this.props.data.length === 0) {
         numOfPages = 1;
       } else {
-        numOfPages = Math.ceil(this.props.currentData.length / itemsPerPage);
+        numOfPages = Math.ceil(this.props.data.length / itemsPerPage);
       }
 
       this.setState({ currentPage, itemsPerPage, numOfPages });
@@ -61,11 +59,10 @@ class TableContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.currentData !== this.props.currentData) {
+    if (prevProps.data !== this.props.data) {
       const height = window.innerHeight;
       const itemsPerPage = Math.floor((height - 250) / 40);
-      const numOfPages =
-        Math.ceil(this.props.currentData.length / itemsPerPage) || 1;
+      const numOfPages = Math.ceil(this.props.data.length / itemsPerPage) || 1;
       this.setState({ numOfPages });
     }
 
@@ -111,48 +108,51 @@ class TableContainer extends Component {
 
   updateHeight = () => {
     const { height, currentPage } = this.state;
-    const { currentData } = this.props;
+    const { data } = this.props;
 
     this.setState({ height: window.innerHeight });
 
     const itemsPerPage = Math.floor((height - 250) / 40);
-    const numOfPages = Math.ceil(currentData.length / itemsPerPage);
+    const numOfPages = Math.ceil(data.length / itemsPerPage);
     if (itemsPerPage > 0) {
       this.setState({ currentPage, itemsPerPage, numOfPages });
     }
   };
 
-  handleRedirect = (id) => {
-    const {
-      history,
-      handleReadIndividual,
-      handleCurrentId,
-      handleReadInnerTable,
-    } = this.props;
-    handleCurrentId(id);
-    handleReadInnerTable(id);
-    handleReadIndividual(id).then((res) => history.push('/view'));
+  //Delete
+  handleDelete = (id) => {
+    const { currentTable, onDelete, url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+
+    switch (currentTable) {
+      case 'donors':
+        axios
+          .delete(`${url}/donor/${id}`, options)
+          .then((res) => onDelete())
+          .catch((err) => console.log(err));
+        break;
+      case 'donations':
+        axios
+          .delete(`${url}/donation/${id}`, options)
+          .then((res) => onDelete())
+          .catch((err) => console.log(err));
+        break;
+    }
   };
 
   render() {
-    const {
-      config,
-      // currentTable,
-      currentData,
-      handleShowAdd,
-      handleDelete,
-      handleTabClick,
-    } = this.props;
+    const { config, data, onTabClick, onAddClick } = this.props;
     const { currentPage, numOfPages, itemsPerPage } = this.state;
 
-    if (!currentData) {
+    if (!data) {
       return <div>Loading ...</div>;
     } else {
       const currentTable = sessionStorage.getItem('currentTable');
       const tables = config.tables;
       const fields = config.ordering[currentTable];
-      const items = this.sliceItems(currentData, itemsPerPage, currentPage);
-      const colLimit = 7;
+      const items = this.sliceItems(data, itemsPerPage, currentPage);
+
       // const dropdownItems = config.dropdowns[currentTable];
 
       return (
@@ -178,7 +178,9 @@ class TableContainer extends Component {
                           data-id={table}
                           key={table}
                           className="table__flag flex--horizontal"
-                          onClick={(e) => handleTabClick(e)}
+                          onClick={(e) =>
+                            onTabClick(e.currentTarget.dataset.id.toLowerCase())
+                          }
                         >
                           <span>{table}</span>
                         </div>
@@ -223,7 +225,7 @@ class TableContainer extends Component {
                     isTransparent
                     message="Add Entry"
                     type="right"
-                    onClick={handleShowAdd}
+                    onClick={() => onAddClick(true)}
                   >
                     <FontAwesomeIcon icon="plus" />
                   </Button>
@@ -234,9 +236,9 @@ class TableContainer extends Component {
           <Table
             fields={fields}
             items={items}
-            redirectToView={this.handleRedirect}
+            redirectToView={() => console.log('Hi')}
             colLimit={7}
-            handleDelete={handleDelete}
+            handleDelete={this.handleDelete}
           />
         </table>
       );
