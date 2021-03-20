@@ -141,8 +141,32 @@ class TableContainer extends Component {
     }
   };
 
+  handleRedirect = (id) => {
+    const { currentTable, history } = this.props;
+
+    switch (currentTable) {
+      case 'donors':
+        history.push({
+          pathname: `/donor`,
+          state: {
+            id,
+          },
+        });
+        break;
+      case 'donations':
+        console.log('HI');
+        history.push({
+          pathname: `/donation`,
+          state: {
+            id,
+          },
+        });
+        break;
+    }
+  };
+
   render() {
-    const { config, data, onTabClick, onAddClick } = this.props;
+    const { config, data, onTabClick, onAddClick, history } = this.props;
     const { currentPage, numOfPages, itemsPerPage } = this.state;
 
     if (!data) {
@@ -178,9 +202,11 @@ class TableContainer extends Component {
                           data-id={table}
                           key={table}
                           className="table__flag flex--horizontal"
-                          onClick={(e) =>
-                            onTabClick(e.currentTarget.dataset.id.toLowerCase())
-                          }
+                          onClick={(e) => {
+                            onTabClick(
+                              e.currentTarget.dataset.id.toLowerCase(),
+                            );
+                          }}
                         >
                           <span>{table}</span>
                         </div>
@@ -236,7 +262,7 @@ class TableContainer extends Component {
           <Table
             fields={fields}
             items={items}
-            redirectToView={() => console.log('Hi')}
+            redirectToView={(id) => this.handleRedirect(id)}
             colLimit={7}
             handleDelete={this.handleDelete}
           />
