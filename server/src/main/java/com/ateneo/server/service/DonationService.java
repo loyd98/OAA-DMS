@@ -65,5 +65,6 @@ public class DonationService {
         existingDonation.setNotes(donation.getNotes());
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
+        return existingDonation;
     }
 }
