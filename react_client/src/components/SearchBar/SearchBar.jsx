@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import './SearchBar.scoped.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import _ from 'lodash';
+import axios from 'axios';
 
 export default class SearchBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      query: '',
+    };
   }
 
-  handleOnChange = (e) => {
-    const { handleSearchQuery, handleDoSearch } = this.props;
-    handleSearchQuery(e.target.value);
-    handleDoSearch();
-  };
-
   render() {
-    const { username, searchQuery } = this.props;
+    const { query } = this.state;
+    const { username, onChange } = this.props;
 
     return (
       <div className="search flex--horizontal">
         <div className="search__container flex--horizontal">
-          <input value={searchQuery} onChange={(e) => this.handleOnChange(e)} />
+          <input onChange={(e) => onChange(e)} />
           <button type="button">
             <FontAwesomeIcon icon="search" />
           </button>

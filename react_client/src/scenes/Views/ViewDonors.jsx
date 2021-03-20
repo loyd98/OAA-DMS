@@ -24,6 +24,8 @@ class ViewDonors extends Component {
       showModal: false,
       id: null,
     };
+    this.tableName = 'donors';
+    this.title = 'Donor';
   }
 
   componentDidMount() {
@@ -225,8 +227,8 @@ class ViewDonors extends Component {
     }
 
     const innerTable =
-      config.innerTables['donors'][index][0].toUpperCase() +
-      config.innerTables['donors'][index].slice(1);
+      config.innerTables[this.tableName][index][0].toUpperCase() +
+      config.innerTables[this.tableName][index].slice(1);
 
     if (form.length === 0) {
       return <div>Loading...</div>;
@@ -252,7 +254,7 @@ class ViewDonors extends Component {
         <div className="view flex--horizontal">
           <div className="view__left">
             <div className="view__titlebar flex--horizontal">
-              <p>Donor:</p>
+              <p>{this.title}</p>
               {button}
             </div>
             <form className="view__details">{inputs}</form>

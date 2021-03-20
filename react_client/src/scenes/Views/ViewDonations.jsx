@@ -9,10 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router';
 import Modal from '../../components/Modal/Modal';
 import InnerTable from '../../components/InnerTable/InnerTable';
-import Add from '../Add/Add';
 import axios from 'axios';
 
-class View extends Component {
+class ViewDonors extends Component {
   constructor(props) {
     super(props);
 
@@ -25,9 +24,22 @@ class View extends Component {
       showModal: false,
       id: null,
     };
+    this.tableName = 'donations';
+    this.title = 'Donation';
   }
 
   componentDidMount() {
+    this.handleRead();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { id } = this.state;
+    if (prevState.id !== id) {
+      sessionStorage.setItem('currentId', id);
+    }
+  }
+
+  handleRead = () => {
     const { history, url } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
@@ -47,17 +59,11 @@ class View extends Component {
         this.copyData();
       })
       .catch((err) => console.log(err));
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { id } = this.state;
-    if (prevState.id !== id) {
-      sessionStorage.setItem('currentId', id);
-    }
-  }
+  };
 
   setIsEditing = (isEditing) => this.setState({ isEditing });
   setShowModal = (showModal) => this.setState({ showModal });
+  setShowAdd = (showAdd) => this.setState({ showAdd });
 
   setForm = (name, value) => {
     this.setState((prevState) => ({
@@ -137,7 +143,7 @@ class View extends Component {
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
     axios
-      .patch(`${url}/donation/update`, form, options)
+      .patch(`${url}/donor/update`, form, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();
@@ -148,7 +154,7 @@ class View extends Component {
 
   render() {
     const { data, isEditing, form, index, showAdd, showModal, id } = this.state;
-    const { config, currentTable, url } = this.props;
+    const { config, currentTable, url, onDelete, onView } = this.props;
     let button;
     let inputs;
 
@@ -157,9 +163,7 @@ class View extends Component {
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
         obj.key !== 'lastModifiedDate' &&
-        obj.key !== 'lastModifiedBy' &&
-        obj.key !== 'donorId' &&
-        obj.key !== 'scholarshipId'
+        obj.key !== 'lastModifiedBy'
       ) {
         return (
           <div key={obj.key} className="view__detailContainer">
@@ -223,8 +227,8 @@ class View extends Component {
     }
 
     const innerTable =
-      config.innerTables['donations'][index][0].toUpperCase() +
-      config.innerTables['donations'][index].slice(1);
+      config.innerTables[this.tableName][index][0].toUpperCase() +
+      config.innerTables[this.tableName][index].slice(1);
 
     if (form.length === 0) {
       return <div>Loading...</div>;
@@ -235,15 +239,6 @@ class View extends Component {
     }
     return (
       <>
-        {showAdd && (
-          <Add
-            currentTable={config.innerTables[currentTable][index]}
-            handleShowAdd={this.handleShowAdd}
-            handleAddFormField={handleAddFormField}
-            config={config}
-            handleAddFormSubmit={this.handleSubmit}
-          />
-        )}
         {showModal && (
           <Modal
             title="Discard your changes?"
@@ -259,7 +254,7 @@ class View extends Component {
         <div className="view flex--horizontal">
           <div className="view__left">
             <div className="view__titlebar flex--horizontal">
-              <p>Donation:</p>
+              <p>{this.title}</p>
               {button}
             </div>
             <form className="view__details">{inputs}</form>
@@ -272,7 +267,7 @@ class View extends Component {
                   isTransparent
                   message={`Add ${config.innerTables[currentTable][index]}`}
                   type="right"
-                  onClick={() => this.handleShowAdd(true)}
+                  onClick={() => this.setShowAdd(true)}
                 >
                   <FontAwesomeIcon icon="plus" />
                 </Button>
@@ -307,9 +302,13 @@ class View extends Component {
               <InnerTable
                 id={id}
                 url={url}
+                showAdd={showAdd}
                 config={config}
                 innerTable={innerTable.toLowerCase()}
                 colLimit={6}
+                onDelete={onDelete}
+                onView={onView}
+                onAddCancel={this.setShowAdd}
               />
             </table>
           </div>
@@ -319,4 +318,4 @@ class View extends Component {
   }
 }
 
-export default withRouter(View);
+export default withRouter(ViewDonors);
