@@ -6,6 +6,7 @@ import Button from '../Buttons/Button/Button';
 import axios from 'axios';
 import { withRouter } from 'react-router';
 import InnerAdd from '../../components/InnerAdd/InnerAdd';
+import DeleteInnerModal from '../DeleteInnerModal/DeleteInnerModal';
 
 class InnerTable extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class InnerTable extends Component {
 
     this.state = {
       data: [],
+      showModal: false,
+      idToBeDeleted: null,
     };
   }
 
@@ -25,6 +28,8 @@ class InnerTable extends Component {
       console.log(prevProps.innerTable, this.props.innerTable);
     }
   }
+
+  setShowModal = (showModal) => this.setState({ showModal });
 
   handleRead = () => {
     const { url, id, innerTable } = this.props;
@@ -46,6 +51,11 @@ class InnerTable extends Component {
     }
   };
 
+  handleDelete = (id) => {
+    this.setState({ idToBeDeleted: id });
+    this.setState({ showModal: true });
+  };
+
   render() {
     const {
       id,
@@ -59,11 +69,26 @@ class InnerTable extends Component {
       showAdd,
       onAddCancel,
     } = this.props;
-    const { data } = this.state;
+    const { data, showModal, idToBeDeleted } = this.state;
     const fields = config.ordering[innerTable];
 
     return (
       <>
+        {showModal && (
+          <DeleteInnerModal
+            title="Delete entry?"
+            message={`Do you really want to delete this entry with ID ${idToBeDeleted}.`}
+            deleteConfirmation={`Type "${idToBeDeleted}" to confirm.`}
+            leftBtnName="Cancel"
+            rightBtnName="Delete"
+            onClose={this.setShowModal}
+            idToBeDeleted={idToBeDeleted}
+            currentTable={innerTable}
+            url={url}
+            onDelete={onDelete}
+            onRead={this.handleRead}
+          />
+        )}
         {showAdd && (
           <InnerAdd
             url={url}
@@ -109,9 +134,7 @@ class InnerTable extends Component {
                     isTransparent={false}
                     message="Delete"
                     type="right"
-                    onClick={() =>
-                      onDelete(url, innerTable, this.handleRead, row.id)
-                    }
+                    onClick={() => this.handleDelete(row.id)}
                   >
                     <FontAwesomeIcon data-id={row.id} icon="times" />
                   </Button>
