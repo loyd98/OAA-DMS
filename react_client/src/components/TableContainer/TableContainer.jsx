@@ -85,6 +85,8 @@ class TableContainer extends Component {
     }
   }
 
+  setShowModal = (showModal) => this.setState({ showModal });
+
   handleLeftClick = () => {
     this.setState((prevState) => ({
       currentPage: prevState.currentPage > 1 ? prevState.currentPage - 1 : 1,
@@ -123,24 +125,9 @@ class TableContainer extends Component {
     }
   };
 
-  //Delete
   handleDelete = (id) => {
     this.setState({ idToBeDeleted: id });
     this.setState({ showModal: true });
-  };
-
-  handleModalDelete = () => {
-    const { idToBeDeleted, value } = this.state;
-
-    if (idToBeDeleted == value) {
-      this.delete(idToBeDeleted);
-      this.setState({ showModal: false });
-    }
-  };
-
-  handleModalCancel = () => {
-    this.setState({ showModal: false });
-    this.setState({ value: '' });
   };
 
   handleRedirect = (id) => {
@@ -167,27 +154,6 @@ class TableContainer extends Component {
     }
   };
 
-  delete(id) {
-    const { currentTable, onDelete, url } = this.props;
-    const token = sessionStorage.getItem('token');
-    const options = { headers: { Authorization: `Bearer ${token}` } };
-
-    switch (currentTable) {
-      case 'donors':
-        axios
-          .delete(`${url}/donor/${id}`, options)
-          .then((res) => onDelete())
-          .catch((err) => console.log(err));
-        break;
-      case 'donations':
-        axios
-          .delete(`${url}/donation/${id}`, options)
-          .then((res) => onDelete())
-          .catch((err) => console.log(err));
-        break;
-    }
-  }
-
   render() {
     const {
       currentPage,
@@ -195,9 +161,8 @@ class TableContainer extends Component {
       itemsPerPage,
       showModal,
       idToBeDeleted,
-      value,
     } = this.state;
-    const { config, data, onTabClick, onAddClick } = this.props;
+    const { config, data, onTabClick, onAddClick, url, onDelete } = this.props;
 
     if (!data) {
       return <div>Loading ...</div>;
@@ -218,11 +183,11 @@ class TableContainer extends Component {
               deleteConfirmation={`Type "${idToBeDeleted}" to confirm.`}
               leftBtnName="Cancel"
               rightBtnName="Delete"
-              exitOnClick={this.handleModalCancel}
-              leftBtnOnClick={this.handleModalCancel}
-              rightBtnOnClick={this.handleModalDelete}
-              value={value}
-              onInputChange={(value) => this.setState({ value })}
+              onClose={this.setShowModal}
+              idToBeDeleted={idToBeDeleted}
+              currentTable={currentTable}
+              url={url}
+              onDelete={onDelete}
             />
           )}
           <table className="table">
