@@ -21,6 +21,7 @@ module.exports = {
       { key: 'faxNumber', name: 'Fax No.', width: '100px' },
       { key: 'companyAddress', name: 'Company Address', width: '100px' },
       { key: 'companyTIN', name: 'Company TIN', width: '100px' },
+      { key: 'donationId', name: 'Donation ID', width: '70px' },
       { key: 'createdBy', name: 'Created By', width: '100px' },
       { key: 'creationDate', name: 'Creation Date', width: '100px' },
       { key: 'lastModifiedBy', name: 'Last Modified By', width: '100px' },

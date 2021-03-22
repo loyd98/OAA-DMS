@@ -5,7 +5,7 @@ import './Dashboard.scoped.css';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TableContainer from '../../components/TableContainer/TableContainer';
 import axios from 'axios';
-import Add from '../Add/Add';
+import Add from '../../components/Add/Add';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -90,7 +90,7 @@ export default class Dashboard extends Component {
 
   render() {
     const { data, showAdd } = this.state;
-    const { config, onTabClick, currentTable, url } = this.props;
+    const { config, onTabClick, currentTable, url, username } = this.props;
 
     return (
       <div className="dashboard flex--vertical">
@@ -103,7 +103,11 @@ export default class Dashboard extends Component {
             onSubmit={this.read}
           />
         )}
-        <SearchBar currentTable={currentTable} onChange={this.handleSearch} />
+        <SearchBar
+          username={username}
+          currentTable={currentTable}
+          onChange={this.handleSearch}
+        />
         <TableContainer
           url={url}
           data={data}

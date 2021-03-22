@@ -87,7 +87,7 @@ class App extends Component {
   };
 
   render() {
-    const { username, password, showAdd, currentTable } = this.state;
+    const { username, password, currentTable } = this.state;
 
     return (
       <div className="App">
@@ -115,6 +115,7 @@ class App extends Component {
                   <>
                     <Navigation />
                     <Dashboard
+                      username={username}
                       url={this.url}
                       currentTable={currentTable}
                       config={this.config}

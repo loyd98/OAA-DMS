@@ -8,6 +8,7 @@ import Dropdown from '../Dropdown/Dropdown';
 import { Redirect, withRouter } from 'react-router';
 import Table from '../Table/Table';
 import axios from 'axios';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 const config = require('../../data.config');
 
@@ -20,6 +21,9 @@ class TableContainer extends Component {
       currentPage: 1,
       numOfPages: 1,
       itemsPerPage: Math.floor((window.innerHeight - 250) / 40),
+      showModal: false,
+      idToBeDeleted: null,
+      inputValue: '',
     };
   }
 
@@ -121,24 +125,22 @@ class TableContainer extends Component {
 
   //Delete
   handleDelete = (id) => {
-    const { currentTable, onDelete, url } = this.props;
-    const token = sessionStorage.getItem('token');
-    const options = { headers: { Authorization: `Bearer ${token}` } };
+    this.setState({ idToBeDeleted: id });
+    this.setState({ showModal: true });
+  };
 
-    switch (currentTable) {
-      case 'donors':
-        axios
-          .delete(`${url}/donor/${id}`, options)
-          .then((res) => onDelete())
-          .catch((err) => console.log(err));
-        break;
-      case 'donations':
-        axios
-          .delete(`${url}/donation/${id}`, options)
-          .then((res) => onDelete())
-          .catch((err) => console.log(err));
-        break;
+  handleModalDelete = () => {
+    const { idToBeDeleted, value } = this.state;
+
+    if (idToBeDeleted == value) {
+      this.delete(idToBeDeleted);
+      this.setState({ showModal: false });
     }
+  };
+
+  handleModalCancel = () => {
+    this.setState({ showModal: false });
+    this.setState({ value: '' });
   };
 
   handleRedirect = (id) => {
@@ -165,9 +167,37 @@ class TableContainer extends Component {
     }
   };
 
+  delete(id) {
+    const { currentTable, onDelete, url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+
+    switch (currentTable) {
+      case 'donors':
+        axios
+          .delete(`${url}/donor/${id}`, options)
+          .then((res) => onDelete())
+          .catch((err) => console.log(err));
+        break;
+      case 'donations':
+        axios
+          .delete(`${url}/donation/${id}`, options)
+          .then((res) => onDelete())
+          .catch((err) => console.log(err));
+        break;
+    }
+  }
+
   render() {
-    const { config, data, onTabClick, onAddClick, history } = this.props;
-    const { currentPage, numOfPages, itemsPerPage } = this.state;
+    const {
+      currentPage,
+      numOfPages,
+      itemsPerPage,
+      showModal,
+      idToBeDeleted,
+      value,
+    } = this.state;
+    const { config, data, onTabClick, onAddClick } = this.props;
 
     if (!data) {
       return <div>Loading ...</div>;
@@ -180,93 +210,109 @@ class TableContainer extends Component {
       // const dropdownItems = config.dropdowns[currentTable];
 
       return (
-        <table className="table">
-          <thead id="table__top">
-            <tr className="table__topRow flex--horizontal">
-              <td className="flex--horizontal">
-                <div className="table__flags flex--horizontal">
-                  {tables.map((table) => {
-                    if (table.toLowerCase() === currentTable) {
-                      return (
-                        <div
-                          data-id={table}
-                          key={table}
-                          className="table__flag flex--horizontal flag--active"
-                        >
-                          <span>{table}</span>
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div
-                          data-id={table}
-                          key={table}
-                          className="table__flag flex--horizontal"
-                          onClick={(e) => {
-                            onTabClick(
-                              e.currentTarget.dataset.id.toLowerCase(),
-                            );
-                          }}
-                        >
-                          <span>{table}</span>
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              </td>
-              <td className="table__pagination flex--horizontal">
-                <Button isTransparent onClick={this.handleLeftClick}>
-                  <FontAwesomeIcon icon="arrow-left" />
-                </Button>
-                <span>
-                  <sup>{currentPage}</sup>&frasl;<sub>{numOfPages}</sub>
-                </span>
-                <Button isTransparent onClick={this.handleRightClick}>
-                  <FontAwesomeIcon icon="arrow-right" />
-                </Button>
-              </td>
-            </tr>
-          </thead>
-          <thead id="table__middle" className="flex--horizontal">
-            <tr>
-              <td className="flex--horizontal">
-                <div className="flex--horizontal">
-                  <Button isTransparent message="Import" type="left">
-                    <FontAwesomeIcon icon="file-upload" />
+        <React.Fragment>
+          {showModal && (
+            <DeleteModal
+              title="Delete entry?"
+              message={`Do you really want to delete this entry with ID ${idToBeDeleted}.`}
+              deleteConfirmation={`Type "${idToBeDeleted}" to confirm.`}
+              leftBtnName="Cancel"
+              rightBtnName="Delete"
+              exitOnClick={this.handleModalCancel}
+              leftBtnOnClick={this.handleModalCancel}
+              rightBtnOnClick={this.handleModalDelete}
+              value={value}
+              onInputChange={(value) => this.setState({ value })}
+            />
+          )}
+          <table className="table">
+            <thead id="table__top">
+              <tr className="table__topRow flex--horizontal">
+                <td className="flex--horizontal">
+                  <div className="table__flags flex--horizontal">
+                    {tables.map((table) => {
+                      if (table.toLowerCase() === currentTable) {
+                        return (
+                          <div
+                            data-id={table}
+                            key={table}
+                            className="table__flag flex--horizontal flag--active"
+                          >
+                            <span>{table}</span>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div
+                            data-id={table}
+                            key={table}
+                            className="table__flag flex--horizontal"
+                            onClick={(e) => {
+                              onTabClick(
+                                e.currentTarget.dataset.id.toLowerCase(),
+                              );
+                            }}
+                          >
+                            <span>{table}</span>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                </td>
+                <td className="table__pagination flex--horizontal">
+                  <Button isTransparent onClick={this.handleLeftClick}>
+                    <FontAwesomeIcon icon="arrow-left" />
                   </Button>
-                  <Button isTransparent message="Export" type="left">
-                    <FontAwesomeIcon icon="file-download" />
+                  <span>
+                    <sup>{currentPage}</sup>&frasl;<sub>{numOfPages}</sub>
+                  </span>
+                  <Button isTransparent onClick={this.handleRightClick}>
+                    <FontAwesomeIcon icon="arrow-right" />
                   </Button>
-                  {/* <Dropdown
+                </td>
+              </tr>
+            </thead>
+            <thead id="table__middle" className="flex--horizontal">
+              <tr>
+                <td className="flex--horizontal">
+                  <div className="flex--horizontal">
+                    <Button isTransparent message="Import" type="left">
+                      <FontAwesomeIcon icon="file-upload" />
+                    </Button>
+                    <Button isTransparent message="Export" type="left">
+                      <FontAwesomeIcon icon="file-download" />
+                    </Button>
+                    {/* <Dropdown
                     title="Dropdown"
                     list={dropdownItems.map((i) => i.name)}
                   /> */}
-                  <Button isTransparent message="Sort" type="center">
-                    <FontAwesomeIcon icon="sort" />
-                  </Button>
-                </div>
-                <div className="flex--horizontal">
-                  <Button
-                    isTransparent
-                    message="Add Entry"
-                    type="right"
-                    onClick={() => onAddClick(true)}
-                  >
-                    <FontAwesomeIcon icon="plus" />
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          </thead>
-          <Table
-            fields={fields}
-            items={items}
-            redirectToView={(id) => this.handleRedirect(id)}
-            colLimit={7}
-            handleDelete={this.handleDelete}
-          />
-        </table>
+                    <Button isTransparent message="Sort" type="center">
+                      <FontAwesomeIcon icon="sort" />
+                    </Button>
+                  </div>
+                  <div className="flex--horizontal">
+                    <Button
+                      isTransparent
+                      message="Add Entry"
+                      type="right"
+                      onClick={() => onAddClick(true)}
+                    >
+                      <FontAwesomeIcon icon="plus" />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            </thead>
+            <Table
+              fields={fields}
+              items={items}
+              redirectToView={(id) => this.handleRedirect(id)}
+              colLimit={7}
+              handleDelete={this.handleDelete}
+            />
+          </table>
+        </React.Fragment>
       );
     }
   }

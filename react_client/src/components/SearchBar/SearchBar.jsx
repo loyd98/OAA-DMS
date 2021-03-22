@@ -8,13 +8,10 @@ export default class SearchBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      query: '',
-    };
+    this.state = {};
   }
 
   render() {
-    const { query } = this.state;
     const { username, onChange } = this.props;
 
     return (

@@ -1,0 +1,7 @@
+.modal input {
+    margin-bottom: 20px;
+}
+
+.delete__modal .modal__message {
+    margin: 10px 0px !important;
+}
