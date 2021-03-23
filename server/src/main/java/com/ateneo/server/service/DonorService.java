@@ -21,6 +21,13 @@ public class DonorService {
 
     //POST
     public Donor saveDonor(Donor donor) {
+        if (donor.getDonationId() != null) {
+            Donation donation = donationRepository.findById(donor.getDonationId()).orElse(null);
+            System.out.println(donation.getId());
+            donation.addDonor(donor);
+
+            return donorRepository.save(donor);
+        }
         return donorRepository.save(donor);
     }
 

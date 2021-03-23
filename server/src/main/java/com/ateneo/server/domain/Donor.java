@@ -17,6 +17,7 @@ public class Donor extends Auditable{
     @Id
     @GeneratedValue
     private Long id;
+    private Long donationId;
     private String donorName;
     private String accountNumber;
     private String accountName;
@@ -36,7 +37,7 @@ public class Donor extends Auditable{
     private String birthDate;
     private String notes;
 
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "donor_donation",
             joinColumns = @JoinColumn(name = "donor_id"),

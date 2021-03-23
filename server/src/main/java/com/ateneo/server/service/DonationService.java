@@ -27,12 +27,11 @@ public class DonationService {
         return donationRepository.findAllByOrderByIdDesc();
     }
 
-    public List<Donation> saveDonation(Donation donation) {
+    public Donation saveDonation(Donation donation) {
         Donor donor = donorRepository.findById(donation.getDonorId()).orElse(null);
 
         donor.addDonation(donation);
-        donationRepository.save(donation);
-        return donor.getDonations();
+        return donationRepository.save(donation);
     }
 
     public String deleteDonation(Long id) {
@@ -65,6 +64,15 @@ public class DonationService {
         existingDonation.setNotes(donation.getNotes());
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
-        return existingDonation;
+        return donationRepository.save(donation);
+    }
+
+    // Search
+    public List<Donation> search(String keyword) {
+        if (keyword != null) {
+            return donationRepository.search(keyword);
+        }
+
+        return donationRepository.findAll();
     }
 }

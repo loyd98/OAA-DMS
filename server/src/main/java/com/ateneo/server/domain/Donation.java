@@ -34,4 +34,8 @@ public class Donation extends Auditable {
     @ManyToMany(mappedBy = "donations")
     @JsonIgnore
     private List<Donor> donors = new ArrayList<>();
+
+    public void addDonor(Donor donor) {
+        donors.add(donor);
+    }
 }
