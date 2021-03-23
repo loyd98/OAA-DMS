@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import './components/FontAwesomeIcons/FontAwesomeIcon';
 import './App.css';
+import axios from 'axios';
 
 // Components
 import Navigation from './components/Navigation/Navigation';
@@ -10,7 +11,6 @@ import Dashboard from './scenes/Dashboard/Dashboard';
 import Login from './scenes/Login/Login';
 import ViewDonors from './scenes/Views/ViewDonors';
 import ViewDonations from './scenes/Views/ViewDonations';
-import axios from 'axios';
 
 const config = require('./data.config');
 
@@ -41,32 +41,36 @@ class App extends Component {
   }
 
   setUsername = (username) => this.setState({ username });
+
   setPassword = (password) => this.setState({ password });
+
   setCurrentTable = (currentTable) => this.setState({ currentTable });
 
   handleView = (history, table, id) => {
     switch (table) {
       case 'donors':
         history.push({
-          pathname: `/donor`,
+          pathname: '/donor',
           state: {
             id,
           },
         });
         break;
       case 'donations':
-        console.log('HI');
         history.push({
-          pathname: `/donation`,
+          pathname: '/donation',
           state: {
             id,
           },
         });
         break;
+      default:
+        console.log('ERROR');
+        break;
     }
   };
 
-  handleDelete = (url, table, callback, id) => {
+  handleInnerDelete = (url, table, callback, id) => {
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -74,17 +78,30 @@ class App extends Component {
       case 'donors':
         axios
           .delete(`${url}/donor/${id}`, options)
-          .then((res) => callback())
+          .then(() => {
+            callback();
+            this.setNotifMessage(`Donor ID ${id} successfulyl deleted.`);
+            this.handleNotification();
+          })
           .catch((err) => console.log(err));
         break;
       case 'donations':
         axios
           .delete(`${url}/donation/${id}`, options)
-          .then((res) => callback())
+          .then(() => {
+            callback();
+            this.setNotifMessage(`Donation ID ${id} successfully deleted.`);
+            this.handleNotification();
+          })
           .catch((err) => console.log(err));
+        break;
+      default:
+        console.log('ERROR');
         break;
     }
   };
+
+  delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   render() {
     const { username, password, currentTable } = this.state;
@@ -134,7 +151,7 @@ class App extends Component {
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
-                  onDelete={this.handleDelete}
+                  onDelete={this.handleInnerDelete}
                 />
               )}
             />
@@ -147,7 +164,7 @@ class App extends Component {
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
-                  onDelete={this.handleDelete}
+                  onNotif={this.handleNotification}
                 />
               )}
             />

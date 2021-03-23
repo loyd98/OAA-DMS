@@ -3,8 +3,10 @@
         "browser": true,
         "es2021": true
     },
+    "parser": "babel-eslint",
     "extends": [
         "plugin:react/recommended",
+        "prettier",
         "airbnb"
     ],
     "parserOptions": {
@@ -15,17 +17,27 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "prettier"
     ],
     "rules": {
-        "no-console": "off",
-        "no-underscore-dangle": "off",
-        "object-curly-newline": "off",
-        "prefer-destructuring": ["error", {
-            "array": false,
-            "object": false
-          }, {
-            "enforceForRenamedProperties": false
-          }]
+        "no-console": "warn",
+        "operator-linebreak": [
+            "error",
+            "after",
+            {
+              "overrides": {
+                ":": "before"
+              }
+            }
+          ]
+        // "no-underscore-dangle": "off",
+        // "object-curly-newline": "off",
+        // "prefer-destructuring": ["error", {
+        //     "array": false,
+        //     "object": false
+        //   }, {
+        //     "enforceForRenamedProperties": false
+        //   }]
     }
 }

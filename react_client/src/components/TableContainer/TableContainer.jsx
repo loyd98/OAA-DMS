@@ -9,6 +9,7 @@ import { Redirect, withRouter } from 'react-router';
 import Table from '../Table/Table';
 import axios from 'axios';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import Notification from '../Notification/Notification';
 
 const config = require('../../data.config');
 
@@ -24,6 +25,8 @@ class TableContainer extends Component {
       showModal: false,
       idToBeDeleted: null,
       inputValue: '',
+      showNotif: 'none',
+      showMessage: '',
     };
   }
 
@@ -86,6 +89,11 @@ class TableContainer extends Component {
   }
 
   setShowModal = (showModal) => this.setState({ showModal });
+  setShowNotif = (showNotif) => this.setState({ showNotif });
+  setNotifMessage = (notifMessage) =>
+    new Promise((resolve, reject) => {
+      this.setState({ notifMessage }, resolve);
+    });
 
   handleLeftClick = () => {
     this.setState((prevState) => ({
@@ -161,6 +169,8 @@ class TableContainer extends Component {
       itemsPerPage,
       showModal,
       idToBeDeleted,
+      showNotif,
+      notifMessage,
     } = this.state;
     const { config, data, onTabClick, onAddClick, url, onDelete } = this.props;
 
@@ -176,6 +186,7 @@ class TableContainer extends Component {
 
       return (
         <React.Fragment>
+          <Notification showNotif={showNotif}>{notifMessage}</Notification>
           {showModal && (
             <DeleteModal
               title="Delete entry?"
@@ -188,6 +199,8 @@ class TableContainer extends Component {
               currentTable={currentTable}
               url={url}
               onDelete={onDelete}
+              onShow={this.setShowNotif}
+              onMessage={this.setNotifMessage}
             />
           )}
           <table className="table">

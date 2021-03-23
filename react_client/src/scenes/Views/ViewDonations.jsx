@@ -298,19 +298,17 @@ class ViewDonors extends Component {
                 <FontAwesomeIcon icon="arrow-left" />
               </Button>
             </div>
-            <table>
-              <InnerTable
-                id={id}
-                url={url}
-                showAdd={showAdd}
-                config={config}
-                innerTable={innerTable.toLowerCase()}
-                colLimit={6}
-                onDelete={onDelete}
-                onView={onView}
-                onAddCancel={this.setShowAdd}
-              />
-            </table>
+            <InnerTable
+              id={id}
+              url={url}
+              showAdd={showAdd}
+              config={config}
+              innerTable={innerTable.toLowerCase()}
+              colLimit={6}
+              onDelete={onDelete}
+              onView={onView}
+              onAddCancel={this.setShowAdd}
+            />
           </div>
         </div>
       </>

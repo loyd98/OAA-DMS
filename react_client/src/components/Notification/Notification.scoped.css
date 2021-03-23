@@ -1,0 +1,17 @@
+.notification {
+    min-height: 60px;
+    min-width: 200px;
+    max-width: 300px;
+    padding: 20px;
+    background-color: var(--white);
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: 3px solid var(--blue);
+    border-top: 0px;
+    text-align: center;
+    z-index: 100;
+    transition: ease-out 2s;
+}
+

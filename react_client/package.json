@@ -25,8 +25,10 @@
     "react-bootstrap": "^1.5.1",
     "react-devtools-electron": "^4.7.0",
     "react-dom": "^17.0.1",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-transition-group": "^4.4.1",
     "scoped-css-loader": "^1.0.0",
     "style-loader": "^2.0.0",
     "styled-components": "^5.2.1",
@@ -61,12 +63,14 @@
     "electron": "^11.3.0",
     "electron-devtools-installer": "^3.1.1",
     "electron-react-devtools": "^0.5.3",
+    "eslint": "^7.22.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "prettier-eslint": "^12.0.0"
   }
 }

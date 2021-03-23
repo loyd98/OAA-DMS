@@ -25,21 +25,34 @@ export default class Button extends Component {
 
   render() {
     const { isClicked, isHidden } = this.state;
-    const { children, isTransparent, message, type, onClick, id } = this.props;
-    const transparent = isTransparent
-      ? `button flex--vertical transparent`
+    const {
+      children, isTransparent, message, type, onClick, id,
+    } = this.props;
+    const transparent = isTransparent ?
+      'button flex--vertical transparent'
       : 'button flex--vertical';
     const clicked = isClicked ? 'btn--active' : '';
-    const hidden = !message ? 'hidden' : isHidden ? 'hidden' : '';
-    const position =
-      type === 'center' || type === 'undefined'
-        ? ''
-        : type === 'left'
-        ? 'caption__left'
-        : 'caption__right';
+
+    let hidden;
+    if (!message) {
+      hidden = 'hidden';
+    } else if (isHidden) {
+      hidden = 'hidden';
+    } else {
+      hidden = '';
+    }
+
+    let position;
+    if (type === 'center') {
+      position = '';
+    } else if (type === 'left') {
+      position = 'caption__left';
+    } else if (type === 'right') {
+      position = 'caption__right';
+    }
 
     return (
-      <React.Fragment>
+      <>
         <button
           data-id={id}
           type="button"
@@ -63,7 +76,22 @@ export default class Button extends Component {
             </div>
           </div>
         </button>
-      </React.Fragment>
+      </>
     );
   }
 }
+
+Button.propTypes = {
+  children: PropTypes.shape({}),
+  id: PropTypes.number.isRequired,
+  isTransparent: PropTypes.bool.isRequired,
+  message: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  type: PropTypes.string,
+};
+
+Button.defaultProps = {
+  children: '',
+  message: '',
+  type: 'center',
+};
