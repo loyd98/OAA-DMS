@@ -3,6 +3,7 @@
     border: 0px;
     border-bottom: 2px solid var(--red);
     text-align: center;
+    font-size: 18px;
 }
 
 .modal input:focus {

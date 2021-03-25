@@ -1,17 +1,13 @@
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './TableContainer.scoped.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { withRouter } from 'react-router';
 import Button from '../Buttons/Button/Button';
-import Dropdown from '../Dropdown/Dropdown';
-import { Redirect, withRouter } from 'react-router';
 import Table from '../Table/Table';
-import axios from 'axios';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import Notification from '../Notification/Notification';
-
-const config = require('../../data.config');
 
 class TableContainer extends Component {
   constructor(props) {
@@ -24,9 +20,8 @@ class TableContainer extends Component {
       itemsPerPage: Math.floor((window.innerHeight - 250) / 40),
       showModal: false,
       idToBeDeleted: null,
-      inputValue: '',
       showNotif: 'none',
-      showMessage: '',
+      notifMessage: '',
     };
   }
 
@@ -43,10 +38,11 @@ class TableContainer extends Component {
       const itemsPerPage = Math.floor((height - 250) / 40);
       let numOfPages;
 
-      if (this.props.data.length === 0) {
+      const { data } = this.props;
+      if (data.length === 0) {
         numOfPages = 1;
       } else {
-        numOfPages = Math.ceil(this.props.data.length / itemsPerPage);
+        numOfPages = Math.ceil(data.length / itemsPerPage);
       }
 
       this.setState({ currentPage, itemsPerPage, numOfPages });
@@ -61,39 +57,45 @@ class TableContainer extends Component {
     window.addEventListener('resize', this.updateHeight);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateHeight);
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data !== this.props.data) {
+    const { data } = this.props;
+    if (prevProps.data !== data) {
       const height = window.innerHeight;
       const itemsPerPage = Math.floor((height - 250) / 40);
-      const numOfPages = Math.ceil(this.props.data.length / itemsPerPage) || 1;
+      const numOfPages = Math.ceil(data.length / itemsPerPage) || 1;
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ numOfPages });
     }
 
     // Go to the nearest number of pages when current page is greater than require number of pages
     const { numOfPages, currentPage } = this.state;
-    const { currentTable } = this.props;
+    const { currentTable, config } = this.props;
 
     if (prevState.numOfPages !== numOfPages && currentPage > numOfPages) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentPage: numOfPages || 1 });
     }
 
     if (prevProps.currentTable !== currentTable) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
+        // eslint-disable-next-line react/no-unused-state
         currentDropdownItem: config.dropdowns[currentTable][0].name,
       });
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateHeight);
+  }
+
   setShowModal = (showModal) => this.setState({ showModal });
+
   setShowNotif = (showNotif) => this.setState({ showNotif });
-  setNotifMessage = (notifMessage) =>
-    new Promise((resolve, reject) => {
-      this.setState({ notifMessage }, resolve);
-    });
+
+  setNotifMessage = (notifMessage) => new Promise((resolve) => {
+    this.setState({ notifMessage }, resolve);
+  });
 
   handleLeftClick = () => {
     this.setState((prevState) => ({
@@ -106,17 +108,18 @@ class TableContainer extends Component {
 
     this.setState((prevState) => ({
       currentPage:
-        prevState.currentPage < numOfPages
-          ? prevState.currentPage + 1
+        prevState.currentPage < numOfPages ?
+          prevState.currentPage + 1
           : numOfPages,
     }));
   };
 
-  sliceItems = (data, itemsPerPage, currentPage) => {
-    currentPage--;
-    let start = itemsPerPage * currentPage;
-    let end = start + itemsPerPage;
-    let paginatedItems = data.slice(start, end);
+  sliceItems = (data, itemsPerPage, _currentPage) => {
+    let currentPage = _currentPage;
+    currentPage -= 1;
+    const start = itemsPerPage * currentPage;
+    const end = start + itemsPerPage;
+    const paginatedItems = data.slice(start, end);
     return paginatedItems;
   };
 
@@ -144,7 +147,7 @@ class TableContainer extends Component {
     switch (currentTable) {
       case 'donors':
         history.push({
-          pathname: `/donor`,
+          pathname: '/donor',
           state: {
             id,
           },
@@ -153,11 +156,14 @@ class TableContainer extends Component {
       case 'donations':
         console.log('HI');
         history.push({
-          pathname: `/donation`,
+          pathname: '/donation',
           state: {
             id,
           },
         });
+        break;
+      default:
+        console.log('ERROR');
         break;
     }
   };
@@ -172,128 +178,148 @@ class TableContainer extends Component {
       showNotif,
       notifMessage,
     } = this.state;
-    const { config, data, onTabClick, onAddClick, url, onDelete } = this.props;
+    const {
+      config, data, onTabClick, onAddClick, url, onDelete,
+    } = this.props;
 
     if (!data) {
       return <div>Loading ...</div>;
-    } else {
-      const currentTable = sessionStorage.getItem('currentTable');
-      const tables = config.tables;
-      const fields = config.ordering[currentTable];
-      const items = this.sliceItems(data, itemsPerPage, currentPage);
+    }
+    const currentTable = sessionStorage.getItem('currentTable');
+    const { tables } = config;
+    const fields = config.ordering[currentTable];
+    const items = this.sliceItems(data, itemsPerPage, currentPage);
 
-      // const dropdownItems = config.dropdowns[currentTable];
+    // const dropdownItems = config.dropdowns[currentTable];
 
-      return (
-        <React.Fragment>
-          <Notification showNotif={showNotif}>{notifMessage}</Notification>
-          {showModal && (
-            <DeleteModal
-              title="Delete entry?"
-              message={`Do you really want to delete this entry with ID ${idToBeDeleted}.`}
-              deleteConfirmation={`Type "${idToBeDeleted}" to confirm.`}
-              leftBtnName="Cancel"
-              rightBtnName="Delete"
-              onClose={this.setShowModal}
-              idToBeDeleted={idToBeDeleted}
-              currentTable={currentTable}
-              url={url}
-              onDelete={onDelete}
-              onShow={this.setShowNotif}
-              onMessage={this.setNotifMessage}
-            />
-          )}
-          <table className="table">
-            <thead id="table__top">
-              <tr className="table__topRow flex--horizontal">
-                <td className="flex--horizontal">
-                  <div className="table__flags flex--horizontal">
-                    {tables.map((table) => {
-                      if (table.toLowerCase() === currentTable) {
-                        return (
-                          <div
-                            data-id={table}
-                            key={table}
-                            className="table__flag flex--horizontal flag--active"
-                          >
-                            <span>{table}</span>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div
-                            data-id={table}
-                            key={table}
-                            className="table__flag flex--horizontal"
-                            onClick={(e) => {
-                              onTabClick(
-                                e.currentTarget.dataset.id.toLowerCase(),
-                              );
-                            }}
-                          >
-                            <span>{table}</span>
-                          </div>
-                        );
-                      }
-                    })}
-                  </div>
-                </td>
-                <td className="table__pagination flex--horizontal">
-                  <Button isTransparent onClick={this.handleLeftClick}>
-                    <FontAwesomeIcon icon="arrow-left" />
+    return (
+      <>
+        <Notification showNotif={showNotif}>{notifMessage}</Notification>
+        {showModal && (
+        <DeleteModal
+          title="Delete entry?"
+          message={`Do you really want to delete this entry with ID ${idToBeDeleted}.`}
+          deleteConfirmation={`Type "${idToBeDeleted}" to confirm.`}
+          leftBtnName="Cancel"
+          rightBtnName="Delete"
+          onClose={this.setShowModal}
+          idToBeDeleted={idToBeDeleted}
+          currentTable={currentTable}
+          url={url}
+          onDelete={onDelete}
+          onShow={this.setShowNotif}
+          onMessage={this.setNotifMessage}
+        />
+        )}
+        <table className="table">
+          <thead id="table__top">
+            <tr className="table__topRow flex--horizontal">
+              <td className="flex--horizontal">
+                <div className="table__flags flex--horizontal">
+                  {tables.map((table) => {
+                    if (table.toLowerCase() === currentTable) {
+                      return (
+                        <div
+                          data-id={table}
+                          key={table}
+                          className="table__flag flex--horizontal flag--active"
+                        >
+                          <span>{table}</span>
+                        </div>
+                      );
+                    }
+                    return (
+                      <button
+                        type="button"
+                        data-id={table}
+                        key={table}
+                        className="table__flag flex--horizontal"
+                        onClick={(e) => {
+                          onTabClick(
+                            e.currentTarget.dataset.id.toLowerCase(),
+                          );
+                        }}
+                      >
+                        <span>{table}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </td>
+              <td className="table__pagination flex--horizontal">
+                <Button isTransparent onClick={this.handleLeftClick}>
+                  <FontAwesomeIcon icon="arrow-left" />
+                </Button>
+                <span>
+                  <sup>{currentPage}</sup>
+                  &frasl;
+                  <sub>{numOfPages}</sub>
+                </span>
+                <Button isTransparent onClick={this.handleRightClick}>
+                  <FontAwesomeIcon icon="arrow-right" />
+                </Button>
+              </td>
+            </tr>
+          </thead>
+          <thead id="table__middle" className="flex--horizontal">
+            <tr>
+              <td className="flex--horizontal">
+                <div className="flex--horizontal">
+                  <Button isTransparent message="Import" type="left">
+                    <FontAwesomeIcon icon="file-upload" />
                   </Button>
-                  <span>
-                    <sup>{currentPage}</sup>&frasl;<sub>{numOfPages}</sub>
-                  </span>
-                  <Button isTransparent onClick={this.handleRightClick}>
-                    <FontAwesomeIcon icon="arrow-right" />
+                  <Button isTransparent message="Export" type="left">
+                    <FontAwesomeIcon icon="file-download" />
                   </Button>
-                </td>
-              </tr>
-            </thead>
-            <thead id="table__middle" className="flex--horizontal">
-              <tr>
-                <td className="flex--horizontal">
-                  <div className="flex--horizontal">
-                    <Button isTransparent message="Import" type="left">
-                      <FontAwesomeIcon icon="file-upload" />
-                    </Button>
-                    <Button isTransparent message="Export" type="left">
-                      <FontAwesomeIcon icon="file-download" />
-                    </Button>
-                    {/* <Dropdown
+                  {/* <Dropdown
                     title="Dropdown"
                     list={dropdownItems.map((i) => i.name)}
                   /> */}
-                    <Button isTransparent message="Sort" type="center">
-                      <FontAwesomeIcon icon="sort" />
-                    </Button>
-                  </div>
-                  <div className="flex--horizontal">
-                    <Button
-                      isTransparent
-                      message="Add Entry"
-                      type="right"
-                      onClick={() => onAddClick(true)}
-                    >
-                      <FontAwesomeIcon icon="plus" />
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            </thead>
-            <Table
-              fields={fields}
-              items={items}
-              redirectToView={(id) => this.handleRedirect(id)}
-              colLimit={7}
-              handleDelete={this.handleDelete}
-            />
-          </table>
-        </React.Fragment>
-      );
-    }
+                  <Button isTransparent message="Sort" type="center">
+                    <FontAwesomeIcon icon="sort" />
+                  </Button>
+                </div>
+                <div className="flex--horizontal">
+                  <Button
+                    isTransparent
+                    message="Add Entry"
+                    type="right"
+                    onClick={() => onAddClick(true)}
+                  >
+                    <FontAwesomeIcon icon="plus" />
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          </thead>
+          <Table
+            fields={fields}
+            items={items}
+            redirectToView={(id) => this.handleRedirect(id)}
+            colLimit={7}
+            handleDelete={this.handleDelete}
+          />
+        </table>
+      </>
+    );
   }
 }
+
+TableContainer.propTypes = {
+  config: PropTypes.shape({
+    dropdowns: PropTypes.shape({}),
+    ordering: PropTypes.shape({}),
+    tables: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  currentTable: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  onAddClick: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onTabClick: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default withRouter(TableContainer);

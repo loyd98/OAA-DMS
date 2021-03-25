@@ -2,7 +2,8 @@ const {
   default: installExtension,
   REACT_DEVELOPER_TOOLS,
 } = require('electron-devtools-installer');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu, MenuItem } = require('electron');
+const contextMenu = require('electron-context-menu');
 const path = require('path');
 
 function createWindow() {
@@ -20,10 +21,16 @@ function createWindow() {
   win.webContents.openDevTools();
 }
 
+contextMenu({
+	prepend: (defaultActions, parameters, browserWindow) => [
+	]
+});
+
 app.whenReady().then(() => {
   installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
+
   createWindow();
 });
 

@@ -82,11 +82,11 @@ export default class Button extends Component {
 }
 
 Button.propTypes = {
-  children: PropTypes.shape({}),
-  id: PropTypes.number.isRequired,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isTransparent: PropTypes.bool.isRequired,
   message: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   type: PropTypes.string,
 };
 
@@ -94,4 +94,6 @@ Button.defaultProps = {
   children: '',
   message: '',
   type: 'center',
+  id: '',
+  onClick: () => {},
 };

@@ -22,7 +22,6 @@ class Add extends Component {
 
     const form = {};
 
-    // eslint-disable-next-line react/prop-types
     config.ordering[currentTable].forEach((obj) => {
       if (
         obj.key !== 'createdBy' &&
@@ -45,14 +44,26 @@ class Add extends Component {
     }));
   };
 
-  // Create
-  handleSubmit = () => {
+  async setNotif(onMessage, onShow, message) {
+    await onMessage(message);
+    onShow(true);
+    await this.delay(3000);
+    onShow(false);
+    await this.delay(1000);
+    onShow('none');
+  }
+
+  delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  handleSubmit = async () => {
     const { form } = this.state;
     const {
       currentTable,
       onSubmit,
       url,
       onCancel,
+      onShow,
+      onMessage,
     } = this.props;
 
     const token = sessionStorage.getItem('token');
@@ -60,27 +71,47 @@ class Add extends Component {
 
     switch (currentTable) {
       case 'donors':
-        axios
-          .post(`${url}/donor/add`, form, options)
-          .then(() => onSubmit())
-          .catch((err) => console.log(err));
+        try {
+          const res = await axios.post(`${url}/donor/add`, form, options);
+          const { accountNumber } = res.data;
+          onSubmit();
+          onCancel(false);
+          await this.setNotif(onMessage, onShow, `Succesfully added donor with account number: ${accountNumber}.`);
+        } catch (err) {
+          const message = err?.response?.data?.errors[0]?.defaultMessage;
+          if (message) {
+            await this.setNotif(onMessage, onShow, message);
+          } else {
+            await this.setNotif(onMessage, onShow, 'Error in Add.jsx');
+          }
+        }
         break;
       case 'donations':
-        axios
-          .post(`${url}/donation/add`, form, options)
-          .then(() => onSubmit())
-          .catch((err) => console.log(err));
+        try {
+          const res = await axios.post(`${url}/donation/add`, form, options);
+          const { accountNumber } = res.data;
+          onSubmit();
+          onCancel(false);
+          await this.setNotif(onMessage, onShow, `Succesfully added donor with account number: ${accountNumber}.`);
+        } catch (err) {
+          const message = err?.response?.data?.errors[0]?.defaultMessage;
+          if (message) {
+            await this.setNotif(onMessage, onShow, message);
+          } else {
+            await this.setNotif(onMessage, onShow, 'Error in Add.jsx');
+          }
+        }
         break;
       default:
-        console.log('Error');
-        break;
+        console.log('ERROR');
     }
-    onCancel(false);
   };
 
   render() {
     const { form } = this.state;
-    const { currentTable, config, onCancel } = this.props;
+    const {
+      currentTable, config, onCancel,
+    } = this.props;
 
     if (_.isEmpty(form)) {
       return <div>Loading...</div>;
@@ -93,7 +124,6 @@ class Add extends Component {
             Cancel
           </Button>
 
-          {/* eslint-disable-next-line react/prop-types */}
           {config.ordering[currentTable].map((obj) => {
             if (
               obj.key === 'createdBy' ||
@@ -102,6 +132,20 @@ class Add extends Component {
               obj.key === 'lastModifiedDate'
             ) {
               return null;
+            }
+
+            if (obj.key === 'id') {
+              return (
+                <div key={obj.key} className="view__detailContainer">
+                  <div className="view__detailTitle">{obj.name}</div>
+                  <input
+                    disabled
+                    name={obj.key}
+                    type="text"
+                    value="AUTO GENERATED"
+                  />
+                </div>
+              );
             }
 
             return (
@@ -126,11 +170,15 @@ class Add extends Component {
 }
 
 Add.propTypes = {
-  config: PropTypes.shape({}).isRequired,
+  config: PropTypes.shape({
+    ordering: PropTypes.shape({}),
+  }).isRequired,
   currentTable: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  onShow: PropTypes.func.isRequired,
+  onMessage: PropTypes.func.isRequired,
 };
 
 export default withRouter(Add);

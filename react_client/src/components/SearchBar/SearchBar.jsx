@@ -1,8 +1,7 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './SearchBar.scoped.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import _ from 'lodash';
-import axios from 'axios';
 
 export default class SearchBar extends Component {
   constructor(props) {
@@ -30,3 +29,8 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+SearchBar.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+};

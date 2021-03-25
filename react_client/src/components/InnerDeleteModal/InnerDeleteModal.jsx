@@ -1,7 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import React, { Component } from 'react';
-import Notification from '../Notification/Notification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class Modal extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class Modal extends Component {
     const { input } = this.state;
     const { onClose, idToBeDeleted } = this.props;
 
-    if (idToBeDeleted == input) {
+    if (idToBeDeleted === parseInt(input, 10)) {
       this.delete(idToBeDeleted);
       onClose(false);
     }
@@ -26,6 +26,15 @@ export default class Modal extends Component {
     const { onClose } = this.props;
     onClose(false);
   };
+
+  async setNotif(onMessage, onShow, message) {
+    await onMessage(message);
+    onShow(true);
+    await this.delay(3000);
+    onShow(false);
+    await this.delay(1000);
+    onShow('none');
+  }
 
   delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -42,7 +51,6 @@ export default class Modal extends Component {
 
     if (innerTable === 'donors') {
       try {
-        console.log('HIT');
         await axios.delete(`${url}/donor/${id}`, options);
         onRead();
         await this.setNotif(
@@ -68,15 +76,6 @@ export default class Modal extends Component {
     }
   };
 
-  async setNotif(onMessage, onShow, message) {
-    await onMessage(message);
-    onShow(true);
-    await this.delay(3000);
-    onShow(false);
-    await this.delay(1000);
-    onShow('none');
-  }
-
   render() {
     const { input } = this.state;
 
@@ -91,8 +90,8 @@ export default class Modal extends Component {
     return (
       <div className="modal__background">
         <div className="deleteModal modal flex--vertical">
-          <div className="modal__exit" onClick={this.handleModalCancel}>
-            <FontAwesomeIcon icon="times" />
+          <div className="modal__exit">
+            <FontAwesomeIcon icon="times" onClick={this.handleModalCancel} />
           </div>
           <div className="modal__icon">
             <FontAwesomeIcon icon="trash" size="3x" />
@@ -106,11 +105,26 @@ export default class Modal extends Component {
             onChange={(e) => this.setState({ input: e.target.value })}
           />
           <div className="modal__btnContainer flex--horizontal">
-            <button onClick={this.handleModalCancel}>{leftBtnName}</button>
-            <button onClick={this.handleModalDelete}>{rightBtnName}</button>
+            <button type="button" onClick={this.handleModalCancel}>{leftBtnName}</button>
+            <button type="button" onClick={this.handleModalDelete}>{rightBtnName}</button>
           </div>
         </div>
       </div>
     );
   }
 }
+
+Modal.propTypes = {
+  currentTable: PropTypes.string.isRequired,
+  deleteConfirmation: PropTypes.string.isRequired,
+  idToBeDeleted: PropTypes.number.isRequired,
+  leftBtnName: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onMessage: PropTypes.func.isRequired,
+  onRead: PropTypes.func.isRequired,
+  onShow: PropTypes.func.isRequired,
+  rightBtnName: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+};

@@ -11,6 +11,7 @@ import Dashboard from './scenes/Dashboard/Dashboard';
 import Login from './scenes/Login/Login';
 import ViewDonors from './scenes/Views/ViewDonors';
 import ViewDonations from './scenes/Views/ViewDonations';
+import Notification from './components/Notification/Notification';
 
 const config = require('./data.config');
 
@@ -21,6 +22,8 @@ class App extends Component {
       currentTable: sessionStorage.getItem('currentTable'),
       username: '',
       password: '',
+      showNotif: 'none',
+      notifMessage: '',
     };
     this.url = config.URL;
     this.config = config;
@@ -45,6 +48,12 @@ class App extends Component {
   setPassword = (password) => this.setState({ password });
 
   setCurrentTable = (currentTable) => this.setState({ currentTable });
+
+  setShowNotif = (showNotif) => this.setState({ showNotif });
+
+  setNotifMessage = (notifMessage) => new Promise((resolve) => {
+    this.setState({ notifMessage }, resolve);
+  });
 
   handleView = (history, table, id) => {
     switch (table) {
@@ -104,10 +113,13 @@ class App extends Component {
   delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   render() {
-    const { username, password, currentTable } = this.state;
+    const {
+      username, password, currentTable, showNotif, notifMessage,
+    } = this.state;
 
     return (
       <div className="App">
+        <Notification showNotif={showNotif}>{notifMessage}</Notification>
         <HashRouter>
           <Switch>
             <Route
@@ -137,6 +149,8 @@ class App extends Component {
                       currentTable={currentTable}
                       config={this.config}
                       onTabClick={this.setCurrentTable}
+                      onShow={this.setShowNotif}
+                      onMessage={this.setNotifMessage}
                     />
                   </>
                 </>

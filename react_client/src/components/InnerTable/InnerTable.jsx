@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './InnerTable.scoped.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from '../Buttons/Button/Button';
 import axios from 'axios';
 import { withRouter } from 'react-router';
-import InnerAdd from '../../components/InnerAdd/InnerAdd';
+import Button from '../Buttons/Button/Button';
+import InnerAdd from '../InnerAdd/InnerAdd';
 import DeleteInnerModal from '../InnerDeleteModal/InnerDeleteModal';
 import Notification from '../Notification/Notification';
 
@@ -27,17 +28,20 @@ class InnerTable extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.innerTable !== this.props.innerTable) {
-      console.log(prevProps.innerTable, this.props.innerTable);
+    const { innerTable } = this.props;
+
+    if (prevProps.innerTable !== innerTable) {
+      console.log(prevProps.innerTable, innerTable);
     }
   }
 
   setShowModal = (showModal) => this.setState({ showModal });
+
   setShowNotif = (showNotif) => this.setState({ showNotif });
-  setNotifMessage = (notifMessage) =>
-    new Promise((resolve, reject) => {
-      this.setState({ notifMessage }, resolve);
-    });
+
+  setNotifMessage = (notifMessage) => new Promise((resolve) => {
+    this.setState({ notifMessage }, resolve);
+  });
 
   handleRead = () => {
     const { url, id, innerTable } = this.props;
@@ -57,6 +61,9 @@ class InnerTable extends Component {
           .get(`${url}/donation/donors/${id}`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
+        break;
+      default:
+        console.log('Error');
         break;
     }
   };
@@ -86,10 +93,12 @@ class InnerTable extends Component {
       showNotif,
       notifMessage,
     } = this.state;
+
+    // eslint-disable-next-line react/prop-types
     const fields = config.ordering[innerTable];
 
     return (
-      <React.Fragment>
+      <>
         <Notification showNotif={showNotif}>{notifMessage}</Notification>
         {showModal && (
           <DeleteInnerModal
@@ -121,24 +130,29 @@ class InnerTable extends Component {
         <table>
           <thead id="table__bottom">
             <tr className="table__bottomRow">
-              {fields.slice(0, colLimit).map((col) => (
+              {
+              // eslint-disable-next-line react/prop-types
+              fields.slice(0, colLimit).map((col) => (
                 <th style={{ width: col.width }} key={col.key}>
                   {col.name}
                 </th>
-              ))}
+              ))
+}
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <th style={{ width: '70px' }} />
             </tr>
           </thead>
           <tbody>
-            {data.map((row, i) => (
+            {data.map((row) => (
               <tr key={row.id}>
-                {fields.slice(0, colLimit).map((col) => {
-                  return (
-                    <td style={{ width: col.width }} key={col.key}>
-                      {row[col.key]}
-                    </td>
-                  );
-                })}
+                {
+                // eslint-disable-next-line react/prop-types
+                fields.slice(0, colLimit).map((col) => (
+                  <td style={{ width: col.width }} key={col.key}>
+                    {row[col.key]}
+                  </td>
+                ))
+}
                 <td style={{ width: '70px' }}>
                   <div className="flex--horizontal">
                     <Button
@@ -164,9 +178,22 @@ class InnerTable extends Component {
             ))}
           </tbody>
         </table>
-      </React.Fragment>
+      </>
     );
   }
 }
+
+InnerTable.propTypes = {
+  colLimit: PropTypes.number.isRequired,
+  config: PropTypes.shape({}).isRequired,
+  history: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({})]).isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  innerTable: PropTypes.string.isRequired,
+  onAddCancel: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired,
+  showAdd: PropTypes.bool.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default withRouter(InnerTable);

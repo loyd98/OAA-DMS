@@ -1,15 +1,15 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Navigation from '../../components/Navigation/Navigation';
 import './Views.scoped.css';
-
-import Button from '../../components/Buttons/Button/Button';
-import Table from '../../components/Table/Table';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router';
+import axios from 'axios';
+
+import Navigation from '../../components/Navigation/Navigation';
 import Modal from '../../components/Modal/Modal';
 import InnerTable from '../../components/InnerTable/InnerTable';
-import axios from 'axios';
+import Button from '../../components/Buttons/Button/Button';
 
 class ViewDonors extends Component {
   constructor(props) {
@@ -62,7 +62,9 @@ class ViewDonors extends Component {
   };
 
   setIsEditing = (isEditing) => this.setState({ isEditing });
+
   setShowModal = (showModal) => this.setState({ showModal });
+
   setShowAdd = (showAdd) => this.setState({ showAdd });
 
   setForm = (name, value) => {
@@ -143,7 +145,7 @@ class ViewDonors extends Component {
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
     axios
-      .patch(`${url}/donor/update`, form, options)
+      .patch(`${url}/donation/update`, form, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();
@@ -153,12 +155,15 @@ class ViewDonors extends Component {
   };
 
   render() {
-    const { data, isEditing, form, index, showAdd, showModal, id } = this.state;
-    const { config, currentTable, url, onDelete, onView } = this.props;
+    const {
+      data, isEditing, form, index, showAdd, showModal, id,
+    } = this.state;
+    const {
+      config, currentTable, url, onDelete, onView,
+    } = this.props;
     let button;
-    let inputs;
 
-    inputs = config.ordering[currentTable].map((obj) => {
+    const inputs = config.ordering[currentTable].map((obj) => {
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
@@ -177,19 +182,18 @@ class ViewDonors extends Component {
             />
           </div>
         );
-      } else {
-        return (
-          <div key={obj.key} className="view__detailContainer">
-            <div className="view__detailTitle">{obj.name}</div>
-            <input
-              disabled
-              name={obj.key}
-              type="text"
-              defaultValue={data[obj.key]}
-            />
-          </div>
-        );
       }
+      return (
+        <div key={obj.key} className="view__detailContainer">
+          <div className="view__detailTitle">{obj.name}</div>
+          <input
+            disabled
+            name={obj.key}
+            type="text"
+            defaultValue={data[obj.key]}
+          />
+        </div>
+      );
     });
 
     if (!isEditing) {
@@ -273,7 +277,7 @@ class ViewDonors extends Component {
                 </Button>
                 <Button
                   isTransparent
-                  message={`Prev table`}
+                  message="Prev table"
                   type="right"
                   onClick={this.handleIndexDec}
                 >
@@ -281,7 +285,7 @@ class ViewDonors extends Component {
                 </Button>
                 <Button
                   isTransparent
-                  message={`Next table`}
+                  message="Next table"
                   type="right"
                   onClick={this.handleIndexInc}
                 >
@@ -315,5 +319,24 @@ class ViewDonors extends Component {
     );
   }
 }
+
+ViewDonors.propTypes = {
+  config: PropTypes.shape({
+    innerTables: PropTypes.arrayOf(PropTypes.string),
+    ordering: PropTypes.shape({}),
+  }).isRequired,
+  currentTable: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      state: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+    push: PropTypes.func,
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default withRouter(ViewDonors);

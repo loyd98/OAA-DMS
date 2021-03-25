@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Redirect, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import './Login.scoped.css';
 
 const axios = require('axios');
@@ -74,6 +75,7 @@ class Login extends Component {
               onChange={(e) => onPasswordChange(e.target.value)}
             />
             <button
+              type="button"
               id="login__proceed--btn"
               onClick={(e) => {
                 this.handleSubmit(e, url, username, password).then((resp) => {
@@ -86,15 +88,27 @@ class Login extends Component {
             <div className="red flex-vertical hidden" id="login__error">
               Invalid username or password.
             </div>
-            <a className="blue" id="createNewUserbtn">
+            <span className="blue" id="createNewUserbtn">
               Create new User
-            </a>
-            <a className="blue">Forgot Password?</a>
+            </span>
+            <span className="blue">Forgot Password?</span>
           </form>
         </div>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  onPasswordChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onUsernameChange: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+};
 
 export default withRouter(Login);

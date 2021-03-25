@@ -1,10 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import Button from '../Buttons/Button/Button';
 import { withRouter } from 'react-router';
 import axios from 'axios';
 import _ from 'lodash';
+
+import Button from '../Buttons/Button/Button';
 
 class InnerAdd extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class InnerAdd extends Component {
     const { config, innerTable, id } = this.props;
 
     const form = {};
+
     config.ordering[innerTable].forEach((obj) => {
       if (obj.key === 'donorId') {
         form[obj.key] = id;
@@ -43,10 +45,11 @@ class InnerAdd extends Component {
     }));
   };
 
-  // Create
   handleSubmit = () => {
     const { form } = this.state;
-    const { innerTable, onSubmit, url, onCancel } = this.props;
+    const {
+      innerTable, onSubmit, url, onCancel,
+    } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -54,14 +57,17 @@ class InnerAdd extends Component {
       case 'donors':
         axios
           .post(`${url}/donor/add`, form, options)
-          .then((res) => onSubmit())
+          .then(() => onSubmit())
           .catch((err) => console.log(err));
         break;
       case 'donations':
         axios
           .post(`${url}/donation/add`, form, options)
-          .then((res) => onSubmit())
+          .then(() => onSubmit())
           .catch((err) => console.log(err));
+        break;
+      default:
+        console.log('Error');
         break;
     }
     onCancel(false);
@@ -69,7 +75,9 @@ class InnerAdd extends Component {
 
   render() {
     const { form } = this.state;
-    const { innerTable, config, onCancel, id } = this.props;
+    const {
+      innerTable, config, onCancel,
+    } = this.props;
 
     if (_.isEmpty(form)) {
       return <div>Loading...</div>;
@@ -81,6 +89,8 @@ class InnerAdd extends Component {
           <Button isTransparent onClick={() => onCancel(false)}>
             Cancel
           </Button>
+
+          {/* eslint-disable-next-line react/prop-types */}
           {config.ordering[innerTable].map((obj) => {
             if (
               obj.key === 'createdBy' ||
@@ -125,5 +135,16 @@ class InnerAdd extends Component {
     );
   }
 }
+
+InnerAdd.propTypes = {
+  config: PropTypes.shape({
+    ordering: PropTypes.shape({}),
+  }).isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  innerTable: PropTypes.string.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default withRouter(InnerAdd);
