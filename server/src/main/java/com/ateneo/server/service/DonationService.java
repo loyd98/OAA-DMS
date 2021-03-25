@@ -2,12 +2,14 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.exception.ResourceNotFoundException;
 import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.DonorRepository;
-import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,11 +29,37 @@ public class DonationService {
         return donationRepository.findAllByOrderByIdDesc();
     }
 
-    public Donation saveDonation(Donation donation) {
-        Donor donor = donorRepository.findById(donation.getDonorId()).orElse(null);
-
-        donor.addDonation(donation);
-        return donationRepository.save(donation);
+    public Donation saveDonation(Donation donation) 
+    {
+    	if (donation.getDonorId()!= null)
+    	{
+    		Donor donor = donorRepository.findById(donation.getDonorId()).orElseThrow(()
+									-> new ResourceNotFoundException("Donor", "id", donation.getDonorId()));
+    		
+    		donation.addDonor(donor);    		
+    		Donation saveDonation = donationRepository.save(donation);
+    		donor.getDonations().add(saveDonation);
+    		donorRepository.save(donor);
+    		return saveDonation;
+    	}     
+    	else
+    	{
+    		if(!ObjectUtils.isEmpty(donation.getDonors()))
+    		{    			
+    			List<Donor> donors = new ArrayList<>();    			
+    			
+    			for (Donor donor : donation.getDonors()) {
+        			donor.getDonations().add(donation);
+        			donors.add(donorRepository.save(donor));
+    			}	    		
+	    		//donation.getDonors().addAll(donors);	
+	    		donation.setDonors(donors);	
+    		}
+    		
+    		Donation saveDonation = donationRepository.save(donation);
+    		
+    		return saveDonation;
+    	}
     }
 
     public String deleteDonation(Long id) {

@@ -3,9 +3,7 @@ package com.ateneo.server.controller;
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import com.ateneo.server.service.DonorService;
-import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 

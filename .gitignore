@@ -114,3 +114,5 @@ transaction-logs
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+/server_original
+/server_2.0

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,14 @@ import java.util.List;
 @Table
 public class Donor extends Auditable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long donationId;
     private String donorName;
+
+    @NotBlank(message = "Cannot have an empty account number field.")
     private String accountNumber;
+
     private String accountName;
     private String companyTIN;
     private String companyAddress;
@@ -37,7 +41,7 @@ public class Donor extends Auditable{
     private String birthDate;
     private String notes;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "donor_donation",
             joinColumns = @JoinColumn(name = "donor_id"),

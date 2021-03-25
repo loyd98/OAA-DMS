@@ -1,6 +1,5 @@
 package com.ateneo.server.repository;
 
-import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

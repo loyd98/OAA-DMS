@@ -3,7 +3,6 @@ package com.ateneo.server.controller;
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import com.ateneo.server.service.DonationService;
-import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,7 @@ public class DonationController {
 
     @PostMapping("/add")
     public Donation addDonation(@RequestBody Donation donation) {
+    	System.out.println(donation);
         return donationService.saveDonation(donation);
     }
 
