@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -27,7 +29,7 @@ public class DonorService {
         if (donor.getDonationId() != null)
         {
             Donation donation = donationRepository.findById(donor.getDonationId()).orElseThrow(()
-            								-> new ResourceNotFoundException("Donation", "id", donor.getDonationId()));
+            								-> new ResourceNotFoundException("Donation", "account number", donor.getDonationId()));
             
             donor.addDonation(donation);    		
             Donor saveDonor = donorRepository.save(donor);
@@ -72,10 +74,6 @@ public class DonorService {
 
     public Donor getDonorById(Long id) {
         return donorRepository.findById(id).orElse(null);
-    }
-
-    public Donor getDonorByAccountName(String accountName) {
-        return donorRepository.findByAccountName(accountName);
     }
 
     //DELETE
@@ -139,6 +137,8 @@ public class DonorService {
 
     public List<Donation> getAllDonationsFromDonor(Long id) {
         Donor donor = donorRepository.findById(id).orElse(null);
-        return donor.getDonations();
+        List<Donation> donations = donor.getDonations();
+        Collections.sort(donations);
+        return donations;
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-public class Donor extends Auditable{
+public class Donor extends Auditable implements Comparable<Donor>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -44,12 +44,17 @@ public class Donor extends Auditable{
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "donor_donation",
-            joinColumns = @JoinColumn(name = "donor_id"),
-            inverseJoinColumns = @JoinColumn(name = "donation_id")
+            joinColumns = @JoinColumn(name = "donor_account_number"),
+            inverseJoinColumns = @JoinColumn(name = "donation_account_number")
     )
     private List<Donation> donations = new ArrayList<>();
 
     public void addDonation(Donation donation) {
         donations.add(donation);
+    }
+
+    @Override
+    public int compareTo(Donor anotherDonor) {
+        return this.getId().compareTo(anotherDonor.getId());
     }
 }

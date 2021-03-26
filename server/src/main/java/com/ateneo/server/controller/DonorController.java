@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class DonorController {
     private DonorService donorService;
 
     @PostMapping("/add")
-    public Donor addDonor(@RequestBody Donor donor) {
+    public Donor addDonor(@Valid  @RequestBody Donor donor) {
         return  donorService.saveDonor(donor);
     }
 
@@ -59,11 +60,6 @@ public class DonorController {
     @GetMapping("/{id}")
     public Donor getDonorById(@PathVariable Long id) {
         return donorService.getDonorById(id);
-    }
-
-    @GetMapping("/accname/{accountName}")
-    public Donor getDonorByAccountName(@PathVariable String accountName) {
-        return donorService.getDonorByAccountName(accountName);
     }
 
     @DeleteMapping(value = "/{id}")

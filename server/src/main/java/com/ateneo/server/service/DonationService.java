@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,10 +32,10 @@ public class DonationService {
 
     public Donation saveDonation(Donation donation) 
     {
-    	if (donation.getDonorId()!= null)
+    	if (donation.getDonorAccountNumber() != null)
     	{
-    		Donor donor = donorRepository.findById(donation.getDonorId()).orElseThrow(()
-									-> new ResourceNotFoundException("Donor", "id", donation.getDonorId()));
+    		Donor donor = donorRepository.findByAccountNumber(donation.getDonorAccountNumber()).orElseThrow(()
+									-> new ResourceNotFoundException("Donor", "account number", donation.getDonorAccountNumber()));
     		
     		donation.addDonor(donor);    		
     		Donation saveDonation = donationRepository.save(donation);
@@ -62,6 +63,16 @@ public class DonationService {
     	}
     }
 
+    public List<Donation> saveDonations(List<Donation> donations) {
+        List<Donation> savedDonations = new ArrayList<>();
+
+        for  (Donation donation: donations) {
+            savedDonations.add(saveDonation(donation));
+        }
+
+        return savedDonations;
+    }
+
     public String deleteDonation(Long id) {
         donationRepository.deleteById(id);
         return "Donation removed " + id;
@@ -73,19 +84,15 @@ public class DonationService {
 
     public List<Donor> getDonorsWithDonation(Long id) {
         Donation donation = donationRepository.findById(id).orElse(null);
-        return donation.getDonors();
-    }
-
-    public List<Donation> saveDonations(List<Donation> donations) {
-        return donationRepository.saveAll(donations);
+        List<Donor> donors = donation.getDonors();
+        Collections.sort(donors);
+        return donors;
     }
 
     public Donation updateDonation(Donation donation) {
         Donation existingDonation = donationRepository.findById(donation.getId()).orElse(null);
         existingDonation.setAccountNumber(donation.getAccountNumber());
         existingDonation.setAccountName(donation.getAccountName());
-        existingDonation.setScholarshipId(donation.getScholarshipId());
-        existingDonation.setDonorId(donation.getDonorId());
         existingDonation.setOrNumber(donation.getOrNumber());
         existingDonation.setDate(donation.getDate());
         existingDonation.setAmount(donation.getAmount());

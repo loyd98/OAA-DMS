@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -16,14 +17,14 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-public class Donation extends Auditable {
+public class Donation extends Auditable implements Comparable<Donation> {
    
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@NotBlank(message = "Cannot have an empty donor ID field.")
-    private Long donorId;
+	@NotBlank(message = "Cannot have an empty donor account number field.")
+    private String donorAccountNumber;
     private Long scholarshipId;
 
     @NotBlank(message = "Cannot have an empty account number field.")
@@ -57,4 +58,9 @@ public class Donation extends Auditable {
 	public void setDonors(List<Donor> donors) {
 		this.donors = donors;
 	}
+
+    @Override
+    public int compareTo(Donation anotherDonation) {
+        return this.getId().compareTo(anotherDonation.getId());
+    }
 }
