@@ -7,9 +7,9 @@ import { withRouter } from 'react-router';
 import axios from 'axios';
 
 import Navigation from '../../components/Navigation/Navigation';
+import Button from '../../components/Buttons/Button/Button';
 import Modal from '../../components/Modal/Modal';
 import InnerTable from '../../components/InnerTable/InnerTable';
-import Button from '../../components/Buttons/Button/Button';
 
 class ViewDonors extends Component {
   constructor(props) {
@@ -145,7 +145,7 @@ class ViewDonors extends Component {
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
     axios
-      .patch(`${url}/donation/update`, form, options)
+      .patch(`${url}/donor/update`, form, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();
@@ -159,7 +159,7 @@ class ViewDonors extends Component {
       data, isEditing, form, index, showAdd, showModal, id,
     } = this.state;
     const {
-      config, currentTable, url, onDelete, onView,
+      config, currentTable, url, onDelete, onView, onShow, onMessage,
     } = this.props;
     let button;
 
@@ -312,6 +312,8 @@ class ViewDonors extends Component {
               onDelete={onDelete}
               onView={onView}
               onAddCancel={this.setShowAdd}
+              onShow={onShow}
+              onMessage={onMessage}
             />
           </div>
         </div>
@@ -322,14 +324,14 @@ class ViewDonors extends Component {
 
 ViewDonors.propTypes = {
   config: PropTypes.shape({
-    innerTables: PropTypes.arrayOf(PropTypes.string),
+    innerTables: PropTypes.shape(),
     ordering: PropTypes.shape({}),
   }).isRequired,
   currentTable: PropTypes.string.isRequired,
   history: PropTypes.shape({
     location: PropTypes.shape({
       state: PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       }),
     }),
     push: PropTypes.func,
@@ -337,6 +339,8 @@ ViewDonors.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onView: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  onShow: PropTypes.func.isRequired,
+  onMessage: PropTypes.func.isRequired,
 };
 
 export default withRouter(ViewDonors);

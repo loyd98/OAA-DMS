@@ -30,7 +30,7 @@ class InnerAdd extends Component {
         obj.key !== 'lastModifiedDate' &&
         obj.key !== 'lastModifiedBy'
       ) {
-        form[obj.key] = '';
+        form[obj.key] = null;
       }
     });
     this.setState({ form });
@@ -45,32 +45,33 @@ class InnerAdd extends Component {
     }));
   };
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { form } = this.state;
     const {
-      innerTable, onSubmit, url, onCancel,
+      innerTable, onSubmit, url, onCancel, onMessage, onShow,
     } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
-    switch (innerTable) {
-      case 'donors':
-        axios
-          .post(`${url}/donor/add`, form, options)
-          .then(() => onSubmit())
-          .catch((err) => console.log(err));
-        break;
-      case 'donations':
-        axios
-          .post(`${url}/donation/add`, form, options)
-          .then(() => onSubmit())
-          .catch((err) => console.log(err));
-        break;
-      default:
-        console.log('Error');
-        break;
+    const formSubmit = form;
+
+    Object.keys(formSubmit).forEach((key) => {
+      if (formSubmit[key] === '') {
+        formSubmit[key] = null;
+      }
+    });
+
+    try {
+      const res = await axios.post(`${url}/${innerTable.slice(0, -1)}/add`, formSubmit, options);
+      const { accountNumber } = res.data;
+      onSubmit();
+      onCancel(false);
+      await this.setNotif(onMessage, onShow, `Succesfully added ${innerTable.slice(0, -1)} with account number: ${accountNumber}.`);
+    } catch (err) {
+      // const message = err.response
+      const message = err.response.data.errors[0].defaultMessage || 'Error in Add.jsx';
+      await this.setNotif(onMessage, onShow, message);
     }
-    onCancel(false);
   };
 
   render() {
@@ -145,6 +146,8 @@ InnerAdd.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  onMessage: PropTypes.func.isRequired,
+  onShow: PropTypes.func.isRequired,
 };
 
 export default withRouter(InnerAdd);

@@ -57,6 +57,7 @@ class Add extends Component {
 
   handleSubmit = async () => {
     const { form } = this.state;
+    const formSubmit = form;
     const {
       currentTable,
       onSubmit,
@@ -66,44 +67,24 @@ class Add extends Component {
       onMessage,
     } = this.props;
 
+    Object.keys(formSubmit).forEach((key) => {
+      if (formSubmit[key] === '') {
+        formSubmit[key] = null;
+      }
+    });
+
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
-    switch (currentTable) {
-      case 'donors':
-        try {
-          const res = await axios.post(`${url}/donor/add`, form, options);
-          const { accountNumber } = res.data;
-          onSubmit();
-          onCancel(false);
-          await this.setNotif(onMessage, onShow, `Succesfully added donor with account number: ${accountNumber}.`);
-        } catch (err) {
-          const message = err?.response?.data?.errors[0]?.defaultMessage;
-          if (message) {
-            await this.setNotif(onMessage, onShow, message);
-          } else {
-            await this.setNotif(onMessage, onShow, 'Error in Add.jsx');
-          }
-        }
-        break;
-      case 'donations':
-        try {
-          const res = await axios.post(`${url}/donation/add`, form, options);
-          const { accountNumber } = res.data;
-          onSubmit();
-          onCancel(false);
-          await this.setNotif(onMessage, onShow, `Succesfully added donor with account number: ${accountNumber}.`);
-        } catch (err) {
-          const message = err?.response?.data?.errors[0]?.defaultMessage;
-          if (message) {
-            await this.setNotif(onMessage, onShow, message);
-          } else {
-            await this.setNotif(onMessage, onShow, 'Error in Add.jsx');
-          }
-        }
-        break;
-      default:
-        console.log('ERROR');
+    try {
+      const res = await axios.post(`${url}/${currentTable.slice(0, -1)}/add`, formSubmit, options);
+      const { accountNumber } = res.data;
+      onSubmit();
+      onCancel(false);
+      await this.setNotif(onMessage, onShow, `Succesfully added ${currentTable.slice(0, -1)} with account number: ${accountNumber}.`);
+    } catch (err) {
+      const message = err.response.data.errors[0].defaultMessage || 'Error in Add.jsx';
+      await this.setNotif(onMessage, onShow, message);
     }
   };
 
@@ -140,9 +121,7 @@ class Add extends Component {
                   <div className="view__detailTitle">{obj.name}</div>
                   <input
                     disabled
-                    name={obj.key}
-                    type="text"
-                    value="AUTO GENERATED"
+                    placeholder="AUTO GENERATED"
                   />
                 </div>
               );

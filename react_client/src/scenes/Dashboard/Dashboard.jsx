@@ -67,7 +67,7 @@ export default class Dashboard extends Component {
           .catch((err) => console.log(err));
         break;
       default:
-        console.log('ERROR');
+        console.log('ERROR in Dashboard.jsx');
         break;
     }
   };

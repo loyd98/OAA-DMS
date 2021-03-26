@@ -58,6 +58,7 @@ class App extends Component {
   handleView = (history, table, id) => {
     switch (table) {
       case 'donors':
+        this.setCurrentTable('donors');
         history.push({
           pathname: '/donor',
           state: {
@@ -66,6 +67,7 @@ class App extends Component {
         });
         break;
       case 'donations':
+        this.setCurrentTable('donations');
         history.push({
           pathname: '/donation',
           state: {
@@ -166,6 +168,8 @@ class App extends Component {
                   config={config}
                   onView={this.handleView}
                   onDelete={this.handleInnerDelete}
+                  onShow={this.setShowNotif}
+                  onMessage={this.setNotifMessage}
                 />
               )}
             />
@@ -179,6 +183,8 @@ class App extends Component {
                   config={config}
                   onView={this.handleView}
                   onNotif={this.handleNotification}
+                  onShow={this.setShowNotif}
+                  onMessage={this.setNotifMessage}
                 />
               )}
             />

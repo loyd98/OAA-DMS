@@ -159,7 +159,7 @@ class ViewDonors extends Component {
       data, isEditing, form, index, showAdd, showModal, id,
     } = this.state;
     const {
-      config, currentTable, url, onDelete, onView,
+      config, currentTable, url, onDelete, onView, onShow, onMessage,
     } = this.props;
     let button;
 
@@ -312,6 +312,8 @@ class ViewDonors extends Component {
               onDelete={onDelete}
               onView={onView}
               onAddCancel={this.setShowAdd}
+              onShow={onShow}
+              onMessage={onMessage}
             />
           </div>
         </div>
@@ -337,6 +339,8 @@ ViewDonors.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onView: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  onShow: PropTypes.func.isRequired,
+  onMessage: PropTypes.func.isRequired,
 };
 
 export default withRouter(ViewDonors);

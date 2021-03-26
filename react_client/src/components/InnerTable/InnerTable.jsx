@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { withRouter } from 'react-router';
 import Button from '../Buttons/Button/Button';
-import InnerAdd from '../InnerAdd/InnerAdd';
+import Add from '../Add/Add';
 import DeleteInnerModal from '../InnerDeleteModal/InnerDeleteModal';
 import Notification from '../Notification/Notification';
 
@@ -25,14 +25,6 @@ class InnerTable extends Component {
 
   componentDidMount() {
     this.handleRead();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { innerTable } = this.props;
-
-    if (prevProps.innerTable !== innerTable) {
-      console.log(prevProps.innerTable, innerTable);
-    }
   }
 
   setShowModal = (showModal) => this.setState({ showModal });
@@ -85,6 +77,8 @@ class InnerTable extends Component {
       onView,
       showAdd,
       onAddCancel,
+      onShow,
+      onMessage,
     } = this.props;
     const {
       data,
@@ -118,13 +112,15 @@ class InnerTable extends Component {
           />
         )}
         {showAdd && (
-          <InnerAdd
-            url={url}
-            innerTable={innerTable}
-            onCancel={onAddCancel}
-            config={config}
-            onSubmit={this.handleRead}
+          <Add
             id={id}
+            url={url}
+            config={config}
+            currentTable={innerTable}
+            onCancel={onAddCancel}
+            onSubmit={this.handleRead}
+            onShow={onShow}
+            onMessage={onMessage}
           />
         )}
         <table>
@@ -194,6 +190,8 @@ InnerTable.propTypes = {
   onView: PropTypes.func.isRequired,
   showAdd: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
+  onShow: PropTypes.func.isRequired,
+  onMessage: PropTypes.func.isRequired,
 };
 
 export default withRouter(InnerTable);
