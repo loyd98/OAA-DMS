@@ -19,6 +19,7 @@ public class Donor extends Auditable implements Comparable<Donor>{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long donationId;
+    private Long scholarshipId;
     private String donorName;
 
     @NotBlank(message = "Cannot have an empty account number field.")
@@ -41,13 +42,21 @@ public class Donor extends Auditable implements Comparable<Donor>{
     private String birthDate;
     private String notes;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "donor_donation",
             joinColumns = @JoinColumn(name = "donor_account_number"),
-            inverseJoinColumns = @JoinColumn(name = "donation_account_number")
+            inverseJoinColumns = @JoinColumn(name = "donation_id")
     )
     private List<Donation> donations = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "donor_scholarship",
+            joinColumns = @JoinColumn(name = "donor_account_number"),
+            inverseJoinColumns = @JoinColumn(name = "scholarship_id")
+    )
+    private List<Scholarship> scholarships = new ArrayList<>();
 
     public void addDonation(Donation donation) {
         donations.add(donation);
@@ -57,4 +66,5 @@ public class Donor extends Auditable implements Comparable<Donor>{
     public int compareTo(Donor anotherDonor) {
         return this.getId().compareTo(anotherDonor.getId());
     }
+
 }
