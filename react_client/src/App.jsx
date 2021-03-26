@@ -142,20 +142,18 @@ class App extends Component {
               exact
               path="/dashboard"
               render={() => (
-                <>
-                  <>
-                    <Navigation />
-                    <Dashboard
-                      username={username}
-                      url={this.url}
-                      currentTable={currentTable}
-                      config={this.config}
-                      onTabClick={this.setCurrentTable}
-                      onShow={this.setShowNotif}
-                      onMessage={this.setNotifMessage}
-                    />
-                  </>
-                </>
+                <div className="flex--horizontal">
+                  <Navigation />
+                  <Dashboard
+                    username={username}
+                    url={this.url}
+                    currentTable={currentTable}
+                    config={this.config}
+                    onTabClick={this.setCurrentTable}
+                    onShow={this.setShowNotif}
+                    onMessage={this.setNotifMessage}
+                  />
+                </div>
               )}
             />
             <Route
