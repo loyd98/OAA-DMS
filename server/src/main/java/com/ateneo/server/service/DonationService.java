@@ -2,12 +2,15 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.exception.ResourceNotFoundException;
 import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.DonorRepository;
-import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -27,12 +30,47 @@ public class DonationService {
         return donationRepository.findAllByOrderByIdDesc();
     }
 
-    public List<Donation> saveDonation(Donation donation) {
-        Donor donor = donorRepository.findById(donation.getDonorId()).orElse(null);
+    public Donation saveDonation(Donation donation) 
+    {
+    	if (donation.getDonorAccountNumber() != null)
+    	{
+    		Donor donor = donorRepository.findByAccountNumber(donation.getDonorAccountNumber()).orElseThrow(()
+									-> new ResourceNotFoundException("Donor", "account number", donation.getDonorAccountNumber()));
+    		
+    		donation.addDonor(donor);    		
+    		Donation saveDonation = donationRepository.save(donation);
+    		donor.getDonations().add(saveDonation);
+    		donorRepository.save(donor);
+    		return saveDonation;
+    	}     
+    	else
+    	{
+    		if(!ObjectUtils.isEmpty(donation.getDonors()))
+    		{    			
+    			List<Donor> donors = new ArrayList<>();    			
+    			
+    			for (Donor donor : donation.getDonors()) {
+        			donor.getDonations().add(donation);
+        			donors.add(donorRepository.save(donor));
+    			}	    		
+	    		//donation.getDonors().addAll(donors);	
+	    		donation.setDonors(donors);	
+    		}
+    		
+    		Donation saveDonation = donationRepository.save(donation);
+    		
+    		return saveDonation;
+    	}
+    }
 
-        donor.addDonation(donation);
-        donationRepository.save(donation);
-        return donor.getDonations();
+    public List<Donation> saveDonations(List<Donation> donations) {
+        List<Donation> savedDonations = new ArrayList<>();
+
+        for  (Donation donation: donations) {
+            savedDonations.add(saveDonation(donation));
+        }
+
+        return savedDonations;
     }
 
     public String deleteDonation(Long id) {
@@ -46,24 +84,30 @@ public class DonationService {
 
     public List<Donor> getDonorsWithDonation(Long id) {
         Donation donation = donationRepository.findById(id).orElse(null);
-        return donation.getDonors();
-    }
-
-    public List<Donation> saveDonations(List<Donation> donations) {
-        return donationRepository.saveAll(donations);
+        List<Donor> donors = donation.getDonors();
+        Collections.sort(donors);
+        return donors;
     }
 
     public Donation updateDonation(Donation donation) {
         Donation existingDonation = donationRepository.findById(donation.getId()).orElse(null);
         existingDonation.setAccountNumber(donation.getAccountNumber());
         existingDonation.setAccountName(donation.getAccountName());
-        existingDonation.setScholarshipId(donation.getScholarshipId());
-        existingDonation.setDonorId(donation.getDonorId());
         existingDonation.setOrNumber(donation.getOrNumber());
         existingDonation.setDate(donation.getDate());
         existingDonation.setAmount(donation.getAmount());
         existingDonation.setNotes(donation.getNotes());
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
+        return donationRepository.save(donation);
+    }
+
+    // Search
+    public List<Donation> search(String keyword) {
+        if (keyword != null) {
+            return donationRepository.search(keyword);
+        }
+
+        return donationRepository.findAll();
     }
 }

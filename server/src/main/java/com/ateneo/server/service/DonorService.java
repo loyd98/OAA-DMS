@@ -2,12 +2,16 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.exception.ResourceNotFoundException;
 import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.DonorRepository;
-import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -20,8 +24,38 @@ public class DonorService {
     private DonationRepository donationRepository;
 
     //POST
-    public Donor saveDonor(Donor donor) {
-        return donorRepository.save(donor);
+    public Donor saveDonor(Donor donor)
+    {
+        if (donor.getDonationId() != null)
+        {
+            Donation donation = donationRepository.findById(donor.getDonationId()).orElseThrow(()
+            								-> new ResourceNotFoundException("Donation", "account number", donor.getDonationId()));
+            
+            donor.addDonation(donation);    		
+            Donor saveDonor = donorRepository.save(donor);
+            
+            donation.getDonors().add(saveDonor);
+            donationRepository.save(donation);
+            
+    		return saveDonor;            
+        }
+        else
+    	{
+    		if(!ObjectUtils.isEmpty(donor.getDonations()))
+    		{    			
+    			List<Donation> donations = new ArrayList<>();    			
+    			
+    			for (Donation donation : donor.getDonations()) {
+    				donation.getDonors().add(donor);
+    				donations.add(donationRepository.save(donation));
+    			}	    		
+    			donor.setDonations(donations);   		
+    		}
+    		
+    		Donor saveDonor =  donorRepository.save(donor);
+    		
+    		return saveDonor;
+    	}
     }
 
     public List<Donor> saveDonors(List<Donor> donors) {
@@ -40,10 +74,6 @@ public class DonorService {
 
     public Donor getDonorById(Long id) {
         return donorRepository.findById(id).orElse(null);
-    }
-
-    public Donor getDonorByAccountName(String accountName) {
-        return donorRepository.findByAccountName(accountName);
     }
 
     //DELETE
@@ -107,6 +137,8 @@ public class DonorService {
 
     public List<Donation> getAllDonationsFromDonor(Long id) {
         Donor donor = donorRepository.findById(id).orElse(null);
-        return donor.getDonations();
+        List<Donation> donations = donor.getDonations();
+        Collections.sort(donations);
+        return donations;
     }
 }

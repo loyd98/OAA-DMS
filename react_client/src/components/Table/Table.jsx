@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './Table.scoped.css';
 
@@ -29,7 +30,8 @@ export default class Table extends Component {
                 {col.name}
               </th>
             ))}
-            <th style={{ width: '50px' }} />
+
+            <th style={{ width: '50px' }}> </th>
           </tr>
         </thead>
         <tbody>
@@ -78,3 +80,11 @@ export default class Table extends Component {
     );
   }
 }
+
+Table.propTypes = {
+  colLimit: PropTypes.number.isRequired,
+  fields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  redirectToView: PropTypes.func.isRequired,
+};

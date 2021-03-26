@@ -1,6 +1,5 @@
 package com.ateneo.server.config;
 
-import com.ateneo.server.domain.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 

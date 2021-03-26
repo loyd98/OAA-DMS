@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Navigation from '../../components/Navigation/Navigation';
-import './View.scoped.css';
+import './ViewDonors.scoped.css';
 
 import Button from '../../components/Buttons/Button/Button';
 import Table from '../../components/Table/Table';
@@ -8,71 +8,88 @@ import Table from '../../components/Table/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router';
 import Modal from '../../components/Modal/Modal';
+import InnerTable from '../../components/InnerTable/InnerTable';
 import Add from '../Add/Add';
+import axios from 'axios';
 
 class View extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      data: [],
+      form: {},
       isEditing: false,
-      showModal: false,
       index: 0,
       showAdd: false,
+      showModal: false,
+      id: null,
     };
   }
 
+  componentDidMount() {
+    const { history, url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+    let id = history.location.state?.id;
+
+    if (!id) {
+      id = sessionStorage.getItem('currentId');
+      this.setState({ id });
+    } else {
+      this.setState({ id });
+    }
+
+    axios
+      .get(`${url}/donor/${id}`, options)
+      .then((res) => {
+        this.setState({ data: res.data });
+        this.copyData();
+      })
+      .catch((err) => console.log(err));
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    const { handleEditForm, currentView } = this.props;
-    if (prevProps.currentView !== this.props.currentView) {
-      handleEditForm(currentView);
+    const { id } = this.state;
+    if (prevState.id !== id) {
+      sessionStorage.setItem('currentId', id);
     }
   }
 
-  handleAddFormField = (name, value) => {
+  setIsEditing = (isEditing) => this.setState({ isEditing });
+  setShowModal = (showModal) => this.setState({ showModal });
+
+  setForm = (name, value) => {
     this.setState((prevState) => ({
-      addForm: {
-        ...prevState.addForm,
+      form: {
+        ...prevState.form,
         [name]: value,
       },
     }));
   };
 
-  handleShowAdd = (showAdd) => this.setState({ showAdd });
-  handleShowModal = (showModal) => this.setState({ showModal });
+  copyData = () => {
+    const { data } = this.state;
+    const { config, currentTable } = this.props;
+
+    const form = {};
+    config.ordering[currentTable].forEach((obj) => {
+      if (
+        obj.key !== 'createdBy' &&
+        obj.key !== 'creationDate' &&
+        obj.key !== 'lastModifiedDate' &&
+        obj.key !== 'lastModifiedBy'
+      ) {
+        form[obj.key] = data[obj.key];
+      }
+    });
+    this.setState({ form });
+  };
 
   handleCancel = () => {
-    const { handleEditForm, currentView } = this.props;
-    this.handleIsEditing(false);
-    handleEditForm(currentView);
+    this.setIsEditing(false);
+    this.copyData();
   };
-
-  handleReturn = () => {
-    const { isEditing } = this.state;
-    const { history } = this.props;
-
-    if (isEditing) {
-      this.handleShowModal(true);
-    } else {
-      history.push('/dashboard');
-    }
-  };
-
-  handleSubmit = () => {
-    const { handleUpdate } = this.props;
-    handleUpdate();
-    this.handleIsEditing(false);
-  };
-
-  handleDiscard = () => {
-    console.log('hit');
-    const { history } = this.props;
-    this.handleIsEditing(false);
-    this.handleShowModal(false);
-    history.push('/dashboard');
-  };
-
-  handleIsEditing = (isEditing) => this.setState({ isEditing });
 
   handleIndexInc = () => {
     const { config, currentTable } = this.props;
@@ -90,107 +107,84 @@ class View extends Component {
     }));
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      handleEditForm,
-      currentView,
-      currentTable,
-      handleReadIndividual,
-      handleReadInnerTable,
-      currentId,
-      history,
-    } = this.props;
-    if (prevProps.currentView !== this.props.currentView) {
-      handleEditForm(currentView);
-    }
-
-    if (prevProps.currentTable !== currentTable) {
-      handleReadInnerTable(currentId).then((res) =>
-        handleReadIndividual(currentId).then((res) => history.push('/view')),
-      );
-    }
-  }
-
-  handleRedirect = (id) => {
-    const { index } = this.state;
-    const {
-      handleCurrentId,
-      handleCurrentTable,
-      currentTable,
-      config,
-    } = this.props;
-    handleCurrentId(id);
-    handleCurrentTable(config.innerTables[currentTable][index]);
+  handleReturn = () => {
+    const { history } = this.props;
+    history.push('/dashboard');
   };
 
-  handleSubmit = async () => {
-    const { handleReadInnerTable, handleInnerSubmit } = this.props;
-    await handleInnerSubmit('donations');
-    await handleReadInnerTable(2);
+  handleReturn = () => {
+    const { isEditing } = this.state;
+    const { history } = this.props;
+
+    if (isEditing) {
+      this.setShowModal(true);
+    } else {
+      history.push('/dashboard');
+    }
+  };
+
+  handleDiscard = () => {
+    const { history } = this.props;
+    this.setIsEditing(false);
+    this.setShowModal(false);
+    history.push('/dashboard');
+  };
+
+  handleSubmit = () => {
+    const { form } = this.state;
+    const { url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+
+    axios
+      .patch(`${url}/donor/update`, form, options)
+      .then((res) => {
+        this.setState({ data: res.data });
+        this.copyData();
+        this.setIsEditing(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   render() {
-    console.log('view render');
-    const { isEditing, showModal, index, showAdd } = this.state;
-    const {
-      config,
-      currentTable,
-      editForm,
-      handleEditFormField,
-      innerTable,
-      handleAddFormField,
-    } = this.props;
-
+    const { data, isEditing, form, index, showAdd, showModal, id } = this.state;
+    const { config, currentTable, url } = this.props;
     let button;
     let inputs;
 
-    if (currentTable === 'donations') {
-      inputs = config.ordering[currentTable].map((key) => {
-        if (key.name.includes('Files')) {
-          return (
-            <button
-              className="view__fileBtn"
-              key={key.key}
-              data-id={key.key}
-              onClick={(e) => {
-                e.preventDefault();
-                console.log(e.currentTarget.dataset.id);
-              }}
-            >
-              {key.name}
-            </button>
-          );
-        } else {
-          return (
-            <div key={key.key} className="view__detailContainer">
-              <div className="view__detailTitle">{key.name}</div>
-              <input
-                disabled={!isEditing}
-                name={key.key}
-                type="text"
-                value={editForm[key.key] == null ? '' : editForm[key.key]}
-                onChange={(e) =>
-                  handleEditFormField(e.target.name, e.target.value)
-                }
-              />
-            </div>
-          );
-        }
-      });
-    } else if (currentTable === 'donors') {
-      inputs = config.ordering[currentTable].map((key) => (
-        <div key={key.key} className="view__detailContainer">
-          <div className="view__detailTitle">{key.name}</div>
-          <input
-            disabled={!isEditing}
-            name={key.key}
-            type="text"
-            value={editForm[key.key] == null ? '' : editForm[key.key]}
-            onChange={(e) => handleEditFormField(e.target.name, e.target.value)}
-          />
-        </div>
-      ));
-    }
+    inputs = config.ordering[currentTable].map((obj) => {
+      if (
+        obj.key !== 'createdBy' &&
+        obj.key !== 'creationDate' &&
+        obj.key !== 'lastModifiedDate' &&
+        obj.key !== 'lastModifiedBy'
+      ) {
+        return (
+          <div key={obj.key} className="view__detailContainer">
+            <div className="view__detailTitle">{obj.name}</div>
+            <input
+              disabled={!isEditing}
+              name={obj.key}
+              type="text"
+              value={form[obj.key] == null ? '' : form[obj.key]}
+              onChange={(e) => this.setForm(e.target.name, e.target.value)}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div key={obj.key} className="view__detailContainer">
+            <div className="view__detailTitle">{obj.name}</div>
+            <input
+              disabled
+              name={obj.key}
+              type="text"
+              defaultValue={data[obj.key]}
+            />
+          </div>
+        );
+      }
+    });
 
     if (!isEditing) {
       button = (
@@ -198,7 +192,7 @@ class View extends Component {
           isTransparent
           message="Edit"
           type="right"
-          onClick={() => this.handleIsEditing(true)}
+          onClick={() => this.setIsEditing(true)}
         >
           <FontAwesomeIcon icon="edit" />
         </Button>
@@ -226,10 +220,17 @@ class View extends Component {
       );
     }
 
-    const tableTitle =
+    const innerTable =
       config.innerTables[currentTable][index][0].toUpperCase() +
       config.innerTables[currentTable][index].slice(1);
 
+    if (form.length === 0) {
+      return <div>Loading...</div>;
+    }
+
+    if (!id) {
+      return null;
+    }
     return (
       <>
         {showAdd && (
@@ -247,8 +248,8 @@ class View extends Component {
             message="The changes in the form have not been submitted yet. Would you like to discard them and return to the Dashboard page?"
             leftBtnName="Cancel"
             rightBtnName="Discard"
-            exitOnClick={() => this.handleShowModal(false)}
-            leftBtnOnClick={() => this.handleShowModal(false)}
+            exitOnClick={() => this.setShowModal(false)}
+            leftBtnOnClick={() => this.setShowModal(false)}
             rightBtnOnClick={this.handleDiscard}
           />
         )}
@@ -256,7 +257,7 @@ class View extends Component {
         <div className="view flex--horizontal">
           <div className="view__left">
             <div className="view__titlebar flex--horizontal">
-              <p>Details</p>
+              <p>Donor:</p>
               {button}
             </div>
             <form className="view__details">{inputs}</form>
@@ -264,7 +265,7 @@ class View extends Component {
           <div className="view__right">
             <div className="view__titlebar flex--horizontal">
               <div className="flex--horizontal">
-                <p>{tableTitle}</p>
+                <p>{innerTable}</p>
                 <Button
                   isTransparent
                   message={`Add ${config.innerTables[currentTable][index]}`}
@@ -301,14 +302,12 @@ class View extends Component {
               </Button>
             </div>
             <table>
-              <Table
-                fields={
-                  config.ordering[config.innerTables[currentTable][index]]
-                }
-                items={innerTable}
+              <InnerTable
+                id={id}
+                url={url}
+                config={config}
+                innerTable={innerTable.toLowerCase()}
                 colLimit={6}
-                handleDelete={console.log}
-                redirectToView={this.handleRedirect}
               />
             </table>
           </div>

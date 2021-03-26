@@ -3,12 +3,11 @@ package com.ateneo.server.controller;
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import com.ateneo.server.service.DonorService;
-import com.ateneo.server.util.DonorDonationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +18,7 @@ public class DonorController {
     private DonorService donorService;
 
     @PostMapping("/add")
-    public Donor addDonor(@RequestBody Donor donor) {
+    public Donor addDonor(@Valid  @RequestBody Donor donor) {
         return  donorService.saveDonor(donor);
     }
 
@@ -61,11 +60,6 @@ public class DonorController {
     @GetMapping("/{id}")
     public Donor getDonorById(@PathVariable Long id) {
         return donorService.getDonorById(id);
-    }
-
-    @GetMapping("/accname/{accountName}")
-    public Donor getDonorByAccountName(@PathVariable String accountName) {
-        return donorService.getDonorByAccountName(accountName);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -155,5 +155,7 @@ table th:last-child {
   height: 30px;
   align-items: center;
   justify-content: center;
+  border: 0px;
   border-right: 2px solid var(--grey);
+  cursor: pointer;
 }

@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Redirect, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import './Login.scoped.css';
 
 const axios = require('axios');
@@ -18,7 +19,7 @@ class Login extends Component {
 
   handleSubmit = async (e, url, username, password) => {
     e.preventDefault();
-    const { history, handleCurrentTable, handleCurrentInnerTable } = this.props;
+    const { history, onSubmit } = this.props;
     const loginUser = async (credentials) => {
       try {
         const resp = await axios.post(`${url}/login`, credentials);
@@ -37,8 +38,7 @@ class Login extends Component {
 
     if (token) {
       sessionStorage.setItem('token', token.data);
-      handleCurrentTable('donors');
-      handleCurrentInnerTable('donations');
+      onSubmit('donors');
       history.push('/dashboard');
     }
 
@@ -51,10 +51,8 @@ class Login extends Component {
       history,
       username,
       password,
-      handleUsername,
-      handlePassword,
-      handleCurrentData,
-      handleCurrentTable,
+      onPasswordChange,
+      onUsernameChange,
     } = this.props;
 
     return (
@@ -67,26 +65,20 @@ class Login extends Component {
               name="username"
               value={username}
               placeholder="Username"
-              onChange={(e) => handleUsername(e.target.value)}
+              onChange={(e) => onUsernameChange(e.target.value)}
             />
             <input
               type="password"
               name="password"
               value={password}
               placeholder="Password"
-              onChange={(e) => handlePassword(e.target.value)}
+              onChange={(e) => onPasswordChange(e.target.value)}
             />
             <button
+              type="button"
               id="login__proceed--btn"
               onClick={(e) => {
-                this.handleSubmit(
-                  e,
-                  url,
-                  username,
-                  password,
-                  handleCurrentData,
-                  handleCurrentTable,
-                ).then((resp) => {
+                this.handleSubmit(e, url, username, password).then((resp) => {
                   if (resp) history.push('/dashboard');
                 });
               }}
@@ -96,15 +88,27 @@ class Login extends Component {
             <div className="red flex-vertical hidden" id="login__error">
               Invalid username or password.
             </div>
-            <a className="blue" id="createNewUserbtn">
+            <span className="blue" id="createNewUserbtn">
               Create new User
-            </a>
-            <a className="blue">Forgot Password?</a>
+            </span>
+            <span className="blue">Forgot Password?</span>
           </form>
         </div>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  onPasswordChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onUsernameChange: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+};
 
 export default withRouter(Login);

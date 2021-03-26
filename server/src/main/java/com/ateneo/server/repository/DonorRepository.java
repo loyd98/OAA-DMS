@@ -1,14 +1,15 @@
 package com.ateneo.server.repository;
 
-import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DonorRepository extends JpaRepository<Donor, Long> {
-    Donor findByAccountName(String accountName);
+    Optional<Donor> findByAccountNumber(String accountNumber);
+
     List<Donor> findAllByOrderByIdAsc();
     List<Donor> findAllByOrderByIdDesc();
     List<Donor> findAllByOrderByAccountNameAsc();

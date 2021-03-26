@@ -18,7 +18,7 @@ html {
 
 ::-webkit-scrollbar {
   -webkit-appearance: none;
-  width: 7px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -93,4 +93,27 @@ body {
 
 button:hover {
   background-color: var(--dark-grey);
+}
+
+.alert-enter {
+  animation-name: slideIn;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+}
+
+.alert-exit {
+  animation-name: slideOut;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+}
+
+
+@keyframes slideIn {
+  from {top: -100px;}
+  to {top: 0px;}
+}
+
+@keyframes slideOut {
+  from {top: 0px;}
+  to {top: -200px;}
 }
