@@ -53,7 +53,7 @@ class ViewDonors extends Component {
     }
 
     axios
-      .get(`${url}/donation/${id}`, options)
+      .get(`${url}/donor/${id}`, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();
@@ -140,12 +140,12 @@ class ViewDonors extends Component {
 
   handleSubmit = () => {
     const { form } = this.state;
-    const { url } = this.props;
+    const { url, currentTable } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
     axios
-      .patch(`${url}/donor/update`, form, options)
+      .patch(`${url}/${currentTable.slice(0, -1)}/update`, form, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();

@@ -22,6 +22,7 @@ module.exports = {
       { key: 'birthDate', name: 'Birth Date', width: '100px' },
       { key: 'companyAddress', name: 'Company Address', width: '100px' },
       { key: 'donationId', name: 'Donation\'s ID', width: '70px' },
+      { key: 'scholarshipId', name: 'Scholarship\'s ID', width: '70px' },
       { key: 'createdBy', name: 'Created By', width: '100px' },
       { key: 'creationDate', name: 'Creation Date', width: '100px' },
       { key: 'lastModifiedBy', name: 'Last Modified By', width: '100px' },
@@ -49,6 +50,15 @@ module.exports = {
       { key: 'tyFiles', name: 'TY Files', width: '100px' },
       { key: 'codFiles', name: 'COD Files', width: '100px' },
     ],
+    scholarships: [
+      { key: 'id', name: 'Scholarship ID', width: '70px' },
+      { key: 'scholarshipName', name: 'Scholarship Name', width: '100px' },
+      { key: 'typeOfScholarship', name: 'Type of Scholarship', width: '100px' },
+      { key: 'dateEstablished', name: 'Date Established', width: '100px' },
+      { key: 'criteria', name: 'Criteria', width: '100px' },
+      { key: 'donationId', name: 'Donation\'s ID', width: '100px' },
+      { key: 'donorAccountNumber', name: 'Donor\'s Account Number', width: '100px' },
+    ],
     scholars: [
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
@@ -69,36 +79,6 @@ module.exports = {
   innerTables: {
     donors: ['donations', 'scholars'],
     donations: ['donors', 'scholars'],
-  },
-  dropdowns: {
-    donors: [
-      {
-        key: 'id',
-        name: 'Donor ID',
-        routeAsc: 'donor/asc',
-        routeDesc: 'donor/desc',
-      },
-      {
-        key: 'donorName',
-        name: 'Donor Name',
-        routeAsc: 'donor/name/asc',
-        routeDesc: 'donor/name/desc',
-      },
-      {
-        key: 'accountName',
-        name: 'Account Name',
-        routeAsc: 'donor/account/asc',
-        routeDesc: 'donor/account/desc',
-      },
-    ],
-    donations: [
-      {
-        key: 'id',
-        name: 'Donation ID',
-        routeAsc: 'donation/asc',
-        routeDesc: 'donation/desc',
-      },
-    ],
   },
   defaultTable: 'donors',
   URL: 'http://localhost:8080',

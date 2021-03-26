@@ -69,19 +69,10 @@ class TableContainer extends Component {
 
     // Go to the nearest number of pages when current page is greater than require number of pages
     const { numOfPages, currentPage } = this.state;
-    const { currentTable, config } = this.props;
 
     if (prevState.numOfPages !== numOfPages && currentPage > numOfPages) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentPage: numOfPages || 1 });
-    }
-
-    if (prevProps.currentTable !== currentTable) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        // eslint-disable-next-line react/no-unused-state
-        currentDropdownItem: config.dropdowns[currentTable][0].name,
-      });
     }
   }
 
