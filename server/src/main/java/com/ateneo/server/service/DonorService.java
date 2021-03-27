@@ -87,7 +87,7 @@ public class DonorService {
         return "All donors removed!";
     }
 
-    //PUT
+    // Update
     public Donor updateDonor(Donor donor) {
         Donor existingDonor = donorRepository.findById(donor.getId()).orElse(null);
         existingDonor.setDonorName(donor.getDonorName());
@@ -111,7 +111,7 @@ public class DonorService {
         return donorRepository.save(existingDonor);
     }
 
-    // Sort
+    // Read
     public List<Donor> getAllByAccountNameAsc() {
         return donorRepository.findAllByOrderByAccountNameAsc();
     }

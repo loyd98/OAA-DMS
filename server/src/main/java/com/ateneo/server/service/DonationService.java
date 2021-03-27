@@ -2,9 +2,11 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.domain.Scholarship;
 import com.ateneo.server.exception.ResourceNotFoundException;
 import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.DonorRepository;
+import com.ateneo.server.repository.ScholarshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -22,6 +24,9 @@ public class DonationService {
     @Autowired
     private DonorRepository donorRepository;
 
+    @Autowired
+    private ScholarshipRepository scholarshipRepository;
+
     public List<Donation> getAllDonationsAsc() {
         return donationRepository.findAllByOrderByIdAsc();
     }
@@ -32,17 +37,47 @@ public class DonationService {
 
     public Donation saveDonation(Donation donation) 
     {
-    	if (donation.getDonorAccountNumber() != null)
+        if (donation.getDonorAccountNumber() != null && donation.getScholarshipId() != null)
+        {
+            Donor donor = donorRepository.findByAccountNumber(donation.getDonorAccountNumber()).orElseThrow(()
+                    -> new ResourceNotFoundException("Donor", "account number", donation.getDonorAccountNumber()));
+
+            Scholarship scholarship = scholarshipRepository.findById(donation.getScholarshipId()).orElseThrow(()
+                    -> new ResourceNotFoundException("Scholarship", "id", donation.getScholarshipId()));
+
+            donation.addDonor(donor);
+            donation.addScholarship(scholarship);
+
+            Donation saveDonation = donationRepository.save(donation);
+            donor.getDonations().add(saveDonation);
+            scholarship.addDonation(saveDonation);
+            donorRepository.save(donor);
+            scholarshipRepository.save(scholarship);
+            return saveDonation;
+        }
+    	else if (donation.getDonorAccountNumber() != null)
     	{
     		Donor donor = donorRepository.findByAccountNumber(donation.getDonorAccountNumber()).orElseThrow(()
 									-> new ResourceNotFoundException("Donor", "account number", donation.getDonorAccountNumber()));
     		
-    		donation.addDonor(donor);    		
-    		Donation saveDonation = donationRepository.save(donation);
-    		donor.getDonations().add(saveDonation);
-    		donorRepository.save(donor);
+    		donation.addDonor(donor); // Add donor to donation
+    		Donation saveDonation = donationRepository.save(donation); // Save donation
+    		donor.getDonations().add(saveDonation); // Add donation to donor
+    		donorRepository.save(donor); // Save donor?
+
     		return saveDonation;
-    	}     
+    	}
+    	else if (donation.getScholarshipId() != null)
+        {
+            Scholarship scholarship = scholarshipRepository.findById(donation.getScholarshipId()).orElseThrow(()
+                    -> new ResourceNotFoundException("Scholarship", "id", donation.getScholarshipId()));
+
+            donation.addScholarship(scholarship);
+            Donation saveDonation = donationRepository.save(donation);
+            scholarship.addDonation(saveDonation);
+            scholarshipRepository.save(scholarship);
+            return saveDonation;
+        }
     	else
     	{
     		if(!ObjectUtils.isEmpty(donation.getDonors()))
@@ -82,7 +117,7 @@ public class DonationService {
         return donationRepository.findById(id).orElse(null);
     }
 
-    public List<Donor> getDonorsWithDonation(Long id) {
+    public List<Donor> getDonorsFromDonation(Long id) {
         Donation donation = donationRepository.findById(id).orElse(null);
         List<Donor> donors = donation.getDonors();
         Collections.sort(donors);
@@ -99,7 +134,51 @@ public class DonationService {
         existingDonation.setNotes(donation.getNotes());
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
-        return donationRepository.save(donation);
+
+        if (donation.getDonorAccountNumber() != null) {
+            // Get donor connected to old donation
+            Donor donor = donorRepository.findByAccountNumber(existingDonation.getDonorAccountNumber()).orElseThrow(() ->
+                    new ResourceNotFoundException("Donor", "account number", existingDonation.getDonorAccountNumber()));
+
+            // Disconnect old donation;
+            donor.getDonations().removeIf(obj -> obj.getId() == existingDonation.getId());
+
+            // Save changes
+            donorRepository.save(donor);
+
+            // Find new donor with new donation's account number
+            Donor newDonor = donorRepository.findByAccountNumber(donation.getDonorAccountNumber()).orElseThrow(() ->
+                    new ResourceNotFoundException("Donor", "account", donation.getDonorAccountNumber()));
+
+            // Connect new donation to new donor
+            newDonor.getDonations().add(donation);
+
+            // Save changes
+            donorRepository.save(newDonor);
+
+            // Set the new account number
+            existingDonation.setDonorAccountNumber(donation.getDonorAccountNumber());
+        }
+
+        if (donation.getScholarshipId() != null) {
+
+            if (existingDonation.getScholarshipId() != null) {
+                Scholarship scholarship = scholarshipRepository.findById(existingDonation.getScholarshipId()).orElseThrow(() ->
+                        new ResourceNotFoundException("Scholarship", "id", existingDonation.getScholarshipId()));
+
+                scholarship.getDonations().removeIf(obj -> obj.getId() == existingDonation.getId());
+                scholarshipRepository.save(scholarship);
+            }
+            
+            Scholarship newScholarship = scholarshipRepository.findById(donation.getScholarshipId()).orElseThrow(() ->
+                    new ResourceNotFoundException("Scholarship", "id", donation.getId()));
+            newScholarship.getDonations().add(donation);
+            scholarshipRepository.save(newScholarship);
+            existingDonation.setScholarshipId(donation.getScholarshipId());
+        }
+
+
+        return donationRepository.save(existingDonation);
     }
 
     // Search

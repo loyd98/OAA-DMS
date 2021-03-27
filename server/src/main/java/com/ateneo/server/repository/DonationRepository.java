@@ -9,8 +9,6 @@ import java.util.Optional;
 
 
 public interface DonationRepository extends JpaRepository<Donation, Long> {
-    Optional<Donation> findByAccountNumber(String accountNumber);
-
     List<Donation> findAllByOrderByIdAsc();
     List<Donation> findAllByOrderByIdDesc();
 

@@ -50,16 +50,8 @@ public class Donor extends Auditable implements Comparable<Donor>{
     )
     private List<Donation> donations = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "donor_scholarship",
-            joinColumns = @JoinColumn(name = "donor_account_number"),
-            inverseJoinColumns = @JoinColumn(name = "scholarship_id")
-    )
-    private List<Scholarship> scholarships = new ArrayList<>();
-
     public void addDonation(Donation donation) {
-        donations.add(donation);
+        this.donations.add(donation);
     }
 
     @Override

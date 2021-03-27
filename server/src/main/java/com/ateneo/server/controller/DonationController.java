@@ -17,6 +17,7 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
+    // Create
     @PostMapping("/add")
     public Donation addDonation(@Valid @RequestBody Donation donation) {
     	System.out.println(donation);
@@ -24,10 +25,11 @@ public class DonationController {
     }
 
     @PostMapping("/add/many")
-    public List<Donation> addDonations(@RequestBody  List<Donation> donations) {
+    public List<Donation> addDonations(@RequestBody List<Donation> donations) {
         return donationService.saveDonations(donations);
     }
 
+    // Read
     @GetMapping("/asc")
     public List<Donation> getAllDonationsAsc() {
         return donationService.getAllDonationsAsc();
@@ -41,21 +43,9 @@ public class DonationController {
         return donationService.getDonationById(id);
     }
 
-
     @GetMapping("/donors/{id}")
-    public List<Donor> getDonorsWithDonation(@PathVariable Long id) {
-        return donationService.getDonorsWithDonation(id);
-    }
-
-    @PatchMapping("/update")
-    public Donation updateDonation(@RequestBody Donation donation) {
-        return donationService.updateDonation(donation);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public List<Donation> deleteDonorById(@PathVariable Long id) {
-        donationService.deleteDonation(id);
-        return donationService.getAllDonationsAsc();
+    public List<Donor> getDonorsOfDonation(@PathVariable Long id) {
+        return donationService.getDonorsFromDonation(id);
     }
 
     @GetMapping ("/search")
@@ -63,5 +53,20 @@ public class DonationController {
         model.addAttribute("keyword", keyword);
         return donationService.search(keyword);
     }
+
+    // Update
+    @PatchMapping("/update")
+    public Donation updateDonation(@RequestBody Donation donation) {
+        return donationService.updateDonation(donation);
+    }
+
+    // Delete
+    @DeleteMapping("/{id}")
+    public List<Donation> deleteDonorById(@PathVariable Long id) {
+        donationService.deleteDonation(id);
+        return donationService.getAllDonationsAsc();
+    }
+
+
 
 }

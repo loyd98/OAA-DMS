@@ -17,6 +17,7 @@ public class DonorController {
     @Autowired
     private DonorService donorService;
 
+    // Create
     @PostMapping("/add")
     public Donor addDonor(@Valid  @RequestBody Donor donor) {
         return  donorService.saveDonor(donor);
@@ -27,6 +28,7 @@ public class DonorController {
         return  donorService.saveDonors(donors);
     }
 
+    // Read
     @GetMapping("/asc")
     public List<Donor> getAllDonorsAsc() {
         return donorService.getDonorsAsc();
@@ -37,32 +39,30 @@ public class DonorController {
         return donorService.getDonorsDesc();
     }
 
-    @GetMapping("/account/asc")
-    public List<Donor> getAllByAccountNameAsc() {
-        return donorService.getAllByAccountNameAsc();
-    }
-
-    @GetMapping("/account/desc")
-    public List<Donor> getAllByAccountNameDesc() {
-        return donorService.getAllByAccountNameDesc();
-    }
-
-    @GetMapping("/name/asc")
-    public List<Donor> getAllByDonorNameAsc() {
-        return donorService.getAllByDonorNameAsc();
-    }
-
-    @GetMapping("/name/desc")
-    public List<Donor> getAllByDonorNameDesc () {
-        return donorService.getAllByDonorNameDesc();
-    }
-
     @GetMapping("/{id}")
     public Donor getDonorById(@PathVariable Long id) {
         return donorService.getDonorById(id);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @GetMapping ("/search")
+    public List<Donor> search(Model model, @RequestParam("q") String keyword) {
+        model.addAttribute("keyword", keyword);
+        return donorService.search(keyword);
+    }
+
+    @GetMapping("/donations/{id}")
+    public List<Donation> getDonationsOfDonor(@PathVariable Long id) {
+        return donorService.getAllDonationsFromDonor(id);
+    }
+
+    // Update
+    @PatchMapping("/update")
+    public Donor updateDonor(@RequestBody Donor donor) {
+        return donorService.updateDonor(donor);
+    }
+
+    // Delete
+    @DeleteMapping("/{id}")
     public List<Donor> deleteDonorById(@PathVariable Long id) {
         donorService.deleteDonor(id);
         return donorService.getDonorsAsc();
@@ -73,20 +73,10 @@ public class DonorController {
         return donorService.deleteAllDonors();
     }
 
-    @GetMapping ("/search")
-    public List<Donor> search(Model model, @RequestParam("q") String keyword) {
-        model.addAttribute("keyword", keyword);
-        return donorService.search(keyword);
-    }
 
-    @PatchMapping("/update")
-    public Donor updateDonor(@RequestBody Donor donor) {
-        return donorService.updateDonor(donor);
-    }
 
-    @GetMapping("/donations/{id}")
-    public List<Donation> getDonationsOfDonor(@PathVariable Long id) {
-        return donorService.getAllDonationsFromDonor(id);
-    }
+
+
+
 
 }

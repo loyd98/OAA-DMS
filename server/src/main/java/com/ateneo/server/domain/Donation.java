@@ -25,6 +25,7 @@ public class Donation extends Auditable implements Comparable<Donation> {
 
 	@NotBlank(message = "Cannot have an empty donor account number field.")
     private String donorAccountNumber;
+
     private Long scholarshipId;
 
     @NotBlank(message = "Cannot have an empty account number field.")
@@ -48,16 +49,16 @@ public class Donation extends Auditable implements Comparable<Donation> {
     private List<Donor> donors = new ArrayList<>();
 
     public void addDonor(Donor donor) {
-        donors.add(donor);
+        this.donors.add(donor);
     }
-    
-    public List<Donor> getDonors() {
-		return donors;
-	}
 
-	public void setDonors(List<Donor> donors) {
-		this.donors = donors;
-	}
+    @ManyToMany(mappedBy = "donations", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("donations")
+    private List<Scholarship> scholarships = new ArrayList<>();
+
+    public void addScholarship(Scholarship scholarship) {
+        this.scholarships.add(scholarship);
+    }
 
     @Override
     public int compareTo(Donation anotherDonation) {

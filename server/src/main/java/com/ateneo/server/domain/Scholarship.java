@@ -25,7 +25,15 @@ public class Scholarship extends Auditable{
     private String dateEstablished;
     private String Criteria;
 
-    @ManyToMany(mappedBy = "scholarships", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("scholarships")
-    private List<Donor> donors = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "scholarship_donation",
+            joinColumns = @JoinColumn(name = "scholarship_id"),
+            inverseJoinColumns = @JoinColumn(name = "donation_id")
+    )
+    private List<Donation> donations = new ArrayList<>();
+
+    public void addDonation(Donation donation) {
+        this.donations.add(donation);
+    }
 }
