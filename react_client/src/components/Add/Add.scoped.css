@@ -32,3 +32,15 @@
     border: 0;
     font-weight: 700;
 }
+
+.view__detailContainer textarea {
+    resize: vertical;
+    width: 100%;
+    border-color: var(--orange);
+    font-family: inherit;
+}
+
+.view__detailContainer textarea:disabled {
+    background-color: var(--white);
+    border-color: var(--blue);
+}

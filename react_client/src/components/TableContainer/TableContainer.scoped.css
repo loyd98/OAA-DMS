@@ -37,6 +37,7 @@
   padding: 0 15px;
 }
 
+
 #table__top,
 #table__middle {
   margin-left: 0px;
@@ -56,6 +57,11 @@
 
 tbody td {
   text-align: left;
+  overflow-x: hidden;
+}
+
+tbody td:last-child {
+  overflow: visible;
 }
 
 tbody tr {

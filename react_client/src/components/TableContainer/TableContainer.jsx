@@ -145,7 +145,6 @@ class TableContainer extends Component {
         });
         break;
       case 'donations':
-        console.log('HI');
         history.push({
           pathname: '/donation',
           state: {
@@ -153,8 +152,16 @@ class TableContainer extends Component {
           },
         });
         break;
+      case 'scholarships':
+        history.push({
+          pathname: '/scholarship',
+          state: {
+            id,
+          },
+        });
+        break;
       default:
-        console.log('ERROR');
+        console.log('ERROR in TableContainer handleRedirect');
         break;
     }
   };

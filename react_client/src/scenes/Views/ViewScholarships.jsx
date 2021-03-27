@@ -23,9 +23,10 @@ class ViewDonors extends Component {
       showAdd: false,
       showModal: false,
       id: null,
+      refreshInnerTable: false,
     };
-    this.tableName = 'donors';
-    this.title = 'Donor';
+    this.tableName = 'scholarships';
+    this.title = 'Scholarship';
   }
 
   componentDidMount() {
@@ -66,6 +67,8 @@ class ViewDonors extends Component {
   setShowModal = (showModal) => this.setState({ showModal });
 
   setShowAdd = (showAdd) => this.setState({ showAdd });
+
+  setRefreshInnerTable = (refreshInnerTable) => this.setState({ refreshInnerTable });
 
   setForm = (name, value) => {
     this.setState((prevState) => ({
@@ -150,13 +153,14 @@ class ViewDonors extends Component {
         this.setState({ data: res.data });
         this.copyData();
         this.setIsEditing(false);
+        this.setRefreshInnerTable(true);
       })
       .catch((err) => console.log(err));
   };
 
   render() {
     const {
-      data, isEditing, form, index, showAdd, showModal, id,
+      data, isEditing, form, index, showAdd, showModal, id, refreshInnerTable,
     } = this.state;
     const {
       config, currentTable, url, onDelete, onView, onShow, onMessage,
@@ -164,6 +168,21 @@ class ViewDonors extends Component {
     let button;
 
     const inputs = config.ordering[currentTable].map((obj) => {
+      if (obj.key === 'criteria') {
+        return (
+          <div key={obj.key} className="view__detailContainer">
+            <div className="view__detailTitle">{obj.name}</div>
+            <textarea
+              disabled={!isEditing}
+              rows="4"
+              name={obj.key}
+              type="text"
+              value={form[obj.key] === null ? '' : form[obj.key]}
+              onChange={(e) => this.setForm(e.target.name, e.target.value)}
+            />
+          </div>
+        );
+      }
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
@@ -315,6 +334,8 @@ class ViewDonors extends Component {
               onAddCancel={this.setShowAdd}
               onShow={onShow}
               onMessage={onMessage}
+              refreshInnerTable={refreshInnerTable}
+              onRefresh={this.setRefreshInnerTable}
               currentTable={currentTable}
             />
           </div>

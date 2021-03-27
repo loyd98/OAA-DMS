@@ -27,6 +27,15 @@ class InnerTable extends Component {
     this.handleRead();
   }
 
+  async componentDidUpdate(prevProps) {
+    const { refreshInnerTable, onRefresh } = this.props;
+
+    if (prevProps.refreshInnerTable !== refreshInnerTable) {
+      this.handleRead();
+      onRefresh(false);
+    }
+  }
+
   setShowModal = (showModal) => this.setState({ showModal });
 
   setShowNotif = (showNotif) => this.setState({ showNotif });
@@ -36,28 +45,34 @@ class InnerTable extends Component {
   });
 
   handleRead = () => {
-    const { url, id, innerTable } = this.props;
+    const {
+      url, id, innerTable, currentTable,
+    } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
-    switch (innerTable) {
-      case 'donations':
-        axios
-          .get(`${url}/donor/donations/${id}`, options)
-          .then((res) => this.setState({ data: res.data }))
-          .catch((err) => console.log(err));
-        break;
-      case 'donors':
-        console.log('DONOR');
-        axios
-          .get(`${url}/donation/donors/${id}`, options)
-          .then((res) => this.setState({ data: res.data }))
-          .catch((err) => console.log(err));
-        break;
-      default:
-        console.log('Error');
-        break;
-    }
+    axios
+      .get(`${url}/${currentTable.slice(0, -1)}/${innerTable}/${id}`, options)
+      .then((res) => this.setState({ data: res.data }))
+      .catch((err) => console.log(err));
+
+    // switch (innerTable) {
+    //   case 'donations':
+    //     axios
+    //       .get(`${url}/scholarship/donations/${id}`, options)
+    //       .then((res) => this.setState({ data: res.data }))
+    //       .catch((err) => console.log(err));
+    //     break;
+    //   case 'donors':
+    //     axios
+    //       .get(`${url}/donation/donors/${id}`, options)
+    //       .then((res) => this.setState({ data: res.data }))
+    //       .catch((err) => console.log(err));
+    //     break;
+    //   default:
+    //     console.log('Error');
+    //     break;
+    // }
   };
 
   handleDelete = (id) => {
@@ -192,6 +207,14 @@ InnerTable.propTypes = {
   url: PropTypes.string.isRequired,
   onShow: PropTypes.func.isRequired,
   onMessage: PropTypes.func.isRequired,
+  refreshInnerTable: PropTypes.bool,
+  onRefresh: PropTypes.func,
+  currentTable: PropTypes.func.isRequired,
+};
+
+InnerTable.defaultProps = {
+  refreshInnerTable: false,
+  onRefresh: null,
 };
 
 export default withRouter(InnerTable);

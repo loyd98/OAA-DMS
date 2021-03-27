@@ -23,6 +23,7 @@ class ViewDonors extends Component {
       showAdd: false,
       showModal: false,
       id: null,
+      refreshInnerTable: false,
     };
     this.tableName = 'donations';
     this.title = 'Donation';
@@ -40,7 +41,7 @@ class ViewDonors extends Component {
   }
 
   handleRead = () => {
-    const { history, url } = this.props;
+    const { history, url, currentTable } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
     let id = history.location.state?.id;
@@ -53,7 +54,7 @@ class ViewDonors extends Component {
     }
 
     axios
-      .get(`${url}/donor/${id}`, options)
+      .get(`${url}/${currentTable.slice(0, -1)}/${id}`, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();
@@ -66,6 +67,8 @@ class ViewDonors extends Component {
   setShowModal = (showModal) => this.setState({ showModal });
 
   setShowAdd = (showAdd) => this.setState({ showAdd });
+
+  setRefreshInnerTable = (refreshInnerTable) => this.setState({ refreshInnerTable });
 
   setForm = (name, value) => {
     this.setState((prevState) => ({
@@ -150,13 +153,14 @@ class ViewDonors extends Component {
         this.setState({ data: res.data });
         this.copyData();
         this.setIsEditing(false);
+        this.setRefreshInnerTable(true);
       })
       .catch((err) => console.log(err));
   };
 
   render() {
     const {
-      data, isEditing, form, index, showAdd, showModal, id,
+      data, isEditing, form, index, showAdd, showModal, id, refreshInnerTable,
     } = this.state;
     const {
       config, currentTable, url, onDelete, onView, onShow, onMessage,
@@ -168,7 +172,8 @@ class ViewDonors extends Component {
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
         obj.key !== 'lastModifiedDate' &&
-        obj.key !== 'lastModifiedBy'
+        obj.key !== 'lastModifiedBy' &&
+        obj.key !== 'id'
       ) {
         return (
           <div key={obj.key} className="view__detailContainer">
@@ -314,6 +319,9 @@ class ViewDonors extends Component {
               onAddCancel={this.setShowAdd}
               onShow={onShow}
               onMessage={onMessage}
+              refreshInnerTable={refreshInnerTable}
+              onRefresh={this.setRefreshInnerTable}
+              currentTable={currentTable}
             />
           </div>
         </div>

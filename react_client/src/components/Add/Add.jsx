@@ -18,21 +18,7 @@ class Add extends Component {
   }
 
   componentDidMount() {
-    const { config, currentTable } = this.props;
-
-    const form = {};
-
-    config.ordering[currentTable].forEach((obj) => {
-      if (
-        obj.key !== 'createdBy' &&
-        obj.key !== 'creationDate' &&
-        obj.key !== 'lastModifiedDate' &&
-        obj.key !== 'lastModifiedBy'
-      ) {
-        form[obj.key] = '';
-      }
-    });
-    this.setState({ form });
+    this.copyData();
   }
 
   setForm = (name, value) => {
@@ -54,6 +40,24 @@ class Add extends Component {
   }
 
   delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  copyData = () => {
+    const { config, currentTable } = this.props;
+
+    const form = {};
+
+    config.ordering[currentTable].forEach((obj) => {
+      if (
+        obj.key !== 'createdBy' &&
+        obj.key !== 'creationDate' &&
+        obj.key !== 'lastModifiedDate' &&
+        obj.key !== 'lastModifiedBy'
+      ) {
+        form[obj.key] = '';
+      }
+    });
+    this.setState({ form });
+  }
 
   handleSubmit = async () => {
     const { form } = this.state;
@@ -78,12 +82,12 @@ class Add extends Component {
 
     try {
       const res = await axios.post(`${url}/${currentTable.slice(0, -1)}/add`, formSubmit, options);
-      const { accountNumber } = res.data;
+      const { id } = res.data;
       onSubmit();
       onCancel(false);
-      await this.setNotif(onMessage, onShow, `Succesfully added ${currentTable.slice(0, -1)} with account number: ${accountNumber}.`);
+      await this.setNotif(onMessage, onShow, `Succesfully added ${currentTable.slice(0, -1)} with ID no. ${id}.`);
     } catch (err) {
-      const message = err.response.data.errors[0].defaultMessage || 'Error in Add.jsx';
+      const message = err.response.data.errors?.[0].defaultMessage || 'Error in Add.jsx';
       await this.setNotif(onMessage, onShow, message);
     }
   };
@@ -97,7 +101,7 @@ class Add extends Component {
     if (_.isEmpty(form)) {
       return <div>Loading...</div>;
     }
-
+    console.log(form);
     return (
       <div className="add__background">
         <form className="add">
@@ -110,18 +114,23 @@ class Add extends Component {
               obj.key === 'createdBy' ||
               obj.key === 'creationDate' ||
               obj.key === 'lastModifiedBy' ||
-              obj.key === 'lastModifiedDate'
+              obj.key === 'lastModifiedDate' ||
+              obj.key === 'id'
             ) {
               return null;
             }
 
-            if (obj.key === 'id') {
+            if (obj.key === 'criteria') {
               return (
                 <div key={obj.key} className="view__detailContainer">
                   <div className="view__detailTitle">{obj.name}</div>
-                  <input
-                    disabled
-                    placeholder="AUTO GENERATED"
+                  <textarea
+                    rows="4"
+                    cols="51"
+                    name={obj.key}
+                    type="text"
+                    value={form[obj.key] === null ? '' : form[obj.key]}
+                    onChange={(e) => this.setForm(e.target.name, e.target.value)}
                   />
                 </div>
               );
@@ -133,7 +142,7 @@ class Add extends Component {
                 <input
                   name={obj.key}
                   type="text"
-                  value={form[obj.key]}
+                  value={form[obj.key] === null ? '' : form[obj.key]}
                   onChange={(e) => this.setForm(e.target.name, e.target.value)}
                 />
               </div>

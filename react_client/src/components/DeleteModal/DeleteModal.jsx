@@ -54,30 +54,16 @@ export default class Modal extends Component {
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
-    if (currentTable === 'donors') {
-      try {
-        await axios.delete(`${url}/donor/${id}`, options);
-        onDelete();
-        await this.setNotif(
-          onMessage,
-          onShow,
-          `Sucessfully deleted donor ID ${id}.`,
-        );
-      } catch (err) {
-        await this.setNotif(onMessage, onShow, err.status);
-      }
-    } else if (currentTable === 'donations') {
-      try {
-        await axios.delete(`${url}/donation/${id}`, options);
-        onDelete();
-        await this.setNotif(
-          onMessage,
-          onShow,
-          `Sucessfully deleted donation ID ${id}.`,
-        );
-      } catch (err) {
-        await this.setNotif(onMessage, onShow, err.status);
-      }
+    try {
+      await axios.delete(`${url}/${currentTable.slice(0, -1)}/${id}`, options);
+      onDelete();
+      await this.setNotif(
+        onMessage,
+        onShow,
+        `Sucessfully deleted ${currentTable.slice(0, -1)} ID no. ${id}.`,
+      );
+    } catch (err) {
+      await this.setNotif(onMessage, onShow, err.status);
     }
   };
 

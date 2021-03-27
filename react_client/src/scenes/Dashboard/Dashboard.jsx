@@ -90,6 +90,12 @@ export default class Dashboard extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
         break;
+      case 'scholarships':
+        axios
+          .get(`${url}/scholarship/asc`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
       default:
         console.log('ERROR in Dashboard.jsx read.');
         break;

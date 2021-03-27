@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import './components/FontAwesomeIcons/FontAwesomeIcon';
@@ -9,9 +9,10 @@ import axios from 'axios';
 import Navigation from './components/Navigation/Navigation';
 import Dashboard from './scenes/Dashboard/Dashboard';
 import Login from './scenes/Login/Login';
+import Notification from './components/Notification/Notification';
 import ViewDonors from './scenes/Views/ViewDonors';
 import ViewDonations from './scenes/Views/ViewDonations';
-import Notification from './components/Notification/Notification';
+import ViewScholarships from './scenes/Views/ViewScholarships';
 
 const config = require('./data.config');
 
@@ -142,7 +143,7 @@ class App extends Component {
               exact
               path="/dashboard"
               render={() => (
-                <div className="flex--horizontal">
+                <>
                   <Navigation />
                   <Dashboard
                     username={username}
@@ -153,7 +154,7 @@ class App extends Component {
                     onShow={this.setShowNotif}
                     onMessage={this.setNotifMessage}
                   />
-                </div>
+                </>
               )}
             />
             <Route
@@ -166,6 +167,7 @@ class App extends Component {
                   config={config}
                   onView={this.handleView}
                   onDelete={this.handleInnerDelete}
+                  onNotif={this.handleNotification}
                   onShow={this.setShowNotif}
                   onMessage={this.setNotifMessage}
                 />
@@ -180,6 +182,23 @@ class App extends Component {
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
+                  onDelete={this.handleInnerDelete}
+                  onNotif={this.handleNotification}
+                  onShow={this.setShowNotif}
+                  onMessage={this.setNotifMessage}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/scholarship"
+              render={() => (
+                <ViewScholarships
+                  url={this.url}
+                  currentTable={currentTable}
+                  config={config}
+                  onView={this.handleView}
+                  onDelete={this.handleInnerDelete}
                   onNotif={this.handleNotification}
                   onShow={this.setShowNotif}
                   onMessage={this.setNotifMessage}
