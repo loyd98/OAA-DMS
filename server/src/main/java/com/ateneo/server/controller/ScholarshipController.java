@@ -16,39 +16,39 @@ public class ScholarshipController {
     private ScholarshipService scholarshipService;
 
     // Create
-    @PostMapping("/add")
-    public Scholarship addScholarship(@RequestBody Scholarship scholarship) {
-        return scholarshipService.saveScholarship(scholarship);
-    }
-
-    // Read
-    @GetMapping("/asc")
-    public List<Scholarship> getAllScholarshipAsc() {
-        return scholarshipService.getAllScholarshipsAsc();
-    }
-
-    @GetMapping("/desc")
-    public List<Scholarship> getAllScholarshipDesc() {
-        return scholarshipService.getAllScholarshipDesc();
-    }
-
-    @GetMapping("/{id}")
-    public Scholarship getScholarshipById(@PathVariable Long id) {
-        return scholarshipService.getScholarshipById(id);
-    }
-
-    @GetMapping("/donations/{id}")
-    public List<Donation> getDonationsFromScholarship(@PathVariable Long id) {
-        return scholarshipService.getAllDonationsFromScholarship(id);
-    }
-
-    // Update
-
-    // Delete
-    @DeleteMapping("/{id}")
-    public String deleteScholarshipById(@PathVariable Long id) {
-        return scholarshipService.deleteById(id);
-    }
-
+//    @PostMapping("/add")
+//    public Scholarship addScholarship(@RequestBody Scholarship scholarship) {
+//        return scholarshipService.saveScholarship(scholarship);
+//    }
+//
+//    // Read
+//    @GetMapping("/asc")
+//    public List<Scholarship> getAllScholarshipAsc() {
+//        return scholarshipService.getAllScholarshipsAsc();
+//    }
+//
+//    @GetMapping("/desc")
+//    public List<Scholarship> getAllScholarshipDesc() {
+//        return scholarshipService.getAllScholarshipDesc();
+//    }
+//
+//    @GetMapping("/{id}")
+//    public Scholarship getScholarshipById(@PathVariable Long id) {
+//        return scholarshipService.getScholarshipById(id);
+//    }
+//
+//    @GetMapping("/donations/{id}")
+//    public List<Donation> getDonationsFromScholarship(@PathVariable Long id) {
+//        return scholarshipService.getAllDonationsFromScholarship(id);
+//    }
+//
+//    // Update
+//
+//    // Delete
+//    @DeleteMapping("/{id}")
+//    public String deleteScholarshipById(@PathVariable Long id) {
+//        return scholarshipService.deleteById(id);
+//    }
+//
 
 }
