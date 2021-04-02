@@ -1,18 +1,17 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Navigation from '../../components/Navigation/Navigation';
-import './ViewDonors.scoped.css';
-
-import Button from '../../components/Buttons/Button/Button';
-import Table from '../../components/Table/Table';
+import './Views.scoped.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router';
-import Modal from '../../components/Modal/Modal';
-import InnerTable from '../../components/InnerTable/InnerTable';
-import Add from '../Add/Add';
 import axios from 'axios';
 
-class View extends Component {
+import Navigation from '../../components/Navigation/Navigation';
+import Button from '../../components/Buttons/Button/Button';
+import Modal from '../../components/Modal/Modal';
+import InnerTable from '../../components/InnerTable/InnerTable';
+
+class ViewDonors extends Component {
   constructor(props) {
     super(props);
 
@@ -24,11 +23,25 @@ class View extends Component {
       showAdd: false,
       showModal: false,
       id: null,
+      innerTableId: null,
     };
+    this.tableName = 'moas';
+    this.title = 'MOA';
   }
 
   componentDidMount() {
-    const { history, url } = this.props;
+    this.handleRead();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { id } = this.state;
+    if (prevState.id !== id) {
+      sessionStorage.setItem('currentId', id);
+    }
+  }
+
+  handleRead = () => {
+    const { history, url, currentTable } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
     let id = history.location.state?.id;
@@ -41,23 +54,19 @@ class View extends Component {
     }
 
     axios
-      .get(`${url}/donor/${id}`, options)
+      .get(`${url}/${currentTable.toLowerCase().slice(0, -1)}/${id}`, options)
       .then((res) => {
-        this.setState({ data: res.data });
+        this.setState({ data: res.data, innerTableId: res.data.id });
         this.copyData();
       })
       .catch((err) => console.log(err));
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { id } = this.state;
-    if (prevState.id !== id) {
-      sessionStorage.setItem('currentId', id);
-    }
-  }
+  };
 
   setIsEditing = (isEditing) => this.setState({ isEditing });
+
   setShowModal = (showModal) => this.setState({ showModal });
+
+  setShowAdd = (showAdd) => this.setState({ showAdd });
 
   setForm = (name, value) => {
     this.setState((prevState) => ({
@@ -132,12 +141,12 @@ class View extends Component {
 
   handleSubmit = () => {
     const { form } = this.state;
-    const { url } = this.props;
+    const { url, currentTable } = this.props;
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
     axios
-      .patch(`${url}/donor/update`, form, options)
+      .patch(`${url}/${currentTable.slice(0, -1)}/update`, form, options)
       .then((res) => {
         this.setState({ data: res.data });
         this.copyData();
@@ -147,17 +156,20 @@ class View extends Component {
   };
 
   render() {
-    const { data, isEditing, form, index, showAdd, showModal, id } = this.state;
-    const { config, currentTable, url } = this.props;
-    let button;
-    let inputs;
+    const {
+      data, isEditing, form, index, showAdd, showModal, id, innerTableId,
+    } = this.state;
+    const {
+      config, currentTable, url, onDelete, onView, onShow, onMessage,
+    } = this.props;
 
-    inputs = config.ordering[currentTable].map((obj) => {
+    const inputs = config.ordering[currentTable].map((obj) => {
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
         obj.key !== 'lastModifiedDate' &&
-        obj.key !== 'lastModifiedBy'
+        obj.key !== 'lastModifiedBy' &&
+        obj.key !== 'id'
       ) {
         return (
           <div key={obj.key} className="view__detailContainer">
@@ -171,77 +183,30 @@ class View extends Component {
             />
           </div>
         );
-      } else {
-        return (
-          <div key={obj.key} className="view__detailContainer">
-            <div className="view__detailTitle">{obj.name}</div>
-            <input
-              disabled
-              name={obj.key}
-              type="text"
-              defaultValue={data[obj.key]}
-            />
-          </div>
-        );
       }
-    });
-
-    if (!isEditing) {
-      button = (
-        <Button
-          isTransparent
-          message="Edit"
-          type="right"
-          onClick={() => this.setIsEditing(true)}
-        >
-          <FontAwesomeIcon icon="edit" />
-        </Button>
-      );
-    } else {
-      button = (
-        <div className="flex--horizontal">
-          <Button
-            isTransparent
-            message="Submit"
-            type="rigth"
-            onClick={this.handleSubmit}
-          >
-            <FontAwesomeIcon icon="share-square" />
-          </Button>
-          <Button
-            isTransparent
-            message="Cancel"
-            type="right"
-            onClick={this.handleCancel}
-          >
-            <FontAwesomeIcon icon="times" />
-          </Button>
+      return (
+        <div key={obj.key} className="view__detailContainer">
+          <div className="view__detailTitle">{obj.name}</div>
+          <input
+            disabled
+            name={obj.key}
+            type="text"
+            defaultValue={data[obj.key]}
+          />
         </div>
       );
-    }
+    });
 
     const innerTable =
-      config.innerTables[currentTable][index][0].toUpperCase() +
-      config.innerTables[currentTable][index].slice(1);
+      config.innerTables[this.tableName][index][0].toUpperCase() +
+      config.innerTables[this.tableName][index].slice(1);
 
-    if (form.length === 0) {
+    if (form.length === 0 || !id || !innerTableId) {
       return <div>Loading...</div>;
     }
 
-    if (!id) {
-      return null;
-    }
     return (
       <>
-        {showAdd && (
-          <Add
-            currentTable={config.innerTables[currentTable][index]}
-            handleShowAdd={this.handleShowAdd}
-            handleAddFormField={handleAddFormField}
-            config={config}
-            handleAddFormSubmit={this.handleSubmit}
-          />
-        )}
         {showModal && (
           <Modal
             title="Discard your changes?"
@@ -257,8 +222,7 @@ class View extends Component {
         <div className="view flex--horizontal">
           <div className="view__left">
             <div className="view__titlebar flex--horizontal">
-              <p>Donor:</p>
-              {button}
+              <p>{this.title}</p>
             </div>
             <form className="view__details">{inputs}</form>
           </div>
@@ -268,15 +232,7 @@ class View extends Component {
                 <p>{innerTable}</p>
                 <Button
                   isTransparent
-                  message={`Add ${config.innerTables[currentTable][index]}`}
-                  type="right"
-                  onClick={() => this.handleShowAdd(true)}
-                >
-                  <FontAwesomeIcon icon="plus" />
-                </Button>
-                <Button
-                  isTransparent
-                  message={`Prev table`}
+                  message="Prev table"
                   type="right"
                   onClick={this.handleIndexDec}
                 >
@@ -284,7 +240,7 @@ class View extends Component {
                 </Button>
                 <Button
                   isTransparent
-                  message={`Next table`}
+                  message="Next table"
                   type="right"
                   onClick={this.handleIndexInc}
                 >
@@ -301,15 +257,20 @@ class View extends Component {
                 <FontAwesomeIcon icon="arrow-left" />
               </Button>
             </div>
-            <table>
-              <InnerTable
-                id={id}
-                url={url}
-                config={config}
-                innerTable={innerTable.toLowerCase()}
-                colLimit={6}
-              />
-            </table>
+            <InnerTable
+              id={innerTableId}
+              url={url}
+              showAdd={showAdd}
+              config={config}
+              innerTable={innerTable.toLowerCase()}
+              colLimit={6}
+              onDelete={onDelete}
+              onView={onView}
+              onAddCancel={this.setShowAdd}
+              onShow={onShow}
+              onMessage={onMessage}
+              currentTable={currentTable}
+            />
           </div>
         </div>
       </>
@@ -317,4 +278,25 @@ class View extends Component {
   }
 }
 
-export default withRouter(View);
+ViewDonors.propTypes = {
+  config: PropTypes.shape({
+    innerTables: PropTypes.shape(),
+    ordering: PropTypes.shape({}),
+  }).isRequired,
+  currentTable: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      state: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      }),
+    }),
+    push: PropTypes.func,
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  onShow: PropTypes.func.isRequired,
+  onMessage: PropTypes.func.isRequired,
+};
+
+export default withRouter(ViewDonors);

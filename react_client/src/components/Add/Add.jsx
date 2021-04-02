@@ -87,7 +87,8 @@ class Add extends Component {
       onCancel(false);
       await this.setNotif(onMessage, onShow, `Succesfully added ${currentTable.slice(0, -1)} with ID no. ${id}.`);
     } catch (err) {
-      const message = err.response.data.errors?.[0].defaultMessage || 'Error in Add.jsx';
+      console.log(err.response);
+      const message = err.response.data.errors?.[0].defaultMessage || 'Error in one of the input fields. Please double check.';
       await this.setNotif(onMessage, onShow, message);
     }
   };
@@ -101,7 +102,7 @@ class Add extends Component {
     if (_.isEmpty(form)) {
       return <div>Loading...</div>;
     }
-    console.log(form);
+
     return (
       <div className="add__background">
         <form className="add">
@@ -110,6 +111,21 @@ class Add extends Component {
           </Button>
 
           {config.ordering[currentTable].map((obj) => {
+            if (obj.key === 'birthDate' || obj.key === 'date' || obj.key === 'dateSigned') {
+              return (
+                <div key={obj.key} className="view__detailContainer">
+                  <div className="view__detailTitle">{obj.name}</div>
+                  <input
+                    name={obj.key}
+                    type="text"
+                    value={form[obj.key] === null ? '' : form[obj.key]}
+                    onChange={(e) => this.setForm(e.target.name, e.target.value)}
+                    placeholder="Format: YYYY-MM-DD"
+                  />
+                </div>
+              );
+            }
+
             if (
               obj.key === 'createdBy' ||
               obj.key === 'creationDate' ||
