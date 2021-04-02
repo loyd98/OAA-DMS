@@ -12,6 +12,7 @@ import Login from './scenes/Login/Login';
 import Notification from './components/Notification/Notification';
 import ViewDonors from './scenes/Views/ViewDonors';
 import ViewDonations from './scenes/Views/ViewDonations';
+import ViewMOAs from './scenes/Views/ViewMOAs';
 import ViewScholarships from './scenes/Views/ViewScholarships';
 
 const config = require('./data.config');
@@ -178,6 +179,22 @@ class App extends Component {
               path="/donation"
               render={() => (
                 <ViewDonations
+                  url={this.url}
+                  currentTable={currentTable}
+                  config={config}
+                  onView={this.handleView}
+                  onDelete={this.handleInnerDelete}
+                  onNotif={this.handleNotification}
+                  onShow={this.setShowNotif}
+                  onMessage={this.setNotifMessage}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/moa"
+              render={() => (
+                <ViewMOAs
                   url={this.url}
                   currentTable={currentTable}
                   config={config}

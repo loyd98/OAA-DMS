@@ -25,8 +25,8 @@ class ViewDonors extends Component {
       id: null,
       innerTableId: null,
     };
-    this.tableName = 'donors';
-    this.title = 'Donor';
+    this.tableName = 'moas';
+    this.title = 'MOA';
   }
 
   componentDidMount() {
@@ -54,9 +54,9 @@ class ViewDonors extends Component {
     }
 
     axios
-      .get(`${url}/${currentTable.slice(0, -1)}/${id}`, options)
+      .get(`${url}/${currentTable.toLowerCase().slice(0, -1)}/${id}`, options)
       .then((res) => {
-        this.setState({ data: res.data, innerTableId: res.data.accountNumber });
+        this.setState({ data: res.data, innerTableId: res.data.id });
         this.copyData();
       })
       .catch((err) => console.log(err));
@@ -162,25 +162,8 @@ class ViewDonors extends Component {
     const {
       config, currentTable, url, onDelete, onView, onShow, onMessage,
     } = this.props;
-    let button;
 
     const inputs = config.ordering[currentTable].map((obj) => {
-      if (obj.key === 'birthDate') {
-        return (
-          <div key={obj.key} className="view__detailContainer">
-            <div className="view__detailTitle">{obj.name}</div>
-            <input
-              disabled={!isEditing}
-              name={obj.key}
-              type="text"
-              value={form[obj.key] == null ? '' : form[obj.key]}
-              onChange={(e) => this.setForm(e.target.name, e.target.value)}
-              placeholder="Format: YYYY-MM-DD"
-            />
-          </div>
-        );
-      }
-
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
@@ -201,7 +184,6 @@ class ViewDonors extends Component {
           </div>
         );
       }
-
       return (
         <div key={obj.key} className="view__detailContainer">
           <div className="view__detailTitle">{obj.name}</div>
@@ -214,40 +196,6 @@ class ViewDonors extends Component {
         </div>
       );
     });
-
-    if (!isEditing) {
-      button = (
-        <Button
-          isTransparent
-          message="Edit"
-          type="right"
-          onClick={() => this.setIsEditing(true)}
-        >
-          <FontAwesomeIcon icon="edit" />
-        </Button>
-      );
-    } else {
-      button = (
-        <div className="flex--horizontal">
-          <Button
-            isTransparent
-            message="Submit"
-            type="rigth"
-            onClick={this.handleSubmit}
-          >
-            <FontAwesomeIcon icon="share-square" />
-          </Button>
-          <Button
-            isTransparent
-            message="Cancel"
-            type="right"
-            onClick={this.handleCancel}
-          >
-            <FontAwesomeIcon icon="times" />
-          </Button>
-        </div>
-      );
-    }
 
     const innerTable =
       config.innerTables[this.tableName][index][0].toUpperCase() +
@@ -275,7 +223,6 @@ class ViewDonors extends Component {
           <div className="view__left">
             <div className="view__titlebar flex--horizontal">
               <p>{this.title}</p>
-              {button}
             </div>
             <form className="view__details">{inputs}</form>
           </div>

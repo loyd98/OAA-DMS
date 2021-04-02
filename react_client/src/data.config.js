@@ -96,6 +96,7 @@ module.exports = {
   innerTables: {
     donors: ['donations', 'scholars'],
     donations: ['donors', 'scholars'],
+    moas: ['donors', 'donations'],
     scholarships: ['donations', 'scholars'],
   },
   defaultTable: 'donors',

@@ -160,6 +160,14 @@ class TableContainer extends Component {
           },
         });
         break;
+      case 'moas':
+        history.push({
+          pathname: '/moa',
+          state: {
+            id,
+          },
+        });
+        break;
       default:
         console.log('ERROR in TableContainer handleRedirect');
         break;
