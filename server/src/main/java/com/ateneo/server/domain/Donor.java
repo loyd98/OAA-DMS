@@ -1,12 +1,14 @@
 package com.ateneo.server.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,8 @@ public class Donor extends Auditable implements Comparable<Donor>{
     private String address4;
     private String address5;
     private String companyAddress;
-    private LocalDate birthDate;
+    private Date birthDate;
+
     private String notes;
 
     @OneToMany(mappedBy = "donor")
@@ -47,5 +50,4 @@ public class Donor extends Auditable implements Comparable<Donor>{
     public int compareTo(Donor anotherDonor) {
         return this.getAccountNumber().compareTo(anotherDonor.getAccountNumber());
     }
-
 }

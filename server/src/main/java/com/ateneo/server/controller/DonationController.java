@@ -50,6 +50,10 @@ public class DonationController {
     }
 
     // Update
+    @PatchMapping("/update")
+    public Donation updateDonation(@RequestBody Donation donation) {
+        return donationService.updateDonation(donation);
+    }
 
     // Delete
     @DeleteMapping("/{id}")

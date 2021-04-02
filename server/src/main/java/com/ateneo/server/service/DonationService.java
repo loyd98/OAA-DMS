@@ -41,6 +41,18 @@ public class DonationService {
     }
 
     // Update
+    public Donation updateDonation(Donation donation) {
+        Donation existingDonation = donationRepository.findById(donation.getId()).orElse(null);
+        existingDonation.setAccountNumber(donation.getAccountNumber());
+        existingDonation.setAccountName(donation.getAccountName());
+        existingDonation.setOrNumber(donation.getOrNumber());
+        existingDonation.setDate(donation.getDate());
+        existingDonation.setNotes(donation.getNotes());
+        existingDonation.setNeedCertificate(donation.getNeedCertificate());
+        existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
+
+        return donationRepository.save(existingDonation);
+    }
 
     // Delete
     public String deleteDonation(Long id) {

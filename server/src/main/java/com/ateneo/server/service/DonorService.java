@@ -46,6 +46,29 @@ public class DonorService {
         return donorRepository.findDonorsOfDonation(donationId);
     }
     // Update
+    public Donor updateDonor(Donor donor) {
+        Donor existingDonor = donorRepository.findById(donor.getId()).orElse(null);
+        existingDonor.setAccountNumber(donor.getAccountNumber());
+        existingDonor.setAccountName(donor.getAccountName());
+        existingDonor.setSalutation(donor.getSalutation());
+        existingDonor.setDonorName(donor.getDonorName());
+        existingDonor.setCellphoneNumber(donor.getCellphoneNumber());
+        existingDonor.setEmailAddress(donor.getEmailAddress());
+        existingDonor.setCompanyTIN(donor.getCompanyTIN());
+        existingDonor.setPhone1(donor.getPhone1());
+        existingDonor.setPhone2(donor.getPhone2());
+        existingDonor.setFaxNumber(donor.getFaxNumber());
+        existingDonor.setAddress1(donor.getAddress1());
+        existingDonor.setAddress2(donor.getAddress2());
+        existingDonor.setAddress3(donor.getAddress3());
+        existingDonor.setAddress4(donor.getAddress4());
+        existingDonor.setAddress5(donor.getAddress5());
+        existingDonor.setCompanyAddress(donor.getCompanyAddress());
+        existingDonor.setBirthDate(donor.getBirthDate());
+        existingDonor.setNotes(donor.getNotes());
+
+        return donorRepository.save(existingDonor);
+    }
 
     // Delete
     public String deleteDonor(Long id) {
