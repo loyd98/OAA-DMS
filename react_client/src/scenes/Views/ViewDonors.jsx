@@ -23,6 +23,7 @@ class ViewDonors extends Component {
       showAdd: false,
       showModal: false,
       id: null,
+      innerTableId: null,
     };
     this.tableName = 'donors';
     this.title = 'Donor';
@@ -55,7 +56,7 @@ class ViewDonors extends Component {
     axios
       .get(`${url}/${currentTable.slice(0, -1)}/${id}`, options)
       .then((res) => {
-        this.setState({ data: res.data });
+        this.setState({ data: res.data, innerTableId: res.data.accountNumber });
         this.copyData();
       })
       .catch((err) => console.log(err));
@@ -156,7 +157,7 @@ class ViewDonors extends Component {
 
   render() {
     const {
-      data, isEditing, form, index, showAdd, showModal, id,
+      data, isEditing, form, index, showAdd, showModal, id, innerTableId,
     } = this.state;
     const {
       config, currentTable, url, onDelete, onView, onShow, onMessage,
@@ -235,13 +236,10 @@ class ViewDonors extends Component {
       config.innerTables[this.tableName][index][0].toUpperCase() +
       config.innerTables[this.tableName][index].slice(1);
 
-    if (form.length === 0) {
+    if (form.length === 0 || !id || !innerTableId) {
       return <div>Loading...</div>;
     }
 
-    if (!id) {
-      return null;
-    }
     return (
       <>
         {showModal && (
@@ -270,14 +268,6 @@ class ViewDonors extends Component {
                 <p>{innerTable}</p>
                 <Button
                   isTransparent
-                  message={`Add ${config.innerTables[currentTable][index]}`}
-                  type="right"
-                  onClick={() => this.setShowAdd(true)}
-                >
-                  <FontAwesomeIcon icon="plus" />
-                </Button>
-                <Button
-                  isTransparent
                   message="Prev table"
                   type="right"
                   onClick={this.handleIndexDec}
@@ -304,7 +294,7 @@ class ViewDonors extends Component {
               </Button>
             </div>
             <InnerTable
-              id={id}
+              id={innerTableId}
               url={url}
               showAdd={showAdd}
               config={config}

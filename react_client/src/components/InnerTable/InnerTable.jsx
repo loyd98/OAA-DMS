@@ -51,28 +51,17 @@ class InnerTable extends Component {
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
-    axios
-      .get(`${url}/${currentTable.slice(0, -1)}/${innerTable}/${id}`, options)
-      .then((res) => this.setState({ data: res.data }))
-      .catch((err) => console.log(err));
-
-    // switch (innerTable) {
-    //   case 'donations':
-    //     axios
-    //       .get(`${url}/scholarship/donations/${id}`, options)
-    //       .then((res) => this.setState({ data: res.data }))
-    //       .catch((err) => console.log(err));
-    //     break;
-    //   case 'donors':
-    //     axios
-    //       .get(`${url}/donation/donors/${id}`, options)
-    //       .then((res) => this.setState({ data: res.data }))
-    //       .catch((err) => console.log(err));
-    //     break;
-    //   default:
-    //     console.log('Error');
-    //     break;
-    // }
+    if (innerTable === 'donations') {
+      axios
+        .get(`${url}/donation/ofdonor/${id}`, options)
+        .then((res) => this.setState({ data: res.data }))
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get(`${url}/${currentTable.slice(0, -1)}/${innerTable}/${id}`, options)
+        .then((res) => this.setState({ data: res.data }))
+        .catch((err) => console.log(err));
+    }
   };
 
   handleDelete = (id) => {
@@ -209,7 +198,7 @@ InnerTable.propTypes = {
   onMessage: PropTypes.func.isRequired,
   refreshInnerTable: PropTypes.bool,
   onRefresh: PropTypes.func,
-  currentTable: PropTypes.func.isRequired,
+  currentTable: PropTypes.string.isRequired,
 };
 
 InnerTable.defaultProps = {

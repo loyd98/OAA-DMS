@@ -101,7 +101,7 @@ class Add extends Component {
     if (_.isEmpty(form)) {
       return <div>Loading...</div>;
     }
-    console.log(form);
+
     return (
       <div className="add__background">
         <form className="add">
