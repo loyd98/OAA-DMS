@@ -36,6 +36,10 @@ public class DonationService {
         return donationRepository.search(keyword);
     }
 
+    public List<Donation> findDonationsOfDonor(String accountNumber) {
+        return donationRepository.findDonationsOfDonor(accountNumber);
+    }
+
     // Update
 
     // Delete

@@ -42,6 +42,9 @@ public class DonorService {
         return donorRepository.search(keyword);
     }
 
+    public List<Donor> findDonorsOfDonation(Long donationId) {
+        return donorRepository.findDonorsOfDonation(donationId);
+    }
     // Update
 
     // Delete

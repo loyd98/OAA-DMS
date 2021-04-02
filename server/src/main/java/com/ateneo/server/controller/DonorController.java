@@ -44,6 +44,11 @@ public class DonorController {
         return donorService.searchDonor(keyword);
     }
 
+    @GetMapping("/ofdonation/{donationId}")
+    public List<Donor> getDonorsOfDonation(@PathVariable Long donationId) {
+        return donorService.findDonorsOfDonation(donationId);
+    }
+
     // Update
 
     // Delete

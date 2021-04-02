@@ -23,20 +23,20 @@ public class Donor extends Auditable implements Comparable<Donor>{
     @NotBlank(message = "Cannot have an empty account number field.")
     private String accountNumber;
     private String accountName;
+    private String salutation;
     private String donorName;
+    private String cellphoneNumber;
+    private String emailAddress;
     private String companyTIN;
-    private String companyAddress;
+    private String phone1;
+    private String phone2;
+    private String faxNumber;
     private String address1;
     private String address2;
     private String address3;
     private String address4;
     private String address5;
-    private String phone1;
-    private String phone2;
-    private String faxNumber;
-    private String cellphoneNumber;
-    private String emailAddress;
-    private String salutation;
+    private String companyAddress;
     private LocalDate birthDate;
     private String notes;
 

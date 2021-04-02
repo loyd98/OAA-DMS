@@ -44,6 +44,11 @@ public class DonationController {
         return donationService.searchDonation(keyword);
     }
 
+    @GetMapping("/ofdonor/{accountNumber}")
+    public List<Donation> getDonationsOfDonor(@PathVariable String accountNumber) {
+        return donationService.findDonationsOfDonor(accountNumber);
+    }
+
     // Update
 
     // Delete
