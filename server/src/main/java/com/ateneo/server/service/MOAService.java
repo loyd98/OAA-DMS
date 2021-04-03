@@ -55,6 +55,20 @@ public class MOAService {
     }
 
     // Update
+    public MOA updateMoa(MOA moa) {
+        MOA existingMoa = moaRepository.findById(moa.getId()).orElse(null);
+        Donor donor = donorRepository.findDonorByAccountNumber(moa.getDonorAccountNumber());
+        Donation donation = donationRepository.findById(moa.getForeignDonationId()).orElse(null);
+
+        existingMoa.setName(moa.getName());
+        existingMoa.setDateSigned(moa.getDateSigned());
+        existingMoa.setDonorAccountNumber(moa.getDonorAccountNumber());
+        existingMoa.setForeignDonationId(moa.getForeignDonationId());
+        existingMoa.setDonor(donor);
+        existingMoa.setDonation(donation);
+
+        return moaRepository.save(existingMoa);
+    }
 
     // Delete
     public String deleteMoa(Long id) {

@@ -17,7 +17,6 @@ public class MOA extends Auditable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "donor_id")
     @JsonIgnoreProperties("moaList")

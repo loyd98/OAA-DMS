@@ -41,9 +41,12 @@ public class MOAController {
     }
 
     // Update
+    @PatchMapping("/update")
+    public MOA updateMoa(@RequestBody MOA moa) {
+        return moaService.updateMoa(moa);
+    }
 
     // Delete
-
     @DeleteMapping("/{id}")
     public String deleteMoaById(@PathVariable Long id) {
         return moaService.deleteMoa(id);

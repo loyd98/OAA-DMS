@@ -50,6 +50,7 @@ public class DonorService {
     // Update
     public Donor updateDonor(Donor donor) {
         Donor existingDonor = donorRepository.findById(donor.getId()).orElse(null);
+
         existingDonor.setAccountNumber(donor.getAccountNumber());
         existingDonor.setAccountName(donor.getAccountName());
         existingDonor.setSalutation(donor.getSalutation());
@@ -68,6 +69,10 @@ public class DonorService {
         existingDonor.setCompanyAddress(donor.getCompanyAddress());
         existingDonor.setBirthDate(donor.getBirthDate());
         existingDonor.setNotes(donor.getNotes());
+
+        for (MOA moa: existingDonor.getMoaList()) {
+            moa.setDonorAccountNumber(donor.getAccountNumber());
+        }
 
         return donorRepository.save(existingDonor);
     }

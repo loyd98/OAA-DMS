@@ -2,6 +2,7 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.domain.MOA;
 import com.ateneo.server.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,10 @@ public class DonationService {
         existingDonation.setNotes(donation.getNotes());
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
+
+        for (MOA moa: donation.getMoaList()) {
+            moa.setDonorAccountNumber(donation.getAccountNumber());
+        }
 
         return donationRepository.save(existingDonation);
     }
