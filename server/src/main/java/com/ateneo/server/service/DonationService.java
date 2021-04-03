@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DonationService {
@@ -56,8 +57,15 @@ public class DonationService {
 
     // Delete
     public String deleteDonation(Long id) {
-        donationRepository.deleteById(id);
-        return "Successfully deleted donation with id: " + id;
+        Optional<Donation> donation = donationRepository.findById(id);
+
+        if (donation.isPresent()) {
+            donation.get().removeMOAs();
+            donationRepository.deleteById(donation.get().getId());
+            return "Successfully deleted donation with id: " + id;
+        }
+
+        return "Delete unsuccessful";
     }
 //    public List<Donation> getAllDonationsAsc() {
 //        return donationRepository.findAllByOrderByIdAsc();

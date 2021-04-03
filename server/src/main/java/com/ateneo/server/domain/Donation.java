@@ -38,6 +38,17 @@ public class Donation extends Auditable implements Comparable<Donation> {
     @OneToMany(mappedBy = "donation")
     List<MOA> moaList = new ArrayList<>();
 
+    public void removeMOA(MOA moa) {
+        this.getMoaList().remove(moa);
+        moa.setDonation(null);
+    }
+
+    public void removeMOAs() {
+        for (MOA moa : new ArrayList<>(moaList)) {
+            removeMOA(moa);
+        }
+    }
+
     @Override
     public int compareTo(Donation anotherDonation) {
         return this.getId().compareTo(anotherDonation.getId());
