@@ -23,6 +23,53 @@ public class ScholarshipService {
     private DonationRepository donationRepository;
 
     // Create
+    public Scholarship saveScholarship(Scholarship scholarship) {
+        Donation donation = donationRepository.findById(scholarship.getForeignDonationId()).orElse(null);
+        scholarship.setDonation(donation);
+        return scholarshipRepository.save(scholarship);
+    }
+
+    // Read
+    public List<Scholarship> findAllScholarshipsAsc() {
+        return scholarshipRepository.findAllByOrderByIdAsc();
+    }
+
+    public List<Scholarship> findAllScholarshipsDesc() {
+        return scholarshipRepository.findAllByOrderByIdDesc();
+    }
+
+    public Scholarship findScholarshipById(Long id) {
+        return scholarshipRepository.findById(id).orElse(null);
+    }
+
+    // Update
+    public Scholarship updateScholarship(Scholarship scholarship) {
+        Scholarship existingScholarship = scholarshipRepository.findById(scholarship.getId()).orElse(null);
+        Donation donation = donationRepository.findById(scholarship.getForeignDonationId()).orElse(null);
+
+        existingScholarship.setScholarshipName(scholarship.getScholarshipName());
+        existingScholarship.setTypeOfScholarship(scholarship.getTypeOfScholarship());
+        existingScholarship.setDateEstablished(scholarship.getDateEstablished());
+        existingScholarship.setCriteria(scholarship.getCriteria());
+        existingScholarship.setForeignDonationId(scholarship.getForeignDonationId());
+        existingScholarship.setDonation(donation);
+
+        return scholarshipRepository.save(existingScholarship);
+    }
+
+    // Delete
+    public String deleteScholarship(Long id) {
+        scholarshipRepository.deleteById(id);
+        return "Successfully deleted scholarship with id: " + id;
+    }
+
+    public String deleteAllScholarships() {
+        scholarshipRepository.deleteAll();
+        return "Successfully deleted all scholarships";
+    }
+
+
+    // Create
 //    public Scholarship saveScholarship(Scholarship scholarship) {
 //        if (scholarship.getDonationId() != null) {
 //            Donation donation = donationRepository.findById(scholarship.getDonationId()).orElseThrow(() -> new ResourceNotFoundException("Donation", "id", scholarship.getDonationId()));

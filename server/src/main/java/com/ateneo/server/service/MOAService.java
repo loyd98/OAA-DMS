@@ -32,12 +32,6 @@ public class MOAService {
         moa.setDonor(donor);
         moa.setDonation(donation);
 
-        donor.getMoaList().add(moa);
-        donorRepository.save(donor);
-
-        donation.getMoaList().add(moa);
-        donorRepository.save(donor);
-//
         return moaRepository.save(moa);
     }
 

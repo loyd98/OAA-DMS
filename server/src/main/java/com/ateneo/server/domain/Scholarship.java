@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +19,17 @@ public class Scholarship extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long donationId;
-    private String donorAccountNumber;
     private String scholarshipName;
     private String typeOfScholarship;
-    private String dateEstablished;
+    private Date dateEstablished;
     private String Criteria;
+
+    private Long foreignDonationId;
+
+    @ManyToOne
+    @JoinColumn(name = "donation_id")
+    @JsonIgnoreProperties("scholarships")
+    Donation donation;
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(

@@ -16,6 +16,45 @@ public class ScholarshipController {
     private ScholarshipService scholarshipService;
 
     // Create
+    @PostMapping("/add")
+    public Scholarship addScholarship(@RequestBody Scholarship scholarship) {
+        return scholarshipService.saveScholarship(scholarship);
+    }
+
+    // Read
+    @GetMapping("/asc")
+    public List<Scholarship> getScholarshipAsc() {
+        return scholarshipService.findAllScholarshipsAsc();
+    }
+
+    @GetMapping("/desc")
+    public List<Scholarship> getScholarshipDesc() {
+        return scholarshipService.findAllScholarshipsDesc();
+    }
+
+    @GetMapping("{id}")
+    public Scholarship getScholarshipById(@PathVariable Long id) {
+        return scholarshipService.findScholarshipById(id);
+    }
+
+    // Update
+    @PatchMapping("/update")
+    public Scholarship updateScholarship(@RequestBody Scholarship scholarship) {
+        return scholarshipService.updateScholarship(scholarship);
+    }
+
+    // Delete
+    @DeleteMapping("{id}")
+    public String deleteScholarshipById(@PathVariable Long id) {
+        return scholarshipService.deleteScholarship(id);
+    }
+
+    @DeleteMapping
+    public String deleteAllScholarships() {
+        return scholarshipService.deleteAllScholarships();
+    }
+
+    // Create
 //    @PostMapping("/add")
 //    public Scholarship addScholarship(@RequestBody Scholarship scholarship) {
 //        return scholarshipService.saveScholarship(scholarship);
