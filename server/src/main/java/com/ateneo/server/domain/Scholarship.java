@@ -14,8 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
-public class Scholarship extends Auditable{
+public class Scholarship extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +29,10 @@ public class Scholarship extends Auditable{
     @JoinColumn(name = "donation_id")
     @JsonIgnoreProperties("scholarships")
     Donation donation;
+
+    @OneToMany(mappedBy = "scholarship")
+    List<Scholar> scholars = new ArrayList<>();
+
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(

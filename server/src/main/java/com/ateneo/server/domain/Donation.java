@@ -47,8 +47,19 @@ public class Donation extends Auditable implements Comparable<Donation> {
     }
 
     public void removeMOAs() {
-        for (MOA moa : new ArrayList<>(moaList)) {
+        for (MOA moa: new ArrayList<>(moaList)) {
             removeMOA(moa);
+        }
+    }
+
+    public void removeScholarship(Scholarship scholarship) {
+        this.getScholarships().remove(scholarship);
+        scholarship.setDonation(null);
+    }
+
+    public void removeScholarships() {
+        for (Scholarship scholarship: new ArrayList<>(scholarships)) {
+            removeScholarship(scholarship);
         }
     }
 
