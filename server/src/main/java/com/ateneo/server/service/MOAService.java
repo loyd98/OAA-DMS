@@ -70,4 +70,9 @@ public class MOAService {
         return "Successfully deleted MOA with id: " + id;
     }
 
+    public String deleteAllMoas() {
+        moaRepository.deleteAll();
+        return "Successfully deleted all MOAs";
+    }
+
 }

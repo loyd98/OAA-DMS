@@ -52,5 +52,8 @@ public class MOAController {
         return moaService.deleteMoa(id);
     }
 
-    // todo Delete ALl
+    @DeleteMapping
+    public String deleteAllMoas() {
+        return moaService.deleteAllMoas();
+    }
 }
