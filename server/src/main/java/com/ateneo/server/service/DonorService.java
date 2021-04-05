@@ -1,26 +1,19 @@
 package com.ateneo.server.service;
 
-import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
 import com.ateneo.server.domain.MOA;
-import com.ateneo.server.exception.ResourceNotFoundException;
-import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.DonorRepository;
-import com.ateneo.server.repository.MOARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DonorService {
 
     @Autowired
     private DonorRepository donorRepository;
-
-    @Autowired
-    private MOARepository moaRepository;
 
     // Create
     public Donor saveDonor(Donor donor) {
@@ -88,6 +81,17 @@ public class DonorService {
         }
 
         return "Delete unsuccessful";
+    }
+
+    public String deleteAllDonors() {
+        List<Donor> donors = donorRepository.findAll();
+
+        for (Donor donor: donors) {
+            donor.removeMOAs();
+        }
+
+        donorRepository.deleteAll();
+        return "Successfully deleted all donors.";
     }
 
 //    public Donor saveDonor(Donor donor)

@@ -52,7 +52,7 @@ public class Donor extends Auditable implements Comparable<Donor>{
     }
 
     public void removeMOAs() {
-        for (MOA moa : new ArrayList<>(moaList)) {
+        for (MOA moa: new ArrayList<>(moaList)) {
             removeMOA(moa);
         }
     }

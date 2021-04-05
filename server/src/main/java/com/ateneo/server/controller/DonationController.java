@@ -61,6 +61,10 @@ public class DonationController {
         return donationService.deleteDonation(id);
     }
 
+    @DeleteMapping
+    public String deleteAllDonations() {
+        return donationService.deleteAllDonations();
+    }
 
 //    @PostMapping("/add")
 //    public Donation addDonation(@Valid @RequestBody Donation donation) {

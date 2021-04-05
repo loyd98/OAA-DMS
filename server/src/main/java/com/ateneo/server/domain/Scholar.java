@@ -24,4 +24,5 @@ public class Scholar extends Auditable {
     @JoinColumn(name = "scholarship_id")
     @JsonIgnoreProperties("scholars")
     Scholarship scholarship;
+
 }

@@ -8,4 +8,6 @@ import java.util.List;
 public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> {
     List<Scholarship> findAllByOrderByIdAsc();
     List<Scholarship> findAllByOrderByIdDesc();
+
+    List<Scholarship> findAllByForeignDonationId(Long foreignDonationId);
 }

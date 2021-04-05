@@ -72,6 +72,17 @@ public class DonationService {
 
         return "Delete unsuccessful";
     }
+
+    public String deleteAllDonations() {
+        List<Donation> donations = donationRepository.findAll();
+
+        for (Donation donation: donations) {
+            donation.removeMOAs();
+        }
+
+        donationRepository.deleteAll();
+        return "Successfully deleted all donations";
+    }
 //    public List<Donation> getAllDonationsAsc() {
 //        return donationRepository.findAllByOrderByIdAsc();
 //    }

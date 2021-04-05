@@ -61,6 +61,10 @@ public class DonorController {
         return donorService.deleteDonor(id);
     }
 
+    @DeleteMapping
+    public String deleteAllDonors() {
+        return donorService.deleteAllDonors();
+    }
 
 
 //    // Create

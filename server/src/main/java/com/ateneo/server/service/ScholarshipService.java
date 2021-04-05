@@ -2,16 +2,13 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Scholarship;
-import com.ateneo.server.exception.ResourceNotFoundException;
 import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.ScholarshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ScholarshipService {
@@ -42,6 +39,10 @@ public class ScholarshipService {
         return scholarshipRepository.findById(id).orElse(null);
     }
 
+    public List<Scholarship> findScholarshipsOfDonation(Long foreignDonationId) {
+        return scholarshipRepository.findAllByForeignDonationId(foreignDonationId);
+    }
+
     // Update
     public Scholarship updateScholarship(Scholarship scholarship) {
         Scholarship existingScholarship = scholarshipRepository.findById(scholarship.getId()).orElse(null);
@@ -59,11 +60,24 @@ public class ScholarshipService {
 
     // Delete
     public String deleteScholarship(Long id) {
-        scholarshipRepository.deleteById(id);
-        return "Successfully deleted scholarship with id: " + id;
+        Optional<Scholarship> scholarship = scholarshipRepository.findById(id);
+
+        if (scholarship.isPresent()) {
+            scholarship.get().removeAllScholars();
+            scholarshipRepository.deleteById(scholarship.get().getId());
+            return "Successfully deleted scholarship with id: " + id;
+        }
+
+        return "Delete unsuccessful";
     }
 
     public String deleteAllScholarships() {
+        List<Scholarship> scholarships = scholarshipRepository.findAll();
+
+        for (Scholarship scholarship: scholarships) {
+            scholarship.removeAllScholars();
+        }
+
         scholarshipRepository.deleteAll();
         return "Successfully deleted all scholarships";
     }

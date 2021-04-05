@@ -33,6 +33,16 @@ public class Scholarship extends Auditable {
     @OneToMany(mappedBy = "scholarship")
     List<Scholar> scholars = new ArrayList<>();
 
+    public void removeScholar(Scholar scholar) {
+        this.getScholars().remove(scholar);
+        scholar.setScholarship(null);
+    }
+
+    public void removeAllScholars() {
+        for (Scholar scholar: new ArrayList<>(scholars)) {
+            removeScholar(scholar);
+        }
+    }
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(

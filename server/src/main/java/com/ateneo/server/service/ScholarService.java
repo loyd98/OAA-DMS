@@ -5,9 +5,11 @@ import com.ateneo.server.domain.Scholarship;
 import com.ateneo.server.repository.ScholarRepository;
 import com.ateneo.server.repository.ScholarshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ScholarService {
 
     @Autowired
@@ -34,6 +36,10 @@ public class ScholarService {
 
     public Scholar findScholarById(Long id) {
         return scholarRepository.findById(id).orElse(null);
+    }
+
+    public List<Scholar> findScholarsOfScholarship(Long scholarshipId) {
+        return scholarRepository.findScholarsByForeignScholarshipId(scholarshipId);
     }
 
     // Update
