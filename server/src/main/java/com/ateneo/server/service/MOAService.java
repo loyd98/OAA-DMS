@@ -48,6 +48,18 @@ public class MOAService {
         return moaRepository.findById(id).orElse(null);
     }
 
+    public List<MOA> findMoasOfDonor(String donorAccountNumber) {
+        return moaRepository.findAllByDonorAccountNumber(donorAccountNumber);
+    }
+
+    public List<MOA> findMoasOfDonation(Long donationId) {
+        return moaRepository.findAllByForeignDonationId(donationId);
+    }
+
+    public List<MOA> search(String keyword) {
+        return moaRepository.search(keyword);
+    }
+
     // Update
     public MOA updateMoa(MOA moa) {
         MOA existingMoa = moaRepository.findById(moa.getId()).orElse(null);

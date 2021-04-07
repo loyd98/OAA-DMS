@@ -22,12 +22,11 @@ public class Scholarship extends Auditable {
     private String typeOfScholarship;
     private Date dateEstablished;
     private String Criteria;
-
     private Long foreignDonationId;
 
     @ManyToOne
     @JoinColumn(name = "donation_id")
-    @JsonIgnoreProperties("scholarships")
+    @JsonIgnoreProperties({"scholarships", "moaList"})
     Donation donation;
 
     @OneToMany(mappedBy = "scholarship")

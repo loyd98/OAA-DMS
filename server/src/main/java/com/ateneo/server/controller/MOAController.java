@@ -40,6 +40,21 @@ public class MOAController {
         return moaService.findMoaById(id);
     }
 
+    @GetMapping("/search")
+    public List<MOA> search(@RequestParam("q") String keyword) {
+        return moaService.search(keyword);
+    }
+
+    @GetMapping("/ofdonor/{donorAccountNumber}")
+    public List<MOA> getMoasOfDonor(@PathVariable String donorAccountNumber) {
+        return moaService.findMoasOfDonor(donorAccountNumber);
+    }
+
+    @GetMapping("/ofdonation/{donationId}")
+    public List<MOA> getMoasOfDonation(@PathVariable Long donationId) {
+        return moaService.findMoasOfDonation(donationId);
+    }
+
     // Update
     @PatchMapping("/update")
     public MOA updateMoa(@RequestBody MOA moa) {

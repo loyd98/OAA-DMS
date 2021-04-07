@@ -42,6 +42,14 @@ public class ScholarService {
         return scholarRepository.findScholarsByForeignScholarshipId(scholarshipId);
     }
 
+    public List<Scholar> findScholarsOfDonor(String donorAccountNumber) {
+        return scholarRepository.findScholarsOfDonor(donorAccountNumber);
+    }
+
+    public List<Scholar> searchScholar(String keyword) {
+        return scholarRepository.search(keyword);
+    }
+
     // Update
     public Scholar updateScholar(Scholar scholar) {
         Scholar existingScholar = scholarRepository.findById(scholar.getId()).orElse(null);

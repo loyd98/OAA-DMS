@@ -1,6 +1,7 @@
 package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
+import com.ateneo.server.domain.Scholar;
 import com.ateneo.server.domain.Scholarship;
 import com.ateneo.server.repository.DonationRepository;
 import com.ateneo.server.repository.ScholarshipRepository;
@@ -41,6 +42,14 @@ public class ScholarshipService {
 
     public List<Scholarship> findScholarshipsOfDonation(Long foreignDonationId) {
         return scholarshipRepository.findAllByForeignDonationId(foreignDonationId);
+    }
+
+    public List<Scholarship> findScholarshipsOfDonor(String donorAccountNumber) {
+        return scholarshipRepository.findScholarshipsOfDonor(donorAccountNumber);
+    }
+
+    public List<Scholarship> searchScholarship(String keyword) {
+        return scholarshipRepository.search(keyword);
     }
 
     // Update
