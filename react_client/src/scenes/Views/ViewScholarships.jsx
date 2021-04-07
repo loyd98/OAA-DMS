@@ -25,8 +25,8 @@ class ViewDonors extends Component {
       id: null,
       innerTableId: null,
     };
-    this.tableName = 'donors';
-    this.title = 'Donor';
+    this.tableName = 'scholarships';
+    this.title = 'Scholarship';
   }
 
   componentDidMount() {
@@ -56,7 +56,7 @@ class ViewDonors extends Component {
     axios
       .get(`${url}/${currentTable.slice(0, -1)}/${id}`, options)
       .then((res) => {
-        this.setState({ data: res.data, innerTableId: res.data.accountNumber });
+        this.setState({ data: res.data, innerTableId: res.data.id });
         this.copyData();
       })
       .catch((err) => console.log(err));

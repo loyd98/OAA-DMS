@@ -198,6 +198,30 @@ class TableContainer extends Component {
 
     // const dropdownItems = config.dropdowns[currentTable];
 
+    const numOfColumns = () => {
+      if (currentTable === 'donors') {
+        return 7;
+      }
+
+      if (currentTable === 'donations') {
+        return 6;
+      }
+
+      if (currentTable === 'moas') {
+        return 6;
+      }
+
+      if (currentTable === 'scholarships') {
+        return 5;
+      }
+
+      if (currentTable === 'scholars') {
+        return 5;
+      }
+
+      return 0;
+    };
+
     return (
       <>
         <Notification showNotif={showNotif}>{notifMessage}</Notification>
@@ -302,7 +326,7 @@ class TableContainer extends Component {
             fields={fields}
             items={items}
             redirectToView={(id) => this.handleRedirect(id)}
-            colLimit={7}
+            colLimit={numOfColumns()}
             handleDelete={this.handleDelete}
           />
         </table>

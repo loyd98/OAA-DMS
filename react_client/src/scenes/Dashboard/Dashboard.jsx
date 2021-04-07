@@ -66,6 +66,24 @@ export default class Dashboard extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
         break;
+      case 'moas':
+        axios
+          .get(`${url}/moa/search?q=${searchString}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
+      case 'scholarships':
+        axios
+          .get(`${url}/scholarship/search?q=${searchString}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
+      case 'scholars':
+        axios
+          .get(`${url}/scholar/search?q=${searchString}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
       default:
         console.log('ERROR in Dashboard.jsx fetchSearchData.');
         break;
@@ -99,6 +117,12 @@ export default class Dashboard extends Component {
       case 'scholarships':
         axios
           .get(`${url}/scholarship/asc`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
+      case 'scholars':
+        axios
+          .get(`${url}/scholar/asc`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
         break;

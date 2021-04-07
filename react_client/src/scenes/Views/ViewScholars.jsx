@@ -25,8 +25,8 @@ class ViewDonors extends Component {
       id: null,
       innerTableId: null,
     };
-    this.tableName = 'donors';
-    this.title = 'Donor';
+    this.tableName = 'scholars';
+    this.title = 'Scholar';
   }
 
   componentDidMount() {
@@ -165,22 +165,6 @@ class ViewDonors extends Component {
     let button;
 
     const inputs = config.ordering[currentTable].map((obj) => {
-      if (obj.key === 'birthDate') {
-        return (
-          <div key={obj.key} className="view__detailContainer">
-            <div className="view__detailTitle">{obj.name}</div>
-            <input
-              disabled={!isEditing}
-              name={obj.key}
-              type="text"
-              value={form[obj.key] == null ? '' : form[obj.key]}
-              onChange={(e) => this.setForm(e.target.name, e.target.value)}
-              placeholder="Format: YYYY-MM-DD"
-            />
-          </div>
-        );
-      }
-
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&
@@ -201,7 +185,6 @@ class ViewDonors extends Component {
           </div>
         );
       }
-
       return (
         <div key={obj.key} className="view__detailContainer">
           <div className="view__detailTitle">{obj.name}</div>
@@ -249,10 +232,9 @@ class ViewDonors extends Component {
       );
     }
 
-    const innerTableSubName = config.innerTables[this.tableName][index][0].toUpperCase() +
-    config.innerTables[this.tableName][index].slice(1);
-    const innerTable = innerTableSubName === 'Moas' ? 'MOAs'
-      : innerTableSubName;
+    const innerTable =
+      config.innerTables[this.tableName][index][0].toUpperCase() +
+      config.innerTables[this.tableName][index].slice(1);
 
     if (form.length === 0 || !id || !innerTableId) {
       return <div>Loading...</div>;
@@ -317,7 +299,7 @@ class ViewDonors extends Component {
               showAdd={showAdd}
               config={config}
               innerTable={innerTable.toLowerCase()}
-              colLimit={5}
+              colLimit={6}
               onDelete={onDelete}
               onView={onView}
               onAddCancel={this.setShowAdd}

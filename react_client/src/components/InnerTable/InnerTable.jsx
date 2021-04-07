@@ -28,11 +28,15 @@ class InnerTable extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { refreshInnerTable, onRefresh } = this.props;
+    const { refreshInnerTable, onRefresh, innerTable } = this.props;
 
     if (prevProps.refreshInnerTable !== refreshInnerTable) {
       this.handleRead();
       onRefresh(false);
+    }
+
+    if (prevProps.innerTable !== innerTable) {
+      this.handleRead();
     }
   }
 
@@ -57,12 +61,27 @@ class InnerTable extends Component {
           .get(`${url}/donation/ofdonor/${id}`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
+      } else if (innerTable === 'moas') {
+        axios
+          .get(`${url}/moa/ofdonor/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'scholarships') {
+        axios
+          .get(`${url}/scholarship/ofdonor/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'scholars') {
+        axios
+          .get(`${url}/scholar/ofdonor/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
       }
     } else if (currentTable === 'donations') {
       if (innerTable === 'donors') {
         axios
           .get(`${url}/donor/ofdonation/${id}`, options)
-          .then((res) => { this.setState({ data: res.data }); console.log(res.data, id); })
+          .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
     } else if (currentTable === 'moas') {
