@@ -15,6 +15,12 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     @Query(value = "SELECT * FROM donation d INNER JOIN moa m ON m.foreign_donation_id = d.id WHERE m.donor_account_number = ?1", nativeQuery = true)
     List<Donation> findDonationsOfDonor(String accountNumber);
 
+    @Query(value =
+            "SELECT * FROM donation WHERE id =\n" +
+            "(SELECT foreign_donation_id FROM moa\n" +
+            "WHERE id = ?1)", nativeQuery = true)
+    List<Donation> findDonationsOfMoa(Long moaId);
+
     @Query(value = "SELECT * FROM donation WHERE donation.id LIKE %?1% OR account_number LIKE %?1% OR account_name LIKE %?1% OR or_number LIKE %?1% OR amount LIKE %?1% OR donation.date LIKE %?1%" , nativeQuery = true)
     List<Donation> search(String keyword);
 }

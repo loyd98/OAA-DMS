@@ -49,6 +49,11 @@ public class DonationController {
         return donationService.findDonationsOfDonor(accountNumber);
     }
 
+    @GetMapping("/ofmoa/{moaId}")
+    public List<Donation> getDonationsOfMoa(@PathVariable Long moaId) {
+        return donationService.findDonationsOfMoa(moaId);
+    }
+
     // Update
     @PatchMapping("/update")
     public Donation updateDonation(@RequestBody Donation donation) {

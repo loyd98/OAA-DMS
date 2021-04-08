@@ -42,6 +42,10 @@ public class DonationService {
         return donationRepository.findDonationsOfDonor(accountNumber);
     }
 
+    public List<Donation> findDonationsOfMoa(Long moaId) {
+        return donationRepository.findDonationsOfMoa(moaId);
+    }
+
     // Update
     public Donation updateDonation(Donation donation) {
         Donation existingDonation = donationRepository.findById(donation.getId()).orElse(null);
