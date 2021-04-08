@@ -100,7 +100,7 @@ module.exports = {
     donors: ['donations', 'moas', 'scholarships', 'scholars'],
     donations: ['donors', 'moas', 'scholarships', 'scholars'],
     moas: ['donors', 'donations', 'scholarships', 'scholars'],
-    scholarships: ['donations', 'scholars'],
+    scholarships: ['donors', 'donations', 'moas', 'scholars'],
   },
   defaultTable: 'donors',
   URL: 'http://localhost:8080',

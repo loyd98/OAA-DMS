@@ -56,6 +56,10 @@ public class MOAService {
         return moaRepository.findAllByForeignDonationId(donationId);
     }
 
+    public List<MOA> findMoasOfScholarship(Long scholarshipId) {
+        return moaRepository.findMoasOfScholarship(scholarshipId);
+    }
+
     public List<MOA> search(String keyword) {
         return moaRepository.search(keyword);
     }

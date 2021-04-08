@@ -17,4 +17,10 @@ public interface MOARepository extends JpaRepository<MOA, Long> {
 
     @Query(value = "SELECT * FROM moa WHERE id LIKE %?1% OR moa.name LIKE %?1% OR donor_account_number LIKE %?1% OR foreign_donation_id LIKE %?1%", nativeQuery = true)
     List<MOA> search(String keyword);
+
+    @Query(value =
+            "SELECT * FROM moa WHERE foreign_donation_id =\n" +
+            "(SELECT foreign_donation_id FROM scholarship\n" +
+            "WHERE id = 1)", nativeQuery = true)
+    List<MOA> findMoasOfScholarship(Long scholarshipId);
 }

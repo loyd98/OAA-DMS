@@ -55,6 +55,11 @@ public class MOAController {
         return moaService.findMoasOfDonation(donationId);
     }
 
+    @GetMapping("/ofscholarship/{scholarshipId}")
+    public List<MOA> getMoasOfScholarship(@PathVariable Long scholarshipId) {
+        return moaService.findMoasOfScholarship(scholarshipId);
+    }
+
     // Update
     @PatchMapping("/update")
     public MOA updateMoa(@RequestBody MOA moa) {

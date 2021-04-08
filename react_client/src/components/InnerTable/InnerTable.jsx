@@ -124,6 +124,28 @@ class InnerTable extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
+    } else if (currentTable === 'scholarships') {
+      if (innerTable === 'donors') {
+        axios
+          .get(`${url}/donor/ofscholarship/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'donations') {
+        axios
+          .get(`${url}/donation/ofscholarship/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'moas') {
+        axios
+          .get(`${url}/moa/ofscholarship/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'scholars') {
+        axios
+          .get(`${url}/scholar/ofscholarship/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      }
     }
   };
 

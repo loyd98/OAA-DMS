@@ -11,7 +11,7 @@ import java.util.List;
 public interface ScholarRepository extends JpaRepository<Scholar, Long> {
     List<Scholar> findAllByOrderByIdAsc();
     List<Scholar> findAllByOrderByIdDesc();
-    List<Scholar> findScholarsByForeignScholarshipId(Long scholarshipId);
+    List<Scholar> findAllByForeignScholarshipId(Long scholarshipId);
 
     @Query(value =
             "SELECT * FROM scholar WHERE scholarship_id IN\n" +

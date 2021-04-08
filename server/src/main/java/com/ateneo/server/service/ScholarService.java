@@ -38,10 +38,6 @@ public class ScholarService {
         return scholarRepository.findById(id).orElse(null);
     }
 
-    public List<Scholar> findScholarsOfScholarship(Long scholarshipId) {
-        return scholarRepository.findScholarsByForeignScholarshipId(scholarshipId);
-    }
-
     public List<Scholar> findScholarsOfDonor(String donorAccountNumber) {
         return scholarRepository.findScholarsOfDonor(donorAccountNumber);
     }
@@ -52,6 +48,10 @@ public class ScholarService {
 
     public List<Scholar> findScholarsOfMoa(Long moaId) {
         return scholarRepository.findScholarsOfMoa(moaId);
+    }
+
+    public List<Scholar> findScholarsOfScholarship(Long scholarshipId) {
+        return scholarRepository.findAllByForeignScholarshipId(scholarshipId);
     }
 
     public List<Scholar> searchScholar(String keyword) {
