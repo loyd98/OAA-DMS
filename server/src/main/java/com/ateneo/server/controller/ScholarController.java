@@ -37,21 +37,25 @@ public class ScholarController {
         return scholarService.findScholarById(id);
     }
 
-    @GetMapping("ofscholarship/{scholarshipId}")
+    @GetMapping("/ofscholarship/{scholarshipId}")
     public List<Scholar> getScholarsOfScholarship(@PathVariable Long scholarshipId) {
         return scholarService.findScholarsOfScholarship(scholarshipId);
     }
 
-    @GetMapping("ofdonor/{donorAccountNumber}")
+    @GetMapping("/ofdonor/{donorAccountNumber}")
     public List<Scholar> getScholarsOfDonor(@PathVariable String donorAccountNumber) {
         return scholarService.findScholarsOfDonor(donorAccountNumber);
     }
 
-    @GetMapping("ofdonation/{donationId}")
+    @GetMapping("/ofdonation/{donationId}")
     public List<Scholar> getScholarsOfDonation (@PathVariable Long donationId) {
         return scholarService.findScholarsOfDonation(donationId);
     }
 
+    @GetMapping("/ofmoa/{moaId}")
+    public List<Scholar> getScholarsOfMoa(@PathVariable Long moaId) {
+        return scholarService.findScholarsOfMoa(moaId);
+    }
 
     @GetMapping("/search")
     public List<Scholar> search(@RequestParam("q") String keyword) {

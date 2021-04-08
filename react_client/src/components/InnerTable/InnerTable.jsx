@@ -118,6 +118,11 @@ class InnerTable extends Component {
           .get(`${url}/scholarship/ofmoa/${id}`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
+      } else if (innerTable === 'scholars') {
+        axios
+          .get(`${url}/scholar/ofmoa/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
       }
     }
   };
