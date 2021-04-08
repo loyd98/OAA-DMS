@@ -48,6 +48,10 @@ public class ScholarshipService {
         return scholarshipRepository.findScholarshipsOfDonor(donorAccountNumber);
     }
 
+    public List<Scholarship> findScholarshipsOfMoa(Long moaId) {
+        return scholarshipRepository.findScholarshipsOfMoa(moaId);
+    }
+
     public List<Scholarship> searchScholarship(String keyword) {
         return scholarshipRepository.search(keyword);
     }
