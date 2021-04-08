@@ -47,6 +47,12 @@ public class ScholarController {
         return scholarService.findScholarsOfDonor(donorAccountNumber);
     }
 
+    @GetMapping("ofdonation/{donationId}")
+    public List<Scholar> getScholarsOfDonation (@PathVariable Long donationId) {
+        return scholarService.findScholarsOfDonation(donationId);
+    }
+
+
     @GetMapping("/search")
     public List<Scholar> search(@RequestParam("q") String keyword) {
         return scholarService.searchScholar(keyword);

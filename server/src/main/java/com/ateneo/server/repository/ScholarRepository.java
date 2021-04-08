@@ -22,6 +22,13 @@ public interface ScholarRepository extends JpaRepository<Scholar, Long> {
             "WHERE d.account_number = ?1))", nativeQuery = true)
     List<Scholar> findScholarsOfDonor(String donorAccountNumber);
 
+    @Query(value =
+            "SELECT * FROM scholar WHERE\n" +
+            "foreign_scholarship_id IN\n" +
+            "(SELECT id FROM scholarship\n" +
+            "WHERE foreign_donation_id = ?1)", nativeQuery = true)
+    List<Scholar> findScholarsOfDonation(Long donationId);
+
     @Query(value = "SELECT * FROM scholar WHERE id LIKE %?1% OR foreign_scholarship_id LIKE %?1% OR scholar.name LIKE %?1% OR course LIKE %?1% OR batch_graduated LIKE %?1%", nativeQuery = true)
     List<Scholar> search(String keyword);
 }

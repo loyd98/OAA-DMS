@@ -55,6 +55,7 @@ class InnerTable extends Component {
     const token = sessionStorage.getItem('token');
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
+    // Donors
     if (currentTable === 'donors') {
       if (innerTable === 'donations') {
         axios
@@ -77,10 +78,27 @@ class InnerTable extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
+
+    // Donations
     } else if (currentTable === 'donations') {
       if (innerTable === 'donors') {
         axios
           .get(`${url}/donor/ofdonation/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'moas') {
+        axios
+          .get(`${url}/moa/ofdonation/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'scholarships') {
+        axios
+          .get(`${url}/scholarship/ofdonation/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'scholars') {
+        axios
+          .get(`${url}/scholar/ofdonation/${id}`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
@@ -88,7 +106,7 @@ class InnerTable extends Component {
       if (innerTable === 'donors') {
         axios
           .get(`${url}/donor/ofdonation/${id}`, options)
-          .then((res) => { this.setState({ data: res.data }); console.log(res.data, id); })
+          .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
     }

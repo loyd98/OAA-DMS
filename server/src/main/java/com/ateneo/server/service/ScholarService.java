@@ -46,6 +46,10 @@ public class ScholarService {
         return scholarRepository.findScholarsOfDonor(donorAccountNumber);
     }
 
+    public List<Scholar> findScholarsOfDonation(Long donationId) {
+        return scholarRepository.findScholarsOfDonation(donationId);
+    }
+
     public List<Scholar> searchScholar(String keyword) {
         return scholarRepository.search(keyword);
     }
