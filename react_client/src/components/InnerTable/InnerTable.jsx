@@ -105,7 +105,7 @@ class InnerTable extends Component {
     } else if (currentTable === 'moas') {
       if (innerTable === 'donors') {
         axios
-          .get(`${url}/donor/ofdonation/${id}`, options)
+          .get(`${url}/donor/ofmoa/${id}`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }

@@ -40,6 +40,11 @@ public class DonorService {
     public List<Donor> findDonorsOfDonation(Long donationId) {
         return donorRepository.findDonorsOfDonation(donationId);
     }
+
+    public List<Donor> findDonorsOfMoa(Long moaId) {
+        return donorRepository.findDonorsOfMoa(moaId);
+    }
+
     // Update
     public Donor updateDonor(Donor donor) {
         Donor existingDonor = donorRepository.findById(donor.getId()).orElse(null);
