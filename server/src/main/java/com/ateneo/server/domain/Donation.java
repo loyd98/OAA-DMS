@@ -31,9 +31,9 @@ public class Donation extends Auditable implements Comparable<Donation> {
     private String notes;
     private String needCertificate;
     private String purposeOfDonation;
-//    private MultipartFile orFiles;
-//    private MultipartFile tyFiles;
-//    private MultipartFile codFiles;
+    private String orFiles;
+    private String tyFiles;
+    private String codFiles;
 
     @OneToMany(mappedBy = "donation")
     List<MOA> moaList = new ArrayList<>();
