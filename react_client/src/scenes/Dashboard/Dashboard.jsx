@@ -15,6 +15,7 @@ export default class Dashboard extends Component {
     this.state = {
       data: [],
       showAdd: false,
+      isAsc: true,
     };
   }
 
@@ -42,6 +43,29 @@ export default class Dashboard extends Component {
     }
     this.debouncedFn();
   };
+
+  handleSort = () => {
+    const { isAsc } = this.state;
+    const { currentTable, url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+
+    if (isAsc) {
+      axios
+        .get(`${url}/${currentTable.slice(0, -1)}/desc`, options)
+        .then((res) => {
+          this.setState({ data: res.data, isAsc: !isAsc });
+        })
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get(`${url}/${currentTable.slice(0, -1)}/asc`, options)
+        .then((res) => {
+          this.setState({ data: res.data, isAsc: !isAsc });
+        })
+        .catch((err) => console.log(err));
+    }
+  }
 
   fetchSearchData = (searchString) => {
     const { currentTable, url } = this.props;
@@ -166,6 +190,7 @@ export default class Dashboard extends Component {
           onTabClick={onTabClick}
           onAddClick={this.handleShowAdd}
           onDelete={this.read}
+          onSort={this.handleSort}
         />
       </div>
     );

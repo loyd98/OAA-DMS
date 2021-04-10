@@ -193,7 +193,7 @@ class TableContainer extends Component {
       notifMessage,
     } = this.state;
     const {
-      config, data, onTabClick, onAddClick, url, onDelete,
+      config, data, onTabClick, onAddClick, url, onDelete, onSort,
     } = this.props;
 
     if (!data) {
@@ -313,7 +313,7 @@ class TableContainer extends Component {
                     title="Dropdown"
                     list={dropdownItems.map((i) => i.name)}
                   /> */}
-                  <Button isTransparent message="Sort" type="center">
+                  <Button isTransparent message="Sort" type="center" onClick={onSort}>
                     <FontAwesomeIcon icon="sort" />
                   </Button>
                 </div>
@@ -358,6 +358,7 @@ TableContainer.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onTabClick: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  onSort: PropTypes.func.isRequired,
 };
 
 export default withRouter(TableContainer);
