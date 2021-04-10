@@ -50,6 +50,10 @@ public class DonationService {
         return donationRepository.findDonationOfScholarship(scholarshipId);
     }
 
+    public List<Donation> findDonationOfScholar(Long scholarId) {
+        return donationRepository.findDonationOfScholar(scholarId);
+    }
+
     // Update
     public Donation updateDonation(Donation donation) {
         Donation existingDonation = donationRepository.findById(donation.getId()).orElse(null);
@@ -74,6 +78,7 @@ public class DonationService {
 
         if (donation.isPresent()) {
             donation.get().removeMOAs();
+            donation.get().removeScholarships();
             donationRepository.deleteById(donation.get().getId());
             return "Successfully deleted donation with id: " + id;
         }
@@ -86,6 +91,7 @@ public class DonationService {
 
         for (Donation donation: donations) {
             donation.removeMOAs();
+            donation.removeScholarships();
         }
 
         donationRepository.deleteAll();

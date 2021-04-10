@@ -152,8 +152,25 @@ class ViewDonors extends Component {
         this.copyData();
         this.setIsEditing(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.err(err));
   };
+
+  handleDownload = (moaId, fileName) => {
+    const { url, currentTable } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { responseType: 'blob', headers: { Authorization: `Bearer ${token}` } };
+
+    axios.get(`${url}/${currentTable.slice(0, -1)}/download/${moaId}/${fileName}`, options)
+      .then(({ data }) => {
+        const downloadUrl = window.URL.createObjectURL(new Blob([data]));
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', fileName);
+        link.click();
+        link.remove();
+      })
+      .catch((err) => console.log(err));
+  }
 
   render() {
     const {
@@ -164,6 +181,14 @@ class ViewDonors extends Component {
     } = this.props;
 
     const inputs = config.ordering[currentTable].map((obj) => {
+      if (obj.key === 'file') {
+        return (
+          <div key={obj.key} className="view__detailContainer view__fileDownload">
+            <div className="view__detailTitle">{obj.name}</div>
+            <button type="button" onClick={() => this.handleDownload(data.id, data.fileName)}>{data.fileName}</button>
+          </div>
+        );
+      }
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&

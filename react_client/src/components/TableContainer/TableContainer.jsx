@@ -168,6 +168,14 @@ class TableContainer extends Component {
           },
         });
         break;
+      case 'scholars':
+        history.push({
+          pathname: '/scholar',
+          state: {
+            id,
+          },
+        });
+        break;
       default:
         console.log('ERROR in TableContainer handleRedirect');
         break;
@@ -208,7 +216,7 @@ class TableContainer extends Component {
       }
 
       if (currentTable === 'moas') {
-        return 6;
+        return 5;
       }
 
       if (currentTable === 'scholarships') {

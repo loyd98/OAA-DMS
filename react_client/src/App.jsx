@@ -14,6 +14,7 @@ import ViewDonors from './scenes/Views/ViewDonors';
 import ViewDonations from './scenes/Views/ViewDonations';
 import ViewMOAs from './scenes/Views/ViewMOAs';
 import ViewScholarships from './scenes/Views/ViewScholarships';
+import ViewScholars from './scenes/Views/ViewScholars';
 
 const config = require('./data.config');
 
@@ -77,6 +78,33 @@ class App extends Component {
           },
         });
         break;
+      case 'moas':
+        this.setCurrentTable('moas');
+        history.push({
+          pathname: '/moa',
+          state: {
+            id,
+          },
+        });
+        break;
+      case 'scholarships':
+        this.setCurrentTable('scholarships');
+        history.push({
+          pathname: '/scholarship',
+          state: {
+            id,
+          },
+        });
+        break;
+      case 'scholars':
+        this.setCurrentTable('scholars');
+        history.push({
+          pathname: '/scholar',
+          state: {
+            id,
+          },
+        });
+        break;
       default:
         console.log('ERROR');
         break;
@@ -93,7 +121,7 @@ class App extends Component {
           .delete(`${url}/donor/${id}`, options)
           .then(() => {
             callback();
-            this.setNotifMessage(`Donor ID ${id} successfulyl deleted.`);
+            this.setNotifMessage(`Donor ID ${id} successfully deleted.`);
             this.handleNotification();
           })
           .catch((err) => console.log(err));
@@ -104,6 +132,36 @@ class App extends Component {
           .then(() => {
             callback();
             this.setNotifMessage(`Donation ID ${id} successfully deleted.`);
+            this.handleNotification();
+          })
+          .catch((err) => console.log(err));
+        break;
+      case 'moas':
+        axios
+          .delete(`${url}/moa/${id}`, options)
+          .then(() => {
+            callback();
+            this.setNotifMessage(`MOA ID ${id} successfully deleted.`);
+            this.handleNotification();
+          })
+          .catch((err) => console.log(err));
+        break;
+      case 'scholarships':
+        axios
+          .delete(`${url}/scholarships/${id}`, options)
+          .then(() => {
+            callback();
+            this.setNotifMessage(`Scholarship ID ${id} successfully deleted.`);
+            this.handleNotification();
+          })
+          .catch((err) => console.log(err));
+        break;
+      case 'scholars':
+        axios
+          .delete(`${url}/scholar/${id}`, options)
+          .then(() => {
+            callback();
+            this.setNotifMessage(`Scholar ID ${id} successfully deleted.`);
             this.handleNotification();
           })
           .catch((err) => console.log(err));
@@ -211,6 +269,22 @@ class App extends Component {
               path="/scholarship"
               render={() => (
                 <ViewScholarships
+                  url={this.url}
+                  currentTable={currentTable}
+                  config={config}
+                  onView={this.handleView}
+                  onDelete={this.handleInnerDelete}
+                  onNotif={this.handleNotification}
+                  onShow={this.setShowNotif}
+                  onMessage={this.setNotifMessage}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/scholar"
+              render={() => (
+                <ViewScholars
                   url={this.url}
                   currentTable={currentTable}
                   config={config}

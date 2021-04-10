@@ -35,6 +35,7 @@ public class Scholarship extends Auditable {
     public void removeScholar(Scholar scholar) {
         this.getScholars().remove(scholar);
         scholar.setScholarship(null);
+        scholar.setForeignScholarshipId(null);
     }
 
     public void removeAllScholars() {

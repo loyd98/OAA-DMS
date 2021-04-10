@@ -33,6 +33,15 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
             "WHERE id = ?1)))", nativeQuery = true)
     List<Donor> findDonorsOfScholarship(Long scholarshipId);
 
+    @Query(value =
+            "SELECT * FROM donor WHERE account_number IN\n" +
+            "(SELECT donor_account_number FROM moa WHERE foreign_donation_id =\n" +
+            "(SELECT id FROM donation WHERE id =\n" +
+            "(SELECT foreign_donation_id FROM scholarship WHERE id =\n" +
+            "(SELECT foreign_scholarship_id FROM scholar\n" +
+            "WHERE id = ?1))))", nativeQuery = true)
+    List<Donor> findDonorsOfScholar(Long scholarId);
+
     @Query(value = "SELECT * FROM donor WHERE id LIKE %?1% OR donor_name LIKE %?1% OR account_number LIKE %?1% OR account_name LIKE %?1% OR email_address LIKE %?1%", nativeQuery = true)
     List<Donor> search(String keyword);
 }

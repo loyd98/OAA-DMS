@@ -23,4 +23,12 @@ public interface MOARepository extends JpaRepository<MOA, Long> {
             "(SELECT foreign_donation_id FROM scholarship\n" +
             "WHERE id = 1)", nativeQuery = true)
     List<MOA> findMoasOfScholarship(Long scholarshipId);
+
+    @Query(value =
+            "SELECT * FROM moa WHERE foreign_donation_id =\n" +
+            "(SELECT id FROM donation WHERE id =\n" +
+            "(SELECT foreign_donation_id FROM scholarship WHERE id =\n" +
+            "(SELECT foreign_scholarship_id FROM scholar\n" +
+            "WHERE id = 1)))", nativeQuery = true)
+    List<MOA> findMoasOfScholar(Long scholarId);
 }

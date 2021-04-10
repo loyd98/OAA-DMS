@@ -71,9 +71,17 @@ class Add extends Component {
       onMessage,
     } = this.props;
 
+    const formData = new FormData();
+
     Object.keys(formSubmit).forEach((key) => {
       if (formSubmit[key] === '') {
         formSubmit[key] = null;
+      }
+    });
+
+    Object.keys(formSubmit).forEach((key) => {
+      if (formSubmit[key] !== null) {
+        formData.append(key, formSubmit[key]);
       }
     });
 
@@ -81,13 +89,12 @@ class Add extends Component {
     const options = { headers: { Authorization: `Bearer ${token}` } };
 
     try {
-      const res = await axios.post(`${url}/${currentTable.slice(0, -1)}/add`, formSubmit, options);
+      const res = await axios.post(`${url}/${currentTable.slice(0, -1)}/add`, formData, options);
       const { id } = res.data;
       onSubmit();
       onCancel(false);
       await this.setNotif(onMessage, onShow, `Succesfully added ${currentTable.slice(0, -1)} with ID no. ${id}.`);
     } catch (err) {
-      console.log(err.response);
       const message = err.response.data.errors?.[0].defaultMessage || 'Error in one of the input fields. Please double check.';
       await this.setNotif(onMessage, onShow, message);
     }
@@ -105,13 +112,13 @@ class Add extends Component {
 
     return (
       <div className="add__background">
-        <form className="add">
+        <form className="add" encType="multipart/form-data">
           <Button isTransparent onClick={() => onCancel(false)}>
             Cancel
           </Button>
 
           {config.ordering[currentTable].map((obj) => {
-            if (obj.key === 'birthDate' || obj.key === 'date' || obj.key === 'dateSigned') {
+            if (obj.key === 'birthDate' || obj.key === 'date' || obj.key === 'dateSigned' || obj.key === 'dateEstablished') {
               return (
                 <div key={obj.key} className="view__detailContainer">
                   <div className="view__detailTitle">{obj.name}</div>
@@ -134,6 +141,19 @@ class Add extends Component {
               obj.key === 'id'
             ) {
               return null;
+            }
+
+            if (obj.key === 'file') {
+              return (
+                <div key={obj.key} className="view__detailContainer view__fileUpload">
+                  <div className="view__detailTitle">{obj.name}</div>
+                  <input
+                    name={obj.key}
+                    type="file"
+                    onChange={(e) => this.setForm(e.target.name, e.target.files[0])}
+                  />
+                </div>
+              );
             }
 
             if (obj.key === 'criteria') {

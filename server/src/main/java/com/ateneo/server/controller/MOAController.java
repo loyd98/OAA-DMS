@@ -7,8 +7,12 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,13 +24,13 @@ public class MOAController {
 
     // Create
     @PostMapping("/add")
-    public MOA addMOA(@RequestBody MOA moa) {
-        return moaService.saveMoa(moa);
+    public MOA addMOA(MOA moa, @RequestParam(required = false) MultipartFile file) throws IOException {
+        return moaService.saveMoa(moa, file);
     }
 
     // Read
     @GetMapping("/asc")
-    public List<MOA> getAllMoasASc() {
+    public List<MOA> getAllMoasAsc() {
         return moaService.findAllMoasAsc();
     }
 
@@ -58,6 +62,16 @@ public class MOAController {
     @GetMapping("/ofscholarship/{scholarshipId}")
     public List<MOA> getMoasOfScholarship(@PathVariable Long scholarshipId) {
         return moaService.findMoasOfScholarship(scholarshipId);
+    }
+
+    @GetMapping("/ofscholar/{scholarId}")
+    public List<MOA> getMoasOfScholar(@PathVariable Long scholarId) {
+        return moaService.findMoasOfScholar(scholarId);
+    }
+
+    @GetMapping("download/{moaId}/{fileName}")
+    public ResponseEntity downloadMoa(@PathVariable Long moaId, @PathVariable String fileName) {
+        return moaService.downloadMoa(moaId, fileName);
     }
 
     // Update

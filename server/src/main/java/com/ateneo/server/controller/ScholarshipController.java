@@ -52,6 +52,11 @@ public class ScholarshipController {
         return scholarshipService.findScholarshipsOfMoa(moaId);
     }
 
+    @GetMapping("/ofscholar/{scholarId}")
+    public List<Scholarship> getScholarshipsOfScholar(@PathVariable Long scholarId) {
+        return scholarshipService.findScholarshipsOfScholar(scholarId);
+    }
+
     @GetMapping("/search")
     public List<Scholarship> search(@RequestParam("q") String keyword) {
         return scholarshipService.searchScholarship(keyword);

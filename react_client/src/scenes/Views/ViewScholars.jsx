@@ -56,7 +56,7 @@ class ViewDonors extends Component {
     axios
       .get(`${url}/${currentTable.slice(0, -1)}/${id}`, options)
       .then((res) => {
-        this.setState({ data: res.data, innerTableId: res.data.accountNumber });
+        this.setState({ data: res.data, innerTableId: res.data.id });
         this.copyData();
       })
       .catch((err) => console.log(err));
@@ -232,9 +232,9 @@ class ViewDonors extends Component {
       );
     }
 
-    const innerTable =
-      config.innerTables[this.tableName][index][0].toUpperCase() +
-      config.innerTables[this.tableName][index].slice(1);
+    const innerTableName = config.innerTables[this.tableName][index][0].toUpperCase() +
+    config.innerTables[this.tableName][index].slice(1);
+    const innerTable = innerTableName === 'Moas' ? 'MOAs' : innerTableName;
 
     if (form.length === 0 || !id || !innerTableId) {
       return <div>Loading...</div>;

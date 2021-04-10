@@ -90,3 +90,16 @@
     color: var(--white);
     background-color: var(--blue);
 }
+
+.view__fileDownload {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--blue);
+    padding: 10px 10px;
+}
+
+.view__fileDownload button {
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+}

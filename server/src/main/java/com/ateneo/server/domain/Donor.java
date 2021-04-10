@@ -49,6 +49,7 @@ public class Donor extends Auditable implements Comparable<Donor>{
     public void removeMOA(MOA moa) {
         this.getMoaList().remove(moa);
         moa.setDonor(null);
+        moa.setDonorAccountNumber(null);
     }
 
     public void removeMOAs() {

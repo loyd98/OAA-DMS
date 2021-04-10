@@ -102,6 +102,8 @@ class InnerTable extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
+
+    // MOAs
     } else if (currentTable === 'moas') {
       if (innerTable === 'donors') {
         axios
@@ -124,6 +126,8 @@ class InnerTable extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
+
+    // Scholarships
     } else if (currentTable === 'scholarships') {
       if (innerTable === 'donors') {
         axios
@@ -146,6 +150,30 @@ class InnerTable extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
       }
+
+    // Scholars
+    } else if (currentTable === 'scholars') {
+      if (innerTable === 'donors') {
+        axios
+          .get(`${url}/donor/ofscholar/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'donations') {
+        axios
+          .get(`${url}/donation/ofscholar/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'moas') {
+        axios
+          .get(`${url}/moa/ofscholar/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      } else if (innerTable === 'scholarships') {
+        axios
+          .get(`${url}/scholarship/ofscholar/${id}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+      }
     }
   };
 
@@ -161,7 +189,6 @@ class InnerTable extends Component {
       history,
       config,
       innerTable,
-      colLimit,
       onDelete,
       onView,
       showAdd,
@@ -179,6 +206,13 @@ class InnerTable extends Component {
 
     // eslint-disable-next-line react/prop-types
     const fields = config.ordering[innerTable];
+
+    const colLimit = () => {
+      if (innerTable === 'donors') return 5;
+      if (innerTable === 'scholarships') return 5;
+      if (innerTable === 'scholars') return 5;
+      return 6;
+    };
 
     return (
       <>
@@ -217,7 +251,7 @@ class InnerTable extends Component {
             <tr className="table__bottomRow">
               {
               // eslint-disable-next-line react/prop-types
-              fields.slice(0, colLimit).map((col) => (
+              fields.slice(0, colLimit()).map((col) => (
                 <th style={{ width: col.width }} key={col.key}>
                   {col.name}
                 </th>
@@ -232,12 +266,16 @@ class InnerTable extends Component {
               <tr key={row.id}>
                 {
                 // eslint-disable-next-line react/prop-types
-                fields.slice(0, colLimit).map((col) => (
-                  <td style={{ width: col.width }} key={col.key}>
-                    {row[col.key]}
-                  </td>
-                ))
-}
+                fields.slice(0, colLimit()).map((col) => {
+                  if (
+                    (col.key === 'donorAccountNumber' && row[col.key] === null) ||
+                    (col.key === 'foreignDonationId' && row[col.key] === null) ||
+                    (col.key === 'foreignScholarshipId' && row[col.key] === null)
+                  ) return <td style={{ width: col.width, color: 'var(--red)' }} key={col.key}>N/A</td>;
+
+                  return <td style={{ width: col.width }} key={col.key}>{row[col.key]}</td>;
+                })
+                }
                 <td style={{ width: '70px' }}>
                   <div className="flex--horizontal">
                     <Button
@@ -269,7 +307,6 @@ class InnerTable extends Component {
 }
 
 InnerTable.propTypes = {
-  colLimit: PropTypes.number.isRequired,
   config: PropTypes.shape({}).isRequired,
   history: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({})]).isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

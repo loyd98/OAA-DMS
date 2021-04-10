@@ -1,9 +1,11 @@
 package com.ateneo.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,6 +32,6 @@ public class MOA extends Auditable {
     private String name;
     private String donorAccountNumber;
     private Long foreignDonationId;
-//    private MultipartFile file;
+    private String fileName;
     private LocalDate dateSigned;
 }

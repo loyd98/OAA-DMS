@@ -30,11 +30,11 @@ module.exports = {
     donations: [
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
-      { key: 'id', name: 'Donation ID', width: '60px' },
-      { key: 'accountNumber', name: 'Account Number', width: '70px' },
-      { key: 'accountName', name: 'Account Name', width: '60px' },
+      { key: 'id', name: 'Donation ID', width: '55px' },
+      { key: 'accountNumber', name: 'Donor Account No.', width: '70px' },
+      { key: 'accountName', name: 'Account Name', width: '70px' },
       { key: 'orNumber', name: 'OR Number', width: '70px' },
-      { key: 'date', name: 'Date', width: '70px' },
+      { key: 'date', name: 'Date', width: '60px' },
       { key: 'amount', name: 'Amount', width: '70px' },
       { key: 'notes', name: 'Notes', width: '70px' },
       { key: 'needCertificate', name: 'Need Certificate', width: '100px' },
@@ -51,11 +51,11 @@ module.exports = {
     ],
     scholarships: [
       { key: 'id', name: 'Scholarship ID', width: '60px' },
+      { key: 'foreignDonationId', name: 'Donation\'s ID', width: '60px' },
       { key: 'scholarshipName', name: 'Scholarship Name', width: '70px' },
       { key: 'typeOfScholarship', name: 'Type of Scholarship', width: '70px' },
       { key: 'dateEstablished', name: 'Date Established', width: '70px' },
       { key: 'criteria', name: 'Criteria', width: '70px' },
-      { key: 'foreignDonationId', name: 'Donation\'s ID', width: '60px' },
       // Auditing fields
       { key: 'createdBy', name: 'Created By', width: '100px' },
       { key: 'creationDate', name: 'Creation Date', width: '100px' },
@@ -64,7 +64,7 @@ module.exports = {
     ],
     scholars: [
       { key: 'id', name: 'Scholar ID', width: '50px' },
-      { key: 'foreignScholarshipId', name: 'Scholarship\'s ID', width: '70px' },
+      { key: 'foreignScholarshipId', name: 'Scholarship ID', width: '70px' },
       { key: 'name', name: 'Name', width: '70px' },
       { key: 'course', name: 'Course', width: '70px' },
       { key: 'batchGraduated', name: 'Batch Graduated', width: '70px' },
@@ -75,12 +75,12 @@ module.exports = {
       { key: 'lastModifiedDate', name: 'Last Modified Date', width: '100px' },
     ],
     moas: [
-      { key: 'id', name: 'MOA ID', width: '30px' },
+      { key: 'id', name: 'MOA ID', width: '40px' },
       { key: 'name', name: 'MOA Name', width: '70px' },
-      { key: 'dateSigned', name: 'Date Signed', width: '70px' },
+      { key: 'donorAccountNumber', name: 'Donor Account No.', width: '80px' },
+      { key: 'foreignDonationId', name: 'Donation ID', width: '70px' },
+      { key: 'dateSigned', name: 'Date Signed', width: '60px' },
       { key: 'file', name: 'File', width: '70px' },
-      { key: 'donorAccountNumber', name: 'Donor\'s Account Number', width: '70px' },
-      { key: 'foreignDonationId', name: 'Donation\'s ID', width: '70px' },
       // Auditing fields
       { key: 'createdBy', name: 'Created By', width: '70px' },
       { key: 'creationDate', name: 'Creation Date', width: '70px' },
@@ -101,6 +101,7 @@ module.exports = {
     donations: ['donors', 'moas', 'scholarships', 'scholars'],
     moas: ['donors', 'donations', 'scholarships', 'scholars'],
     scholarships: ['donors', 'donations', 'moas', 'scholars'],
+    scholars: ['donors', 'donations', 'moas', 'scholarships'],
   },
   defaultTable: 'donors',
   URL: 'http://localhost:8080',

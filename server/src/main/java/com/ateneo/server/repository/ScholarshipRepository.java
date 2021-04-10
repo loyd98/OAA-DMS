@@ -29,6 +29,12 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
             "WHERE id = ?1)", nativeQuery = true)
     List<Scholarship> findScholarshipsOfMoa(Long moaId);
 
+    @Query(value =
+            "SELECT * FROM scholarship WHERE id =\n" +
+            "(SELECT foreign_scholarship_id FROM scholar\n" +
+            "WHERE id = ?1)", nativeQuery = true)
+    List<Scholarship> findScholarshipsOfScholar(Long scholarId);
+
     @Query(value = "SELECT * FROM scholarship WHERE id LIKE %?1% OR scholarship_name LIKE %?1% OR foreign_donation_id LIKE %?1% OR scholarship.type_of_scholarship LIKE %?1%", nativeQuery = true)
     List<Scholarship> search(String keyword);
 }

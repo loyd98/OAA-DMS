@@ -63,10 +63,11 @@ public class ScholarService {
         Scholar existingScholar = scholarRepository.findById(scholar.getId()).orElse(null);
         Scholarship scholarship = scholarshipRepository.findById(scholar.getForeignScholarshipId()).orElse(null);
 
+        existingScholar.setScholarship(scholarship);
         existingScholar.setForeignScholarshipId(scholar.getForeignScholarshipId());
         existingScholar.setName(scholar.getName());
-        existingScholar.setName(scholar.getCourse());
-        existingScholar.setName(scholar.getBatchGraduated());
+        existingScholar.setCourse(scholar.getCourse());
+        existingScholar.setBatchGraduated(scholar.getBatchGraduated());
 
         return scholarRepository.save(existingScholar);
     }

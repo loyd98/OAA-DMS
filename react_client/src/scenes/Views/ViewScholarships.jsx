@@ -232,9 +232,9 @@ class ViewDonors extends Component {
       );
     }
 
-    const innerTable =
-      config.innerTables[this.tableName][index][0].toUpperCase() +
-      config.innerTables[this.tableName][index].slice(1);
+    const innerTableName = config.innerTables[this.tableName][index][0].toUpperCase() +
+    config.innerTables[this.tableName][index].slice(1);
+    const innerTable = innerTableName === 'Moas' ? 'MOAs' : innerTableName;
 
     if (form.length === 0 || !id || !innerTableId) {
       return <div>Loading...</div>;

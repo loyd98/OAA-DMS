@@ -52,6 +52,10 @@ public class ScholarshipService {
         return scholarshipRepository.findScholarshipsOfMoa(moaId);
     }
 
+    public List<Scholarship> findScholarshipsOfScholar(Long scholarId) {
+        return scholarshipRepository.findScholarshipsOfScholar(scholarId);
+    }
+
     public List<Scholarship> searchScholarship(String keyword) {
         return scholarshipRepository.search(keyword);
     }

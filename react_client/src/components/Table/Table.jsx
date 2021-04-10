@@ -46,6 +46,12 @@ export default class Table extends Component {
                   );
                 }
 
+                if (
+                  (col.key === 'donorAccountNumber' && row[col.key] === null) ||
+                  (col.key === 'foreignDonationId' && row[col.key] === null) ||
+                  (col.key === 'foreignScholarshipId' && row[col.key] === null)
+                ) return <td style={{ width: col.width, color: 'var(--red)' }} key={col.key}>N/A</td>;
+
                 return (
                   <td style={{ width: col.width }} key={col.key}>
                     {row[col.key]}
