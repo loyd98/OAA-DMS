@@ -26,7 +26,7 @@ public class Scholarship extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "donation_id")
-    @JsonIgnoreProperties({"scholarships", "moaList"})
+    @JsonIgnoreProperties({"scholarships", "donorDonationList"})
     Donation donation;
 
     @OneToMany(mappedBy = "scholarship")

@@ -12,13 +12,15 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     List<Donation> findAllByOrderByIdAsc();
     List<Donation> findAllByOrderByIdDesc();
 
-    @Query(value = "SELECT * FROM donation d INNER JOIN moa m ON m.foreign_donation_id = d.id WHERE m.donor_account_number = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM donation d INNER JOIN donor_donation m ON m.foreign_donation_id = d.id WHERE m.donor_account_number = ?1", nativeQuery = true)
     List<Donation> findDonationsOfDonor(String accountNumber);
 
     @Query(value =
-            "SELECT * FROM donation WHERE id =\n" +
-            "(SELECT foreign_donation_id FROM moa\n" +
-            "WHERE id = ?1)", nativeQuery = true)
+            "SELECT * FROM donation WHERE id IN\n" +
+                    "(SELECT donation_id FROM donor_donation\n" +
+                    "WHERE donor_account_number IN\n" +
+                    "(SELECT foreign_donor_account_number\n" +
+                    "FROM moa WHERE id = ?1));", nativeQuery = true)
     List<Donation> findDonationsOfMoa(Long moaId);
 
     @Query(value =

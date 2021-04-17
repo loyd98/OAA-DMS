@@ -2,6 +2,7 @@ package com.ateneo.server.service;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.domain.DonorDonation;
 import com.ateneo.server.domain.MOA;
 import com.ateneo.server.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +66,8 @@ public class DonationService {
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
 
-        for (MOA moa: donation.getMoaList()) {
-            moa.setDonorAccountNumber(donation.getAccountNumber());
+        for (DonorDonation donorDonation: donation.getDonorDonationList()) {
+            donorDonation.setDonorAccountNumber(donation.getAccountNumber());
         }
 
         return donationRepository.save(existingDonation);
@@ -77,7 +78,7 @@ public class DonationService {
         Optional<Donation> donation = donationRepository.findById(id);
 
         if (donation.isPresent()) {
-            donation.get().removeMOAs();
+            donation.get().removeDonorDonations();
             donation.get().removeScholarships();
             donationRepository.deleteById(donation.get().getId());
             return "Successfully deleted donation with id: " + id;
@@ -90,7 +91,7 @@ public class DonationService {
         List<Donation> donations = donationRepository.findAll();
 
         for (Donation donation: donations) {
-            donation.removeMOAs();
+            donation.removeDonorDonations();
             donation.removeScholarships();
         }
 

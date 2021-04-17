@@ -12,19 +12,22 @@ import java.sql.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MOA extends Auditable {
+public class DonorDonation extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "donor_id")
-    @JsonIgnoreProperties({"moaList", "donorDonationList"})
+    @JsonIgnoreProperties("donorDonationList")
     private Donor donor;
 
-    private String name;
-    private String foreignDonorAccountNumber;
-    private String files;
+    @ManyToOne
+    @JoinColumn(name = "donation_id")
+    @JsonIgnoreProperties("donorDonationList")
+    private Donation donation;
+
     private String notes;
-    private Date dateSigned;
+    private String donorAccountNumber;
+    private Long foreignDonationId;
 }

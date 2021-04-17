@@ -17,16 +17,20 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
     @Query(value = "" +
             "SELECT * FROM scholarship WHERE donation_id IN\n" +
             "(SELECT donation_id FROM donor d \n" +
-            "INNER JOIN moa m \n" +
+            "INNER JOIN donor_donation m \n" +
             "ON d.account_number = m.donor_account_number \n" +
             "WHERE d.account_number = ?1)", nativeQuery = true)
     List<Scholarship> findScholarshipsOfDonor(String donorAccountNumber);
 
     @Query(value =
-            "SELECT * from scholarship WHERE\n" +
-            "foreign_donation_id = \n" +
-            "(SELECT foreign_donation_id FROM moa\n" +
-            "WHERE id = ?1)", nativeQuery = true)
+            "SELECT * FROM scholarship\n" +
+            "WHERE foreign_donation_id IN\n" +
+            "(SELECT foreign_donation_id\n" +
+            "from donor_donation d \n" +
+            "INNER JOIN moa m\n" +
+            "ON d.donor_account_number\n" +
+            "= m.foreign_donor_account_number\n" +
+            "WHERE m.id = ?1)", nativeQuery = true)
     List<Scholarship> findScholarshipsOfMoa(Long moaId);
 
     @Query(value =

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Donation extends Auditable implements Comparable<Donation> {
     private String accountNumber;
     private String accountName;
     private String orNumber;
-    private String date;
+    private Date date;
     private Double amount;
     private String notes;
     private String needCertificate;
@@ -36,20 +37,20 @@ public class Donation extends Auditable implements Comparable<Donation> {
     private String codFiles;
 
     @OneToMany(mappedBy = "donation")
-    List<MOA> moaList = new ArrayList<>();
+    List<DonorDonation> donorDonationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "donation")
     List<Scholarship> scholarships = new ArrayList<>();
 
-    public void removeMOA(MOA moa) {
-        this.getMoaList().remove(moa);
-        moa.setDonation(null);
-        moa.setForeignDonationId(null);
+    public void removeDonorDonation(DonorDonation donorDonation) {
+        this.getDonorDonationList().remove(donorDonation);
+        donorDonation.setDonation(null);
+        donorDonation.setForeignDonationId(null);
     }
 
-    public void removeMOAs() {
-        for (MOA moa: new ArrayList<>(moaList)) {
-            removeMOA(moa);
+    public void removeDonorDonations() {
+        for (DonorDonation donorDonation: new ArrayList<>(donorDonationList)) {
+            removeDonorDonation(donorDonation);
         }
     }
 
