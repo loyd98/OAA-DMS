@@ -7,11 +7,25 @@ export default class SearchBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      username: '',
+    };
+  }
+
+  componentDidMount() {
+    const sessionUsername = sessionStorage.getItem('username');
+    if (!sessionUsername) {
+      const { username } = this.props;
+      sessionStorage.setItem('username', username);
+      this.setState({ username });
+    } else {
+      this.setState({ username: sessionUsername });
+    }
   }
 
   render() {
-    const { username, onChange } = this.props;
+    const { username } = this.state;
+    const { onChange } = this.props;
 
     return (
       <div className="search flex--horizontal">

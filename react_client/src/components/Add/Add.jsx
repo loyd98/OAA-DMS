@@ -6,7 +6,6 @@ import { withRouter } from 'react-router';
 import _ from 'lodash';
 
 import NormalForm from '../NormalForm/NormalForm';
-import MultiPartForm from '../MultiPartForm/MultiPartForm';
 
 class Add extends Component {
   constructor(props) {
@@ -59,37 +58,20 @@ class Add extends Component {
     this.setState({ form });
   }
 
-  renderForm = (currentTable, form, onCancel, onSubmit, url, onShow, onMessage) => {
-    if (currentTable === 'moas') {
-      return (
-        <MultiPartForm
-          form={form}
-          currentTable={currentTable}
-          onCancel={onCancel}
-          setForm={this.setForm}
-          onSubmit={onSubmit}
-          url={url}
-          onShow={onShow}
-          onMessage={onMessage}
-          delay={this.delay}
-        />
-      );
-    }
-    return (
-      <NormalForm
-        form={form}
-        currentTable={currentTable}
-        onCancel={onCancel}
-        setForm={this.setForm}
-        onSubmit={onSubmit}
-        url={url}
-        onShow={onShow}
-        onMessage={onMessage}
-        setNotif={this.setNotif}
-        delay={this.delay}
-      />
-    );
-  }
+  renderForm = (currentTable, form, onCancel, onSubmit, url, onShow, onMessage) => (
+    <NormalForm
+      form={form}
+      currentTable={currentTable}
+      onCancel={onCancel}
+      setForm={this.setForm}
+      onSubmit={onSubmit}
+      url={url}
+      onShow={onShow}
+      onMessage={onMessage}
+      setNotif={this.setNotif}
+      delay={this.delay}
+    />
+  )
 
   render() {
     const { form } = this.state;

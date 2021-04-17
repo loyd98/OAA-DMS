@@ -15,6 +15,7 @@ import ViewDonations from './scenes/Views/ViewDonations';
 import ViewMOAs from './scenes/Views/ViewMOAs';
 import ViewScholarships from './scenes/Views/ViewScholarships';
 import ViewScholars from './scenes/Views/ViewScholars';
+import SignUp from './scenes/SignUp/SignUp';
 
 const config = require('./data.config');
 
@@ -296,6 +297,7 @@ class App extends Component {
                 />
               )}
             />
+            <Route exact path="/signup" render={() => <SignUp />} />
           </Switch>
         </HashRouter>
       </div>

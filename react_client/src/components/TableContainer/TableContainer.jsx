@@ -227,6 +227,10 @@ class TableContainer extends Component {
         return 5;
       }
 
+      if (currentTable === 'connections') {
+        return 8;
+      }
+
       return 0;
     };
 
@@ -336,6 +340,7 @@ class TableContainer extends Component {
             redirectToView={(id) => this.handleRedirect(id)}
             colLimit={numOfColumns()}
             handleDelete={this.handleDelete}
+            currentTable={currentTable}
           />
         </table>
       </>

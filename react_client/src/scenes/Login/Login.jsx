@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import './Login.scoped.css';
 
 const axios = require('axios');
@@ -89,7 +90,7 @@ class Login extends Component {
               Invalid username or password.
             </div>
             <span className="blue" id="createNewUserbtn">
-              Create new User
+              <Link to="/signup">Create new User</Link>
             </span>
             <span className="blue">Forgot Password?</span>
           </form>

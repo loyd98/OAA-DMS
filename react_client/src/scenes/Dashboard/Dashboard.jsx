@@ -108,6 +108,12 @@ export default class Dashboard extends Component {
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
         break;
+      case 'connections':
+        axios
+          .get(`${url}/connection/search?q=${searchString}`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
       default:
         console.log('ERROR in Dashboard.jsx fetchSearchData.');
         break;
@@ -147,6 +153,12 @@ export default class Dashboard extends Component {
       case 'scholars':
         axios
           .get(`${url}/scholar/asc`, options)
+          .then((res) => this.setState({ data: res.data }))
+          .catch((err) => console.log(err));
+        break;
+      case 'connections':
+        axios
+          .get(`${url}/connection/asc`, options)
           .then((res) => this.setState({ data: res.data }))
           .catch((err) => console.log(err));
         break;

@@ -19,6 +19,7 @@ export default class Table extends Component {
       redirectToView,
       colLimit,
       handleDelete,
+      currentTable,
     } = this.props;
 
     return (
@@ -60,14 +61,16 @@ export default class Table extends Component {
               })}
               <td style={{ width: '50px' }}>
                 <div className="flex--horizontal">
-                  <Button
-                    isTransparent={false}
-                    message="View"
-                    type="right"
-                    onClick={() => redirectToView(row.id)}
-                  >
-                    <FontAwesomeIcon icon="border-all" />
-                  </Button>
+                  {currentTable === 'connections' ? null : (
+                    <Button
+                      isTransparent={false}
+                      message="View"
+                      type="right"
+                      onClick={() => redirectToView(row.id)}
+                    >
+                      <FontAwesomeIcon icon="border-all" />
+                    </Button>
+                  )}
                   <Button
                     id={row.id}
                     isTransparent={false}
@@ -93,4 +96,5 @@ Table.propTypes = {
   handleDelete: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   redirectToView: PropTypes.func.isRequired,
+  currentTable: PropTypes.string.isRequired,
 };

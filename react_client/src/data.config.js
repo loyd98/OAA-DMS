@@ -77,10 +77,21 @@ module.exports = {
     moas: [
       { key: 'id', name: 'MOA ID', width: '40px' },
       { key: 'name', name: 'MOA Name', width: '70px' },
-      { key: 'donorAccountNumber', name: 'Donor Account No.', width: '80px' },
-      { key: 'foreignDonationId', name: 'Donation ID', width: '70px' },
+      { key: 'foreignDonorAccountNumber', name: 'Donor Account Number', width: '70px' },
+      { key: 'files', name: 'Files', width: '70px' },
+      { key: 'notes', name: 'Notes', width: '70px' },
       { key: 'dateSigned', name: 'Date Signed', width: '60px' },
-      { key: 'file', name: 'File', width: '70px' },
+      // Auditing fields
+      { key: 'createdBy', name: 'Created By', width: '70px' },
+      { key: 'creationDate', name: 'Creation Date', width: '70px' },
+      { key: 'lastModifiedBy', name: 'Last Modified By', width: '70px' },
+      { key: 'lastModifiedDate', name: 'Last Modified Date', width: '70px' },
+    ],
+    connections: [
+      { key: 'id', name: 'Connection ID', width: '60px' },
+      { key: 'donorAccountNumber', name: 'Donor Account Number', width: '70px' },
+      { key: 'foreignDonationId', name: 'Donation ID', width: '70px' },
+      { key: 'notes', name: 'Notes', width: '70px' },
       // Auditing fields
       { key: 'createdBy', name: 'Created By', width: '70px' },
       { key: 'creationDate', name: 'Creation Date', width: '70px' },
@@ -91,6 +102,7 @@ module.exports = {
   tables: [
     'Donors',
     'Donations',
+    'Connections',
     'MOAs',
     'Scholarships',
     'Scholars',
