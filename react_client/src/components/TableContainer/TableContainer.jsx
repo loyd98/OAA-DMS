@@ -176,6 +176,14 @@ class TableContainer extends Component {
           },
         });
         break;
+      case 'documents':
+        history.push({
+          pathname: '/document',
+          state: {
+            id,
+          },
+        });
+        break;
       default:
         console.log('ERROR in TableContainer handleRedirect');
         break;
@@ -228,6 +236,10 @@ class TableContainer extends Component {
       }
 
       if (currentTable === 'connections') {
+        return 8;
+      }
+
+      if (currentTable === 'documents') {
         return 8;
       }
 

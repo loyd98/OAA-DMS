@@ -15,6 +15,7 @@ import ViewDonations from './scenes/Views/ViewDonations';
 import ViewMOAs from './scenes/Views/ViewMOAs';
 import ViewScholarships from './scenes/Views/ViewScholarships';
 import ViewScholars from './scenes/Views/ViewScholars';
+import ViewDocuments from './scenes/Views/ViewDocuments';
 import SignUp from './scenes/SignUp/SignUp';
 
 const config = require('./data.config');
@@ -101,6 +102,15 @@ class App extends Component {
         this.setCurrentTable('scholars');
         history.push({
           pathname: '/scholar',
+          state: {
+            id,
+          },
+        });
+        break;
+      case 'documents':
+        this.setCurrentTable('documents');
+        history.push({
+          pathname: '/document',
           state: {
             id,
           },
@@ -286,6 +296,22 @@ class App extends Component {
               path="/scholar"
               render={() => (
                 <ViewScholars
+                  url={this.url}
+                  currentTable={currentTable}
+                  config={config}
+                  onView={this.handleView}
+                  onDelete={this.handleInnerDelete}
+                  onNotif={this.handleNotification}
+                  onShow={this.setShowNotif}
+                  onMessage={this.setNotifMessage}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/document"
+              render={() => (
+                <ViewDocuments
                   url={this.url}
                   currentTable={currentTable}
                   config={config}

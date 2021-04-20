@@ -98,6 +98,17 @@ module.exports = {
       { key: 'lastModifiedBy', name: 'Last Modified By', width: '70px' },
       { key: 'lastModifiedDate', name: 'Last Modified Date', width: '70px' },
     ],
+    documents: [
+      { key: 'id', name: 'Document ID', width: '60px' },
+      { key: 'name', name: 'Name', width: '70px' },
+      { key: 'files', name: 'Files', width: '70px' },
+      { key: 'notes', name: 'Notes', width: '70px' },
+      // Auditing fields
+      { key: 'createdBy', name: 'Created By', width: '70px' },
+      { key: 'creationDate', name: 'Creation Date', width: '70px' },
+      { key: 'lastModifiedBy', name: 'Last Modified By', width: '70px' },
+      { key: 'lastModifiedDate', name: 'Last Modified Date', width: '70px' },
+    ],
   },
   tables: [
     'Donors',
@@ -114,6 +125,7 @@ module.exports = {
     moas: ['donors', 'donations', 'scholarships', 'scholars'],
     scholarships: ['donors', 'donations', 'moas', 'scholars'],
     scholars: ['donors', 'donations', 'moas', 'scholarships'],
+    documents: [],
   },
   defaultTable: 'donors',
   URL: 'http://localhost:8080',
