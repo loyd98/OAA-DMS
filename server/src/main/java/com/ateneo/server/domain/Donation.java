@@ -36,6 +36,21 @@ public class Donation extends Auditable implements Comparable<Donation> {
     private String tyFiles;
     private String codFiles;
 
+    public Donation(Long id, @NotBlank(message = "Cannot have an empty account number field.") String accountNumber, String accountName, String orNumber, Date date, Double amount, String notes, String needCertificate, String purposeOfDonation, String orFiles, String tyFiles, String codFiles) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.accountName = accountName;
+        this.orNumber = orNumber;
+        this.date = date;
+        this.amount = amount;
+        this.notes = notes;
+        this.needCertificate = needCertificate;
+        this.purposeOfDonation = purposeOfDonation;
+        this.orFiles = orFiles;
+        this.tyFiles = tyFiles;
+        this.codFiles = codFiles;
+    }
+
     @OneToMany(mappedBy = "donation")
     List<DonorDonation> donorDonationList = new ArrayList<>();
 

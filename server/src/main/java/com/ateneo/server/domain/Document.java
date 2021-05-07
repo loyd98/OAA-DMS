@@ -11,7 +11,6 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Document extends Auditable {
     @Id
@@ -21,4 +20,11 @@ public class Document extends Auditable {
     private String name;
     private String files;
     private String notes;
+
+    public Document(Long id, String name, String files, String notes) {
+        this.id = id;
+        this.name = name;
+        this.files = files;
+        this.notes = notes;
+    }
 }

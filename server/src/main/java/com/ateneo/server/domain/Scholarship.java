@@ -24,6 +24,15 @@ public class Scholarship extends Auditable {
     private String Criteria;
     private Long foreignDonationId;
 
+    public Scholarship(Long id, String scholarshipName, String typeOfScholarship, Date dateEstablished, String criteria, Long foreignDonationId) {
+        this.id = id;
+        this.scholarshipName = scholarshipName;
+        this.typeOfScholarship = typeOfScholarship;
+        this.dateEstablished = dateEstablished;
+        Criteria = criteria;
+        this.foreignDonationId = foreignDonationId;
+    }
+
     @ManyToOne
     @JoinColumn(name = "donation_id")
     @JsonIgnoreProperties({"scholarships", "donorDonationList"})

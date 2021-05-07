@@ -17,6 +17,15 @@ public class MOA extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public MOA(Long id, String name, String foreignDonorAccountNumber, String files, String notes, Date dateSigned) {
+        this.id = id;
+        this.name = name;
+        this.foreignDonorAccountNumber = foreignDonorAccountNumber;
+        this.files = files;
+        this.notes = notes;
+        this.dateSigned = dateSigned;
+    }
+
     @ManyToOne
     @JoinColumn(name = "donor_id")
     @JsonIgnoreProperties({"moaList", "donorDonationList"})

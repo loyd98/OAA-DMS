@@ -3,7 +3,7 @@ module.exports = {
     donors: [
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
-      { key: 'id', name: 'Donor ID', width: '50px' },
+      { key: 'idCopy', name: 'Donor ID', width: '50px' },
       { key: 'accountNumber', name: 'Account Number', width: '90px' },
       { key: 'accountName', name: 'Account Name', width: '80px' },
       { key: 'salutation', name: 'Salutation', width: '70px' },

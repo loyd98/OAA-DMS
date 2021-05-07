@@ -20,6 +20,14 @@ public class Scholar extends Auditable {
     private String course;
     private String batchGraduated;
 
+    public Scholar(Long id, Long foreignScholarshipId, String name, String course, String batchGraduated) {
+        this.id = id;
+        this.foreignScholarshipId = foreignScholarshipId;
+        this.name = name;
+        this.course = course;
+        this.batchGraduated = batchGraduated;
+    }
+
     @ManyToOne
     @JoinColumn(name = "scholarship_id")
     @JsonIgnoreProperties("scholars")

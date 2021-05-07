@@ -17,6 +17,13 @@ public class DonorDonation extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public DonorDonation(Long id, String notes, String donorAccountNumber, Long foreignDonationId) {
+        this.id = id;
+        this.notes = notes;
+        this.donorAccountNumber = donorAccountNumber;
+        this.foreignDonationId = foreignDonationId;
+    }
+
     @ManyToOne
     @JoinColumn(name = "donor_id")
     @JsonIgnoreProperties("donorDonationList")

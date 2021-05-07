@@ -18,7 +18,9 @@ public class DonorService {
 
     // Create
     public Donor saveDonor(Donor donor) {
-        return donorRepository.save(donor);
+        Donor savedDonor = donorRepository.save(donor);
+        savedDonor.setIdCopy(savedDonor.getId());
+        return donorRepository.save(savedDonor);
     }
 
     // Read
