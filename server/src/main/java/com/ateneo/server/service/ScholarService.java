@@ -20,9 +20,11 @@ public class ScholarService {
 
     // Create
     public Scholar saveScholar(Scholar scholar) {
-        Scholarship scholarship = scholarshipRepository.findById(scholar.getForeignScholarshipId()).orElse(null);
+        Scholarship scholarship = scholarshipRepository.findScholarshipByConnectionId(scholar.getForeignScholarshipId());
         scholar.setScholarship(scholarship);
-        return scholarRepository.save(scholar);
+        Scholar savedScholar = scholarRepository.save(scholar);
+        savedScholar.setConnectionId(savedScholar.getId());
+        return scholarRepository.save(savedScholar);
     }
 
     // Read

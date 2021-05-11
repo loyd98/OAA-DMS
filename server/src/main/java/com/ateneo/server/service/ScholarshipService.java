@@ -22,9 +22,11 @@ public class ScholarshipService {
 
     // Create
     public Scholarship saveScholarship(Scholarship scholarship) {
-        Donation donation = donationRepository.findById(scholarship.getForeignDonationId()).orElse(null);
+        Donation donation = donationRepository.findDonationByConnectionId(scholarship.getForeignDonationId());
         scholarship.setDonation(donation);
-        return scholarshipRepository.save(scholarship);
+        Scholarship savedScholarship = scholarshipRepository.save(scholarship);
+        savedScholarship.setConnectionId(savedScholarship.getId());
+        return scholarshipRepository.save(savedScholarship);
     }
 
     // Read

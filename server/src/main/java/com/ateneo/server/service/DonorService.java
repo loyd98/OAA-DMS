@@ -19,7 +19,7 @@ public class DonorService {
     // Create
     public Donor saveDonor(Donor donor) {
         Donor savedDonor = donorRepository.save(donor);
-        savedDonor.setIdCopy(savedDonor.getId());
+        savedDonor.setConnectionId(savedDonor.getId());
         return donorRepository.save(savedDonor);
     }
 

@@ -17,13 +17,14 @@ public class MOA extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public MOA(Long id, String name, String foreignDonorAccountNumber, String files, String notes, Date dateSigned) {
+    public MOA(Long id, String name, String foreignDonorAccountNumber, String files, String notes, Date dateSigned, Long connectionId) {
         this.id = id;
         this.name = name;
         this.foreignDonorAccountNumber = foreignDonorAccountNumber;
         this.files = files;
         this.notes = notes;
         this.dateSigned = dateSigned;
+        this.connectionId = connectionId;
     }
 
     @ManyToOne
@@ -36,4 +37,5 @@ public class MOA extends Auditable {
     private String files;
     private String notes;
     private Date dateSigned;
+    private Long connectionId;
 }

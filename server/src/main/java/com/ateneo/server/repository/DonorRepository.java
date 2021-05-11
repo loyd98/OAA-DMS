@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface DonorRepository extends JpaRepository<Donor, Long> {
     Donor findDonorByAccountNumber(String accountNumber);
-
     List<Donor> findAllByOrderByIdAsc();
     List<Donor> findAllByOrderByIdDesc();
 

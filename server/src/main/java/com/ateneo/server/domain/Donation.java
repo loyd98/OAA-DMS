@@ -35,8 +35,9 @@ public class Donation extends Auditable implements Comparable<Donation> {
     private String orFiles;
     private String tyFiles;
     private String codFiles;
+    private Long connectionId;
 
-    public Donation(Long id, @NotBlank(message = "Cannot have an empty account number field.") String accountNumber, String accountName, String orNumber, Date date, Double amount, String notes, String needCertificate, String purposeOfDonation, String orFiles, String tyFiles, String codFiles) {
+    public Donation(Long id, @NotBlank(message = "Cannot have an empty account number field.") String accountNumber, String accountName, String orNumber, Date date, Double amount, String notes, String needCertificate, String purposeOfDonation, String orFiles, String tyFiles, String codFiles, Long connectionId) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.accountName = accountName;
@@ -49,6 +50,7 @@ public class Donation extends Auditable implements Comparable<Donation> {
         this.orFiles = orFiles;
         this.tyFiles = tyFiles;
         this.codFiles = codFiles;
+        this.connectionId = connectionId;
     }
 
     @OneToMany(mappedBy = "donation")

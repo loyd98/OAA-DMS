@@ -9,6 +9,7 @@ import java.util.Optional;
 
 
 public interface DonationRepository extends JpaRepository<Donation, Long> {
+    Donation findDonationByConnectionId(Long connectionId);
     List<Donation> findAllByOrderByIdAsc();
     List<Donation> findAllByOrderByIdDesc();
 

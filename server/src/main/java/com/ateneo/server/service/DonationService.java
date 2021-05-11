@@ -19,7 +19,9 @@ public class DonationService {
 
     // Create
     public Donation saveDonation(Donation donation) {
-        return donationRepository.save(donation);
+        Donation savedDonation = donationRepository.save(donation);
+        savedDonation.setConnectionId(savedDonation.getId());
+        return donationRepository.save(savedDonation);
     }
 
     // Read

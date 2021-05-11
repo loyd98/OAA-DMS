@@ -20,11 +20,13 @@ public class Document extends Auditable {
     private String name;
     private String files;
     private String notes;
+    private Long connectionId;
 
-    public Document(Long id, String name, String files, String notes) {
+    public Document(Long id, String name, String files, String notes, Long connectionId) {
         this.id = id;
         this.name = name;
         this.files = files;
         this.notes = notes;
+        this.connectionId = connectionId;
     }
 }

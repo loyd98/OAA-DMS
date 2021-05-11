@@ -46,11 +46,13 @@ public class DonorDonationService {
         }
 
         if (donorDonation.getForeignDonationId() != null) {
-            Donation donation = donationRepository.findById(donorDonation.getForeignDonationId()).orElse(null);
+            Donation donation = donationRepository.findDonationByConnectionId(donorDonation.getForeignDonationId());
             donorDonation.setDonation(donation);
         }
 
-        return donorDonationRepository.save(donorDonation);
+        DonorDonation savedDonorDonation = donorDonationRepository.save(donorDonation);
+        savedDonorDonation.setConnectionId(savedDonorDonation.getId());
+        return donorDonationRepository.save(savedDonorDonation);
     }
 
     // Read

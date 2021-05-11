@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ScholarRepository extends JpaRepository<Scholar, Long> {
+    Scholar findScholarByConnectionId(Long connectionId);
     List<Scholar> findAllByOrderByIdAsc();
     List<Scholar> findAllByOrderByIdDesc();
     List<Scholar> findAllByForeignScholarshipId(Long scholarshipId);

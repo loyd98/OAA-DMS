@@ -26,7 +26,9 @@ public class MoaService {
     public MOA saveMoa(MOA moa) {
         Donor donor = donorRepository.findDonorByAccountNumber(moa.getForeignDonorAccountNumber());
         moa.setDonor(donor);
-        return moaRepository.save(moa);
+        MOA savedMoa = moaRepository.save(moa);
+        savedMoa.setConnectionId(savedMoa.getId());
+        return moaRepository.save(savedMoa);
     }
 
     // Read

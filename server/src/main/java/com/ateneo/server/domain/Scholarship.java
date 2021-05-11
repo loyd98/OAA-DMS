@@ -23,14 +23,16 @@ public class Scholarship extends Auditable {
     private Date dateEstablished;
     private String Criteria;
     private Long foreignDonationId;
+    private Long connectionId;
 
-    public Scholarship(Long id, String scholarshipName, String typeOfScholarship, Date dateEstablished, String criteria, Long foreignDonationId) {
+    public Scholarship(Long id, String scholarshipName, String typeOfScholarship, Date dateEstablished, String criteria, Long foreignDonationId, Long connectionId) {
         this.id = id;
         this.scholarshipName = scholarshipName;
         this.typeOfScholarship = typeOfScholarship;
         this.dateEstablished = dateEstablished;
         Criteria = criteria;
         this.foreignDonationId = foreignDonationId;
+        this.connectionId = connectionId;
     }
 
     @ManyToOne

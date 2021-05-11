@@ -17,11 +17,12 @@ public class DonorDonation extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public DonorDonation(Long id, String notes, String donorAccountNumber, Long foreignDonationId) {
+    public DonorDonation(Long id, String notes, String donorAccountNumber, Long foreignDonationId, Long connectionId) {
         this.id = id;
         this.notes = notes;
         this.donorAccountNumber = donorAccountNumber;
         this.foreignDonationId = foreignDonationId;
+        this.connectionId = connectionId;
     }
 
     @ManyToOne
@@ -37,4 +38,5 @@ public class DonorDonation extends Auditable {
     private String notes;
     private String donorAccountNumber;
     private Long foreignDonationId;
+    private Long connectionId;
 }

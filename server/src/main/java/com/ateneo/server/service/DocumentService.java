@@ -16,7 +16,9 @@ public class DocumentService {
 
     // Create
     public Document saveDocument(Document document) {
-        return documentRepository.save(document);
+        Document savedDocument = documentRepository.save(document);
+        savedDocument.setConnectionId(savedDocument.getId());
+        return documentRepository.save(savedDocument);
     }
 
     // Read
