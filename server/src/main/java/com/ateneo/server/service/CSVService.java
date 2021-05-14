@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.swing.text.html.parser.Entity;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,7 +41,7 @@ public class CSVService {
 
     public void saveDonor(MultipartFile file) {
         try {
-            donorService.deleteAllDonors();
+            donorService.truncateDonors();
             List<Donor> donors = CSVHelper.csvToDonors(file.getInputStream());
             for (Donor donor: donors) {
                 donorService.saveDonor(donor);
@@ -50,7 +53,7 @@ public class CSVService {
 
     public void saveDonation(MultipartFile file) {
         try {
-            donationService.deleteAllDonations();
+            donationService.truncateDonations();
             List<Donation> donations = CSVHelper.csvToDonations(file.getInputStream());
             for (Donation donation: donations) {
                 donationService.saveDonation(donation);
@@ -62,7 +65,7 @@ public class CSVService {
 
     public void saveConnection(MultipartFile file) {
         try {
-            donorDonationService.deleteAllDonorDonations();
+            donorDonationService.truncateDonorDonations();
             List<DonorDonation> connections = CSVHelper.csvToConnections(file.getInputStream());
             for (DonorDonation connection: connections) {
                 donorDonationService.saveDonorDonation(connection);
@@ -74,7 +77,7 @@ public class CSVService {
 
     public void saveMoa(MultipartFile file) {
         try {
-            moaService.deleteAllMoa();
+            moaService.truncateMoas();
             List<MOA> moas = CSVHelper.csvToMoas(file.getInputStream());
             for (MOA moa: moas) {
                 moaService.saveMoa(moa);
@@ -86,7 +89,7 @@ public class CSVService {
 
     public void saveScholarship(MultipartFile file) {
         try {
-            scholarshipService.deleteAllScholarships();
+            scholarService.truncateScholars();
             List<Scholarship> scholarships = CSVHelper.csvToScholarships(file.getInputStream());
             for (Scholarship scholarship: scholarships) {
                 scholarshipService.saveScholarship(scholarship);
@@ -98,7 +101,7 @@ public class CSVService {
 
     public void saveScholar(MultipartFile file) {
         try {
-            scholarService.deleteAllScholars();
+            scholarService.truncateScholars();
             List<Scholar> scholars = CSVHelper.csvToScholars(file.getInputStream());
             for (Scholar scholar: scholars) {
                 scholarService.saveScholar(scholar);
@@ -110,7 +113,7 @@ public class CSVService {
 
     public void saveDocument(MultipartFile file) {
         try {
-            documentService.deleteAllDocuments();
+            documentService.truncateDocuments();
             List<Document> documents = CSVHelper.csvToDocuments(file.getInputStream());
             for (Document document: documents) {
                 documentService.saveDocument(document);

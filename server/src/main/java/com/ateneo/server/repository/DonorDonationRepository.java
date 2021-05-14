@@ -5,8 +5,10 @@ import com.ateneo.server.domain.DonorDonation;
 import com.ateneo.server.domain.MOA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,4 +35,9 @@ public interface DonorDonationRepository extends JpaRepository<DonorDonation, Lo
             "(SELECT foreign_scholarship_id FROM scholar\n" +
             "WHERE id = ?1)))", nativeQuery = true)
     List<DonorDonation> findDonorDonationOfScholar(Long scholarId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "TRUNCATE TABLE donor_donation", nativeQuery = true)
+    void truncate();
 }

@@ -201,7 +201,7 @@ class TableContainer extends Component {
       notifMessage,
     } = this.state;
     const {
-      config, data, onTabClick, onAddClick, url, onDelete, onSort,
+      config, data, onTabClick, onAddClick, url, onDelete, onSort, onImport,
     } = this.props;
 
     if (!data) {
@@ -252,7 +252,7 @@ class TableContainer extends Component {
         {showModal && (
         <DeleteModal
           title="Delete entry?"
-          message={`Do you really want to delete this entry with ID ${idToBeDeleted}.`}
+          message={`Do you really want to delete this entry # ${idToBeDeleted}.`}
           deleteConfirmation={`Type "${idToBeDeleted}" to confirm.`}
           leftBtnName="Cancel"
           rightBtnName="Delete"
@@ -319,7 +319,7 @@ class TableContainer extends Component {
             <tr>
               <td className="flex--horizontal">
                 <div className="flex--horizontal">
-                  <Button isTransparent message="Import" type="left">
+                  <Button isTransparent message="Import" type="left" onClick={() => onImport(true)}>
                     <FontAwesomeIcon icon="file-upload" />
                   </Button>
                   <Button isTransparent message="Export" type="left">
@@ -376,6 +376,7 @@ TableContainer.propTypes = {
   onTabClick: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
   onSort: PropTypes.func.isRequired,
+  onImport: PropTypes.func.isRequired,
 };
 
 export default withRouter(TableContainer);

@@ -2,8 +2,10 @@ package com.ateneo.server.repository;
 
 import com.ateneo.server.domain.Scholarship;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,4 +44,9 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
 
     @Query(value = "SELECT * FROM scholarship WHERE id LIKE %?1% OR scholarship_name LIKE %?1% OR foreign_donation_id LIKE %?1% OR scholarship.type_of_scholarship LIKE %?1%", nativeQuery = true)
     List<Scholarship> search(String keyword);
+
+    @Modifying
+    @Transactional
+    @Query(value = "TRUNCATE TABLE scholarship", nativeQuery = true)
+    void truncate();
 }

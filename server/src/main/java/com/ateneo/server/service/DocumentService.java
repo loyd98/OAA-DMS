@@ -17,7 +17,11 @@ public class DocumentService {
     // Create
     public Document saveDocument(Document document) {
         Document savedDocument = documentRepository.save(document);
-        savedDocument.setConnectionId(savedDocument.getId());
+
+        if (savedDocument.getConnectionId() == null) {
+            savedDocument.setConnectionId(savedDocument.getId());
+        }
+
         return documentRepository.save(savedDocument);
     }
 
@@ -58,5 +62,10 @@ public class DocumentService {
     public String deleteAllDocuments() {
         documentRepository.deleteAll();
         return "Successfully deleted all documents.";
+    }
+
+    public String truncateDocuments() {
+        documentRepository.truncate();
+        return "Successfully truncated document table.";
     }
 }

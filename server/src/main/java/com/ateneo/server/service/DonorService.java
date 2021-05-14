@@ -19,7 +19,11 @@ public class DonorService {
     // Create
     public Donor saveDonor(Donor donor) {
         Donor savedDonor = donorRepository.save(donor);
-        savedDonor.setConnectionId(savedDonor.getId());
+
+        if (savedDonor.getConnectionId() == null) {
+            savedDonor.setConnectionId(savedDonor.getId());
+        }
+
         return donorRepository.save(savedDonor);
     }
 
@@ -108,6 +112,11 @@ public class DonorService {
 
         donorRepository.deleteAll();
         return "Successfully deleted all donors.";
+    }
+
+    public String truncateDonors() {
+        donorRepository.truncate();
+        return "Successfully truncated donor table.";
     }
 
 //    public Donor saveDonor(Donor donor)

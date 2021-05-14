@@ -23,7 +23,11 @@ public class ScholarService {
         Scholarship scholarship = scholarshipRepository.findScholarshipByConnectionId(scholar.getForeignScholarshipId());
         scholar.setScholarship(scholarship);
         Scholar savedScholar = scholarRepository.save(scholar);
-        savedScholar.setConnectionId(savedScholar.getId());
+
+        if (savedScholar.getConnectionId() == null) {
+            savedScholar.setConnectionId(savedScholar.getId());
+        }
+
         return scholarRepository.save(savedScholar);
     }
 
@@ -83,5 +87,10 @@ public class ScholarService {
     public String deleteAllScholars() {
         scholarRepository.deleteAll();
         return "Successfully deleted all scholars";
+    }
+
+    public String truncateScholars() {
+        scholarRepository.truncate();
+        return "Successfully truncated scholar table";
     }
 }

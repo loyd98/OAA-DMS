@@ -64,7 +64,7 @@ public class CSVHelper {
                         csvRecord.get("Company Address"),
                         date,
                         csvRecord.get("Notes"),
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                 );
 
                 donors.add(donor);
@@ -106,7 +106,7 @@ public class CSVHelper {
                         csvRecord.get("OR Files"),
                         csvRecord.get("TY Files"),
                         csvRecord.get("COD Files"),
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                 );
 
                 donations.add(donation);
@@ -133,7 +133,7 @@ public class CSVHelper {
                         csvRecord.get("Notes"),
                         csvRecord.get("Donor Account Number"),
                         Long.parseLong(csvRecord.get("Donation Id")),
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                         );
 
                 connections.add(connection);
@@ -170,7 +170,7 @@ public class CSVHelper {
                         csvRecord.get("Files"),
                         csvRecord.get("Notes"),
                         date,
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                 );
 
                 moas.add(moa);
@@ -207,7 +207,7 @@ public class CSVHelper {
                         date,
                         csvRecord.get("Criteria"),
                         Long.parseLong(csvRecord.get("Donation Id")),
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                 );
 
                 scholarships.add(scholarship);
@@ -236,7 +236,7 @@ public class CSVHelper {
                         csvRecord.get("Name"),
                         csvRecord.get("Course"),
                         csvRecord.get("Batch Graduated"),
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                 );
 
                 scholars.add(scholar);
@@ -264,7 +264,7 @@ public class CSVHelper {
                         csvRecord.get("Name"),
                         csvRecord.get("Files"),
                         csvRecord.get("Notes"),
-                        Long.parseLong(csvRecord.get("Id Copy"))
+                        Long.parseLong(csvRecord.get("Connection Id"))
                 );
 
                 documents.add(document);

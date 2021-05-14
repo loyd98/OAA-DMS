@@ -60,7 +60,7 @@ export default class Modal extends Component {
       await this.setNotif(
         onMessage,
         onShow,
-        `Sucessfully deleted ${currentTable.slice(0, -1)} ID no. ${id}.`,
+        `Sucessfully deleted ${currentTable.slice(0, -1)} # ${id}.`,
       );
     } catch (err) {
       await this.setNotif(onMessage, onShow, err.status);

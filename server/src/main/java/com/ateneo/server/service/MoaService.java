@@ -27,7 +27,11 @@ public class MoaService {
         Donor donor = donorRepository.findDonorByAccountNumber(moa.getForeignDonorAccountNumber());
         moa.setDonor(donor);
         MOA savedMoa = moaRepository.save(moa);
-        savedMoa.setConnectionId(savedMoa.getId());
+
+        if (savedMoa.getConnectionId() == null) {
+            savedMoa.setConnectionId(savedMoa.getId());
+        }
+
         return moaRepository.save(savedMoa);
     }
 
@@ -54,6 +58,10 @@ public class MoaService {
 
     public List<MOA> findMoasOfScholar(Long scholarId) {
         return moaRepository.findMoasOfScholar(scholarId);
+    }
+
+    public List<MOA> findMoasOfScholarship(Long scholarshipId) {
+        return moaRepository.findMoasOfScholarship(scholarshipId);
     }
 
     public List<MOA> searchMoa(String keyword) {
@@ -84,5 +92,10 @@ public class MoaService {
     public String deleteAllMoa() {
         moaRepository.deleteAll();
         return "Successfully deleted all scholars";
+    }
+
+    public String truncateMoas() {
+        moaRepository.truncate();
+        return "Successfully truncated MOA table.";
     }
 }

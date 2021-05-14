@@ -2,8 +2,10 @@ package com.ateneo.server.repository;
 
 import com.ateneo.server.domain.Scholar;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,4 +46,9 @@ public interface ScholarRepository extends JpaRepository<Scholar, Long> {
 
     @Query(value = "SELECT * FROM scholar WHERE id LIKE %?1% OR foreign_scholarship_id LIKE %?1% OR scholar.name LIKE %?1% OR course LIKE %?1% OR batch_graduated LIKE %?1%", nativeQuery = true)
     List<Scholar> search(String keyword);
+
+    @Modifying
+    @Transactional
+    @Query(value = "TRUNCATE TABLE scholar", nativeQuery = true)
+    void truncate();
 }

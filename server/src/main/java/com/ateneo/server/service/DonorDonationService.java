@@ -51,7 +51,11 @@ public class DonorDonationService {
         }
 
         DonorDonation savedDonorDonation = donorDonationRepository.save(donorDonation);
-        savedDonorDonation.setConnectionId(savedDonorDonation.getId());
+
+        if (savedDonorDonation.getConnectionId() == null) {
+            savedDonorDonation.setConnectionId(savedDonorDonation.getId());
+        }
+
         return donorDonationRepository.save(savedDonorDonation);
     }
 
@@ -112,6 +116,11 @@ public class DonorDonationService {
     public String deleteAllDonorDonations() {
         donorDonationRepository.deleteAll();
         return "Successfully deleted all MOAs";
+    }
+
+    public String truncateDonorDonations() {
+        donorDonationRepository.truncate();
+        return "Successfully truncated donor_donation table.";
     }
 
 }

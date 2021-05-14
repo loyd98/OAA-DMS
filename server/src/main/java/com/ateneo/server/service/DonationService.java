@@ -20,7 +20,12 @@ public class DonationService {
     // Create
     public Donation saveDonation(Donation donation) {
         Donation savedDonation = donationRepository.save(donation);
-        savedDonation.setConnectionId(savedDonation.getId());
+
+        if (savedDonation.getConnectionId() == null) {
+            System.out.println("HIT");
+            savedDonation.setConnectionId(savedDonation.getId());
+        }
+
         return donationRepository.save(savedDonation);
     }
 
@@ -99,6 +104,11 @@ public class DonationService {
 
         donationRepository.deleteAll();
         return "Successfully deleted all donations";
+    }
+
+    public String truncateDonations() {
+        donationRepository.truncate();
+        return "Successfully truncated donation table";
     }
 //    public List<Donation> getAllDonationsAsc() {
 //        return donationRepository.findAllByOrderByIdAsc();

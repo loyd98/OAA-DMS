@@ -53,6 +53,11 @@ public class MoaController {
         return moaService.findMoasOfScholar(scholarId);
     }
 
+    @GetMapping("ofscholarship/{scholarshipId}")
+    public List<MOA> getMoasOfScholarship(@PathVariable Long scholarshipId) {
+        return moaService.findMoasOfScholarship(scholarshipId);
+    }
+
     @GetMapping("/search")
     public List<MOA> search(@RequestParam("q") String keyword) {
         return moaService.searchMoa(keyword);

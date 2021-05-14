@@ -25,7 +25,11 @@ public class ScholarshipService {
         Donation donation = donationRepository.findDonationByConnectionId(scholarship.getForeignDonationId());
         scholarship.setDonation(donation);
         Scholarship savedScholarship = scholarshipRepository.save(scholarship);
-        savedScholarship.setConnectionId(savedScholarship.getId());
+
+        if (savedScholarship.getConnectionId() == null) {
+            savedScholarship.setConnectionId(savedScholarship.getId());
+        }
+
         return scholarshipRepository.save(savedScholarship);
     }
 
@@ -101,6 +105,10 @@ public class ScholarshipService {
         return "Successfully deleted all scholarships";
     }
 
+    public String truncateScholarships() {
+        scholarshipRepository.truncate();
+        return "Succesfully truncated scholarship table.";
+    }
 
     // Create
 //    public Scholarship saveScholarship(Scholarship scholarship) {

@@ -7,6 +7,7 @@ import axios from 'axios';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TableContainer from '../../components/TableContainer/TableContainer';
 import Add from '../../components/Add/Add';
+import ImportModal from '../../components/ImportModal/ImportModal';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class Dashboard extends Component {
       data: [],
       showAdd: false,
       isAsc: true,
+      showImport: false,
     };
   }
 
@@ -31,6 +33,8 @@ export default class Dashboard extends Component {
   }
 
   handleShowAdd = (showAdd) => this.setState({ showAdd });
+
+  handleShowImport = (showImport) => this.setState({ showImport });
 
   handleSearch = (event) => {
     event.persist();
@@ -176,7 +180,7 @@ export default class Dashboard extends Component {
 
   render() {
     const {
-      data, showAdd,
+      data, showAdd, showImport,
     } = this.state;
     const {
       config, onTabClick, currentTable, url, username, onShow, onMessage,
@@ -195,6 +199,9 @@ export default class Dashboard extends Component {
             onMessage={onMessage}
           />
         )}
+        {showImport && (
+          <ImportModal url={url} onCancel={this.handleShowImport} onSubmit={this.read} />
+        )}
         <SearchBar
           username={username}
           currentTable={currentTable}
@@ -209,6 +216,7 @@ export default class Dashboard extends Component {
           onAddClick={this.handleShowAdd}
           onDelete={this.read}
           onSort={this.handleSort}
+          onImport={this.handleShowImport}
         />
       </div>
     );

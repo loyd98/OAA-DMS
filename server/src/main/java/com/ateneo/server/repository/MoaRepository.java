@@ -3,8 +3,10 @@ package com.ateneo.server.repository;
 import com.ateneo.server.domain.MOA;
 import com.ateneo.server.domain.Scholar;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,4 +35,17 @@ public interface MoaRepository extends JpaRepository<MOA, Long> {
             "(SELECT foreign_scholarship_id FROM scholar\n" +
             "WHERE id = ?1)))", nativeQuery = true)
     List<MOA> findMoasOfScholar(Long scholarId);
+
+    @Query(value = "SELECT * FROM moa\n" +
+            "WHERE foreign_donor_account_number IN\n" +
+            "(SELECT donor_account_number FROM donor_donation\n" +
+            "WHERE donation_id IN \n" +
+            "(SELECT foreign_donation_id FROM scholarship\n" +
+            "WHERE id = ?1))", nativeQuery = true)
+    List<MOA> findMoasOfScholarship(Long scholarshipId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "TRUNCATE TABLE moa", nativeQuery = true)
+    void truncate();
 }

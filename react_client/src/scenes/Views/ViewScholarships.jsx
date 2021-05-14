@@ -170,7 +170,8 @@ class ViewDonors extends Component {
         obj.key !== 'creationDate' &&
         obj.key !== 'lastModifiedDate' &&
         obj.key !== 'lastModifiedBy' &&
-        obj.key !== 'id'
+        obj.key !== 'id' &&
+        obj.key !== 'connectionId'
       ) {
         return (
           <div key={obj.key} className="view__detailContainer">
