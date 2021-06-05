@@ -165,6 +165,21 @@ class ViewDonors extends Component {
     let button;
 
     const inputs = config.ordering[currentTable].map((obj) => {
+      if (obj.key === 'dateEstablished') {
+        return (
+          <div key={obj.key} className="view__detailContainer">
+            <div className="view__detailTitle">{obj.name}</div>
+            <input
+              disabled={!isEditing}
+              name={obj.key}
+              type="text"
+              value={form[obj.key] == null ? '' : form[obj.key]}
+              onChange={(e) => this.setForm(e.target.name, e.target.value)}
+              placeholder="Format: YYYY-MM-DD"
+            />
+          </div>
+        );
+      }
       if (
         obj.key !== 'createdBy' &&
         obj.key !== 'creationDate' &&

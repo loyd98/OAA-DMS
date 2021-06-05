@@ -80,7 +80,8 @@ export default class NormalForm extends Component {
               obj.key === 'creationDate' ||
               obj.key === 'lastModifiedBy' ||
               obj.key === 'lastModifiedDate' ||
-              obj.key === 'id'
+              obj.key === 'id' ||
+              obj.key === 'connectionId'
             ) {
               return null;
             }

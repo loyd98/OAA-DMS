@@ -1,6 +1,10 @@
+.header__title {
+  width: 100px;
+}
+
 .header {
   height: 30px;
-  width: 100px;
+  width: 200px;
   justify-content: space-around;
   background-color: transparent;
   border: 0;

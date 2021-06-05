@@ -4,7 +4,7 @@ module.exports = {
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
       { key: 'id', name: '#', width: '20px' },
-      { key: 'connectionId', name: 'Donor ID', width: '50px' },
+      { key: 'connectionId', name: 'Donor ID', width: '60px' },
       { key: 'accountNumber', name: 'Account Number', width: '90px' },
       { key: 'accountName', name: 'Account Name', width: '80px' },
       { key: 'salutation', name: 'Salutation', width: '70px' },
@@ -19,7 +19,7 @@ module.exports = {
       { key: 'address2', name: 'Address 2', width: '100px' },
       { key: 'address3', name: 'Address 3', width: '100px' },
       { key: 'address4', name: 'Address 4', width: '100px' },
-      { key: 'address5', name: 'Addres 5', width: '100px' },
+      { key: 'address5', name: 'Address 5', width: '100px' },
       { key: 'birthDate', name: 'Birth Date', width: '100px' },
       { key: 'companyAddress', name: 'Company Address', width: '100px' },
       // Auditing fields
@@ -32,7 +32,7 @@ module.exports = {
       // width refers to column width
       // { key: '#', name: '#', width: '20px' },
       { key: 'id', name: '#', width: '20px' },
-      { key: 'connectionId', name: 'Donation ID', width: '55px' },
+      { key: 'connectionId', name: 'Donation ID', width: '60px' },
       { key: 'accountNumber', name: 'Donor Account No.', width: '70px' },
       { key: 'accountName', name: 'Account Name', width: '70px' },
       { key: 'orNumber', name: 'OR Number', width: '70px' },
@@ -67,7 +67,7 @@ module.exports = {
     ],
     scholars: [
       { key: 'id', name: '#', width: '20px' },
-      { key: 'connectionId', name: 'Scholar ID', width: '50px' },
+      { key: 'connectionId', name: 'Scholar ID', width: '60px' },
       { key: 'foreignScholarshipId', name: 'Scholarship ID', width: '70px' },
       { key: 'name', name: 'Name', width: '70px' },
       { key: 'course', name: 'Course', width: '70px' },
@@ -80,7 +80,7 @@ module.exports = {
     ],
     moas: [
       { key: 'id', name: '#', width: '20px' },
-      { key: 'connectionId', name: 'MOA ID', width: '40px' },
+      { key: 'connectionId', name: 'MOA ID', width: '60px' },
       { key: 'name', name: 'MOA Name', width: '70px' },
       { key: 'foreignDonorAccountNumber', name: 'Donor Account Number', width: '70px' },
       { key: 'files', name: 'Files', width: '70px' },
@@ -94,7 +94,7 @@ module.exports = {
     ],
     connections: [
       { key: 'id', name: '#', width: '20px' },
-      { key: 'connectionId', name: 'Connection ID', width: '60px' },
+      { key: 'connectionId', name: 'Connection ID', width: '65px' },
       { key: 'donorAccountNumber', name: 'Donor Account Number', width: '70px' },
       { key: 'foreignDonationId', name: 'Donation ID', width: '70px' },
       { key: 'notes', name: 'Notes', width: '70px' },

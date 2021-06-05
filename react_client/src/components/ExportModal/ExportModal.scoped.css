@@ -1,0 +1,12 @@
+.export__link {
+    display: block;
+    width: 100%;
+    height: 40px;
+    background-color: var(--blue);
+    color: var(--white);
+    border: 0;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding: 10px;
+    text-align: center;
+}

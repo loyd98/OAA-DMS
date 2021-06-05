@@ -10,7 +10,9 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      showError: false,
+    };
     this.nameAutoFocus = true;
   }
 
@@ -18,8 +20,13 @@ class Login extends Component {
     this.nameAutoFocus = false;
   }
 
+  setShowEror = (showError) => {
+    this.setState({ showError });
+  }
+
   handleSubmit = async (e, url, username, password) => {
     e.preventDefault();
+    localStorage.setItem('url', url);
     const { history, onSubmit } = this.props;
     const loginUser = async (credentials) => {
       try {
@@ -27,6 +34,7 @@ class Login extends Component {
         return resp;
       } catch (err) {
         console.error(err);
+        this.setShowEror(true);
       }
 
       return null;
@@ -47,6 +55,8 @@ class Login extends Component {
   };
 
   render() {
+    const { showError } = this.state;
+
     const {
       url,
       history,
@@ -54,13 +64,21 @@ class Login extends Component {
       password,
       onPasswordChange,
       onUsernameChange,
+      onUrlChange,
     } = this.props;
 
     return (
       <div className="login">
         <div className="login__container">
           <h1 className="blue">Log-in</h1>
-          <form id="login__form">
+          <form
+            id="login__form"
+            onSubmit={(e) => {
+              this.handleSubmit(e, url, username, password).then((resp) => {
+                if (resp) history.push('/dashboard');
+              });
+            }}
+          >
             <input
               type="text"
               name="username"
@@ -75,8 +93,15 @@ class Login extends Component {
               placeholder="Password"
               onChange={(e) => onPasswordChange(e.target.value)}
             />
+            <input
+              type="text"
+              name="url"
+              value={url}
+              placeholder="Server Address"
+              onChange={(e) => onUrlChange(e.target.value)}
+            />
             <button
-              type="button"
+              type="submit"
               id="login__proceed--btn"
               onClick={(e) => {
                 this.handleSubmit(e, url, username, password).then((resp) => {
@@ -86,13 +111,12 @@ class Login extends Component {
             >
               Proceed
             </button>
-            <div className="red flex-vertical hidden" id="login__error">
+            <div className={showError ? 'red flex-vertical' : 'red flex-vertical hidden'} id="login__error" style={{ color: 'red' }}>
               Invalid username or password.
             </div>
             <span className="blue" id="createNewUserbtn">
               <Link to="/signup">Create new User</Link>
             </span>
-            <span className="blue">Forgot Password?</span>
           </form>
         </div>
       </div>
@@ -110,6 +134,7 @@ Login.propTypes = {
   password: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
+  onUrlChange: PropTypes.string.isRequired,
 };
 
 export default withRouter(Login);

@@ -8,6 +8,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import TableContainer from '../../components/TableContainer/TableContainer';
 import Add from '../../components/Add/Add';
 import ImportModal from '../../components/ImportModal/ImportModal';
+import ExportModal from '../../components/ExportModal/ExportModal';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ export default class Dashboard extends Component {
       showAdd: false,
       isAsc: true,
       showImport: false,
+      showExport: false,
     };
   }
 
@@ -35,6 +37,8 @@ export default class Dashboard extends Component {
   handleShowAdd = (showAdd) => this.setState({ showAdd });
 
   handleShowImport = (showImport) => this.setState({ showImport });
+
+  handleShowExport = (showExport) => this.setState({ showExport });
 
   handleSearch = (event) => {
     event.persist();
@@ -180,7 +184,7 @@ export default class Dashboard extends Component {
 
   render() {
     const {
-      data, showAdd, showImport,
+      data, showAdd, showImport, showExport,
     } = this.state;
     const {
       config, onTabClick, currentTable, url, username, onShow, onMessage,
@@ -202,10 +206,14 @@ export default class Dashboard extends Component {
         {showImport && (
           <ImportModal url={url} onCancel={this.handleShowImport} onSubmit={this.read} />
         )}
+        {showExport && (
+          <ExportModal url={url} onCancel={this.handleShowExport} />
+        )}
         <SearchBar
           username={username}
           currentTable={currentTable}
           onChange={this.handleSearch}
+          url={url}
         />
         <TableContainer
           url={url}
@@ -217,6 +225,7 @@ export default class Dashboard extends Component {
           onDelete={this.read}
           onSort={this.handleSort}
           onImport={this.handleShowImport}
+          onExport={this.handleShowExport}
         />
       </div>
     );

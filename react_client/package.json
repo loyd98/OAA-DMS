@@ -1,8 +1,10 @@
 {
-  "name": "react_client",
-  "version": "0.1.0",
+  "productName": "OAA SMS",
+  "name": "oaa_sms",
+  "version": "1.0.0",
   "private": true,
   "main": "main.js",
+  "homepage": "./",
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free": "^5.15.2",
@@ -19,8 +21,11 @@
     "craco-plugin-scoped-css": "^1.1.1",
     "css-loader": "^5.1.2",
     "electron-context-menu": "^2.5.0",
+    "electron-dl": "^3.2.1",
+    "file-saver": "^2.0.5",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
+    "open": "^8.1.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.1",
@@ -37,11 +42,12 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export BROWSER=none && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron": "electron .",
+    "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron/main.js --publish never"
   },
   "eslintConfig": {
     "extends": [
@@ -63,6 +69,7 @@
   },
   "devDependencies": {
     "electron": "^11.3.0",
+    "electron-builder": "^22.10.5",
     "electron-devtools-installer": "^3.1.1",
     "electron-react-devtools": "^0.5.3",
     "eslint": "^7.22.0",
@@ -74,5 +81,22 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "prettier-eslint": "^12.0.0"
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "publish": {
+      "provider": "github",
+      "repo": "oaa_dms",
+      "owner": "loyd98"
+    },
+    "mac": {
+      "icon": "build/icon.icns"
+    },
+    "win": {
+      "icon": "build/icon.ico"
+    }
   }
 }

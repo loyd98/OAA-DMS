@@ -1,5 +1,6 @@
-const { app, BrowserWindow, Menu, MenuItem, shell } = require('electron');
+const { app, BrowserWindow, Menu, MenuItem } = require('electron');
 const contextMenu = require('electron-context-menu');
+const url = require('url');
 const path = require('path');
 const electronDl = require('electron-dl');
 
@@ -15,13 +16,15 @@ function createWindow() {
     title: 'OAA: Scholarship Management System',
   });
 
-  win.loadURL('http://localhost:3000');
-  
-  win.webContents.on('new-window', function(e, url) {
-    e.preventDefault();
-    console.log(url)
-    shell.openExternal(url);
-  });
+  // win.loadFile(path.join(__dirname, ".", "src", "index.html"));
+  const startUrl = process.env.ELECTRON_START_URL || url.format({
+    pathname: path.join(__dirname, '../index.html'),
+    protocol: 'file:',
+    slashes: true
+    });
+    win.loadURL(startUrl);
+  // win.loadURL('http://localhost:3000');
+  // win.webContents.openDevTools();
 }
 
 contextMenu({
@@ -48,4 +51,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-

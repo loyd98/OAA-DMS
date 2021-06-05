@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './TableContainer.scoped.css';
+import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router';
@@ -190,6 +191,19 @@ class TableContainer extends Component {
     }
   };
 
+  handleExport = async () => {
+    console.log('HIT');
+    const { url } = this.props;
+    const token = sessionStorage.getItem('token');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+
+    axios.get(`${url}/donor/export`, options)
+      .then((res) => {
+        console.log('HIT AGAIN');
+        console.log(res.data);
+      });
+  }
+
   render() {
     const {
       currentPage,
@@ -201,7 +215,7 @@ class TableContainer extends Component {
       notifMessage,
     } = this.state;
     const {
-      config, data, onTabClick, onAddClick, url, onDelete, onSort, onImport,
+      config, data, onTabClick, onAddClick, url, onDelete, onSort, onImport, onExport,
     } = this.props;
 
     if (!data) {
@@ -220,7 +234,7 @@ class TableContainer extends Component {
       }
 
       if (currentTable === 'donations') {
-        return 6;
+        return 7;
       }
 
       if (currentTable === 'moas') {
@@ -322,7 +336,7 @@ class TableContainer extends Component {
                   <Button isTransparent message="Import" type="left" onClick={() => onImport(true)}>
                     <FontAwesomeIcon icon="file-upload" />
                   </Button>
-                  <Button isTransparent message="Export" type="left">
+                  <Button isTransparent message="Export" type="left" onClick={() => onExport(true)}>
                     <FontAwesomeIcon icon="file-download" />
                   </Button>
                   {/* <Dropdown
@@ -377,6 +391,7 @@ TableContainer.propTypes = {
   url: PropTypes.string.isRequired,
   onSort: PropTypes.func.isRequired,
   onImport: PropTypes.func.isRequired,
+  onExport: PropTypes.func.isRequired,
 };
 
 export default withRouter(TableContainer);

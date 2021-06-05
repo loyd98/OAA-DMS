@@ -17,6 +17,8 @@ import ViewScholarships from './scenes/Views/ViewScholarships';
 import ViewScholars from './scenes/Views/ViewScholars';
 import ViewDocuments from './scenes/Views/ViewDocuments';
 import SignUp from './scenes/SignUp/SignUp';
+import ManageUsers from './scenes/ManageUsers/ManageUsers';
+import UserDashboard from './scenes/UserDashboard/UserDashboard';
 
 const config = require('./data.config');
 
@@ -29,8 +31,8 @@ class App extends Component {
       password: '',
       showNotif: 'none',
       notifMessage: '',
+      url: '',
     };
-    this.url = config.URL;
     this.config = config;
   }
 
@@ -38,6 +40,10 @@ class App extends Component {
     const currentTable = sessionStorage.getItem('currentTable');
     if (currentTable) {
       this.setState({ currentTable });
+    }
+
+    if (localStorage.getItem('url')) {
+      this.setState({ url: localStorage.getItem('url') });
     }
   }
 
@@ -47,6 +53,8 @@ class App extends Component {
       sessionStorage.setItem('currentTable', currentTable);
     }
   }
+
+  setUrl = (url) => this.setState({ url });
 
   setUsername = (username) => this.setState({ username });
 
@@ -187,7 +195,7 @@ class App extends Component {
 
   render() {
     const {
-      username, password, currentTable, showNotif, notifMessage,
+      username, password, currentTable, showNotif, notifMessage, url,
     } = this.state;
 
     return (
@@ -200,12 +208,13 @@ class App extends Component {
               path="/"
               render={() => (
                 <Login
-                  url={this.url}
+                  url={url}
                   username={username}
                   password={password}
                   onPasswordChange={this.setPassword}
                   onUsernameChange={this.setUsername}
                   onSubmit={this.setCurrentTable}
+                  onUrlChange={this.setUrl}
                 />
               )}
             />
@@ -217,7 +226,7 @@ class App extends Component {
                   <Navigation />
                   <Dashboard
                     username={username}
-                    url={this.url}
+                    url={url}
                     currentTable={currentTable}
                     config={this.config}
                     onTabClick={this.setCurrentTable}
@@ -232,7 +241,7 @@ class App extends Component {
               path="/donor"
               render={() => (
                 <ViewDonors
-                  url={this.url}
+                  url={url}
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
@@ -248,7 +257,7 @@ class App extends Component {
               path="/donation"
               render={() => (
                 <ViewDonations
-                  url={this.url}
+                  url={url}
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
@@ -264,7 +273,7 @@ class App extends Component {
               path="/moa"
               render={() => (
                 <ViewMOAs
-                  url={this.url}
+                  url={url}
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
@@ -280,7 +289,7 @@ class App extends Component {
               path="/scholarship"
               render={() => (
                 <ViewScholarships
-                  url={this.url}
+                  url={url}
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
@@ -296,7 +305,7 @@ class App extends Component {
               path="/scholar"
               render={() => (
                 <ViewScholars
-                  url={this.url}
+                  url={url}
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
@@ -312,7 +321,7 @@ class App extends Component {
               path="/document"
               render={() => (
                 <ViewDocuments
-                  url={this.url}
+                  url={url}
                   currentTable={currentTable}
                   config={config}
                   onView={this.handleView}
@@ -324,6 +333,17 @@ class App extends Component {
               )}
             />
             <Route exact path="/signup" render={() => <SignUp />} />
+            <Route exact path="/manage" render={() => <ManageUsers />} />
+            <Route
+              exact
+              path="/manage/users"
+              render={() => (
+                <>
+                  <Navigation />
+                  <UserDashboard url={url} />
+                </>
+              )}
+            />
           </Switch>
         </HashRouter>
       </div>
