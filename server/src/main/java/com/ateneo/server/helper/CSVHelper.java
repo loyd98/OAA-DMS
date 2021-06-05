@@ -17,7 +17,6 @@ import java.util.List;
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
-    static String[] DONOR_HEADERS = {"Id", "Account Number", "Account Name", "Salutation", "Donor Name", "Cellphone Number", "Email Address", "Company TIN", "Phone 1", "Phone 2", "Fax Number", "Address 1", "Address 2", "Address 3", "Address 4", "Address 5", "Company Address", "Birth Date", "Notes"};
 
     public static boolean hasCSVFormat(MultipartFile file) {
         if (!TYPE.equals(file.getContentType())) {
@@ -38,10 +37,18 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
                 Date date;
+                Long connectionId;
+
                 if (csvRecord.get("Birth Date").equals("")) {
                     date = null;
                 } else {
                     date = Date.valueOf(csvRecord.get("Birth Date"));
+                }
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId = Long.parseLong(csvRecord.get("Connection Id"));
                 }
 
                 Donor donor = new Donor(
@@ -64,7 +71,7 @@ public class CSVHelper {
                         csvRecord.get("Company Address"),
                         date,
                         csvRecord.get("Notes"),
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        connectionId
                 );
 
                 donors.add(donor);
@@ -87,10 +94,25 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
                 Date date;
+                Long connectionId;
+                Double amount;
+
                 if (csvRecord.get("Date").equals("")) {
                     date = null;
                 } else {
                     date = Date.valueOf(csvRecord.get("Date"));
+                }
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId = Long.parseLong(csvRecord.get("Connection Id"));
+                }
+
+                if (csvRecord.get("Amount").equals("")) {
+                    amount = null;
+                } else {
+                    amount = Double.parseDouble(csvRecord.get("Amount"));
                 }
 
                 Donation donation = new Donation(
@@ -99,14 +121,14 @@ public class CSVHelper {
                         csvRecord.get("Account Name"),
                         csvRecord.get("OR Number"),
                         date,
-                        Double.parseDouble(csvRecord.get("Amount")),
+                        amount,
                         csvRecord.get("Notes"),
                         csvRecord.get("Need Certificate"),
                         csvRecord.get("Purpose of Donation"),
                         csvRecord.get("OR Files"),
                         csvRecord.get("TY Files"),
                         csvRecord.get("COD Files"),
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        connectionId
                 );
 
                 donations.add(donation);
@@ -128,12 +150,27 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+                Long donationId;
+                Long connectionId;
+
+                if (csvRecord.get("Donation Id").equals("")) {
+                    donationId = null;
+                } else {
+                    donationId = Long.parseLong(csvRecord.get("Donation Id"));
+                }
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId = Long.parseLong(csvRecord.get("Connection Id"));
+                }
+
                 DonorDonation connection = new DonorDonation(
                         Long.parseLong(csvRecord.get("Id")),
                         csvRecord.get("Notes"),
                         csvRecord.get("Donor Account Number"),
-                        Long.parseLong(csvRecord.get("Donation Id")),
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        donationId,
+                        connectionId
                         );
 
                 connections.add(connection);
@@ -157,10 +194,18 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 Date date;
+                Long connectionId;
+
                 if (csvRecord.get("Date Signed").equals("")) {
                     date = null;
                 } else {
                     date = Date.valueOf(csvRecord.get("Date Signed"));
+                }
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId = Long.parseLong(csvRecord.get("Connection Id"));
                 }
 
                 MOA moa = new MOA(
@@ -170,7 +215,7 @@ public class CSVHelper {
                         csvRecord.get("Files"),
                         csvRecord.get("Notes"),
                         date,
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        connectionId
                 );
 
                 moas.add(moa);
@@ -194,10 +239,25 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 Date date;
+                Long donationId;
+                Long connectionId;
+
                 if (csvRecord.get("Date Established").equals("")) {
                     date = null;
                 } else {
                     date = Date.valueOf(csvRecord.get("Date Established"));
+                }
+
+                if (csvRecord.get("Donation Id").equals("")) {
+                    donationId = null;
+                } else {
+                    donationId = Long.parseLong(csvRecord.get("Donation Id"));
+                }
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId = Long.parseLong(csvRecord.get("Connection Id"));
                 }
 
                 Scholarship scholarship = new Scholarship(
@@ -206,8 +266,8 @@ public class CSVHelper {
                         csvRecord.get("Type of Scholarship"),
                         date,
                         csvRecord.get("Criteria"),
-                        Long.parseLong(csvRecord.get("Donation Id")),
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        donationId,
+                        connectionId
                 );
 
                 scholarships.add(scholarship);
@@ -229,6 +289,13 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+                Long connectionId;
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId =  Long.parseLong(csvRecord.get("Connection Id"));
+                }
 
                 Scholar scholar = new Scholar(
                         Long.parseLong(csvRecord.get("Id")),
@@ -236,7 +303,7 @@ public class CSVHelper {
                         csvRecord.get("Name"),
                         csvRecord.get("Course"),
                         csvRecord.get("Batch Graduated"),
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        connectionId
                 );
 
                 scholars.add(scholar);
@@ -258,13 +325,20 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+                Long connectionId;
+
+                if (csvRecord.get("Connection Id").equals("")) {
+                    connectionId = null;
+                } else {
+                    connectionId =  Long.parseLong(csvRecord.get("Connection Id"));
+                }
 
                 Document document = new Document(
                         Long.parseLong(csvRecord.get("Id")),
                         csvRecord.get("Name"),
                         csvRecord.get("Files"),
                         csvRecord.get("Notes"),
-                        Long.parseLong(csvRecord.get("Connection Id"))
+                        connectionId
                 );
 
                 documents.add(document);

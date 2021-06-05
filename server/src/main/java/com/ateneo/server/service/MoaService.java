@@ -29,7 +29,8 @@ public class MoaService {
         MOA savedMoa = moaRepository.save(moa);
 
         if (savedMoa.getConnectionId() == null) {
-            savedMoa.setConnectionId(savedMoa.getId());
+            Long id = System.currentTimeMillis();
+            savedMoa.setConnectionId(id);
         }
 
         return moaRepository.save(savedMoa);

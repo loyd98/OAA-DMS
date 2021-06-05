@@ -15,7 +15,7 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
     List<Donor> findAllByOrderByIdAsc();
     List<Donor> findAllByOrderByIdDesc();
 
-    @Query(value = "SELECT * FROM donor d INNER JOIN donor_donation m ON m.donor_account_number = d.account_number WHERE m.donation_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM donor d INNER JOIN donor_donation m ON m.donor_account_number = d.account_number WHERE m.foreign_donation_id = ?1", nativeQuery = true)
     List<Donor> findDonorsOfDonation(Long donationId);
 
     @Query(value =
@@ -39,10 +39,10 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
             "(SELECT donor_account_number\n" +
             "FROM donor_donation \n" +
             "WHERE foreign_donation_id IN \n" +
-            "(SELECT id FROM donation \n" +
-            "WHERE id IN \n" +
+            "(SELECT connection_id FROM donation \n" +
+            "WHERE connection_id IN \n" +
             "(SELECT foreign_donation_id\n" +
-            "FROM scholarship WHERE id IN\n" +
+            "FROM scholarship WHERE connection_id IN\n" +
             "(SELECT foreign_scholarship_id\n" +
             "FROM scholar WHERE id = ?1))))", nativeQuery = true)
     List<Donor> findDonorsOfScholar(Long scholarId);

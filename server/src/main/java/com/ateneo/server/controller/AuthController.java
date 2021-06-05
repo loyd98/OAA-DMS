@@ -12,10 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class AuthController {
@@ -68,5 +69,15 @@ public class AuthController {
         }
 
         return jwtUtil.generateToken(authRequest.getUsername());
+    }
+
+    @GetMapping("/users")
+    public List<User> findAllUsersAsc() {
+        return userService.findAllUsersAsc();
+    }
+
+    @DeleteMapping("/users/{id}")
+    public String deleteUserById(@PathVariable Long id) {
+        return userService.deleteUserById(id);
     }
 }

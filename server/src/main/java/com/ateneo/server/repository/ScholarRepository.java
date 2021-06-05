@@ -16,6 +16,9 @@ public interface ScholarRepository extends JpaRepository<Scholar, Long> {
     List<Scholar> findAllByOrderByIdDesc();
     List<Scholar> findAllByForeignScholarshipId(Long scholarshipId);
 
+    @Query(value = "SELECT * FROM scholar WHERE foreign_scholarship_id IN (SELECT connection_id FROM scholarship WHERE id =?1)", nativeQuery = true)
+    List<Scholar> findScholarsOfScholarship(Long id);
+
     @Query(value =
             "SELECT * FROM scholar WHERE scholarship_id IN\n" +
             "(SELECT id FROM scholarship WHERE donation_id IN\n" +
@@ -28,14 +31,14 @@ public interface ScholarRepository extends JpaRepository<Scholar, Long> {
     @Query(value =
             "SELECT * FROM scholar WHERE\n" +
             "foreign_scholarship_id IN\n" +
-            "(SELECT id FROM scholarship\n" +
+            "(SELECT connection_id FROM scholarship\n" +
             "WHERE foreign_donation_id = ?1)", nativeQuery = true)
     List<Scholar> findScholarsOfDonation(Long donationId);
 
     @Query(value =
             "SELECT * FROM scholar\n" +
             "WHERE foreign_scholarship_id IN\n" +
-            "(SELECT id FROM scholarship\n" +
+            "(SELECT connection_id FROM scholarship\n" +
             "WHERE foreign_donation_id IN\n" +
             "(SELECT foreign_donation_id FROM\n" +
             "donor_donation d INNER JOIN moa m\n" +

@@ -19,7 +19,8 @@ public class DocumentService {
         Document savedDocument = documentRepository.save(document);
 
         if (savedDocument.getConnectionId() == null) {
-            savedDocument.setConnectionId(savedDocument.getId());
+            Long id = System.currentTimeMillis();
+            savedDocument.setConnectionId(id);
         }
 
         return documentRepository.save(savedDocument);

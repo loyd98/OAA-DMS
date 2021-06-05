@@ -37,7 +37,7 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
     List<Scholarship> findScholarshipsOfMoa(Long moaId);
 
     @Query(value =
-            "SELECT * FROM scholarship WHERE id =\n" +
+            "SELECT * FROM scholarship WHERE connection_id =\n" +
             "(SELECT foreign_scholarship_id FROM scholar\n" +
             "WHERE id = ?1)", nativeQuery = true)
     List<Scholarship> findScholarshipsOfScholar(Long scholarId);

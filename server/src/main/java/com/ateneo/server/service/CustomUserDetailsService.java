@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -39,5 +40,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRepository.save(user);
 
         return user;
+    }
+
+    public List<User> findAllUsersAsc() {
+        return userRepository.findAllByOrderByIdAsc();
+    }
+
+    public String deleteUserById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        userRepository.delete(user);
+        return "Successfully deleted user with id" + id;
     }
 }

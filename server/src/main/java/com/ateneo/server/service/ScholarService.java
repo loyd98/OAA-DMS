@@ -25,7 +25,8 @@ public class ScholarService {
         Scholar savedScholar = scholarRepository.save(scholar);
 
         if (savedScholar.getConnectionId() == null) {
-            savedScholar.setConnectionId(savedScholar.getId());
+            Long id = System.currentTimeMillis();
+            savedScholar.setConnectionId(id);
         }
 
         return scholarRepository.save(savedScholar);
@@ -57,7 +58,7 @@ public class ScholarService {
     }
 
     public List<Scholar> findScholarsOfScholarship(Long scholarshipId) {
-        return scholarRepository.findAllByForeignScholarshipId(scholarshipId);
+        return scholarRepository.findScholarsOfScholarship(scholarshipId);
     }
 
     public List<Scholar> searchScholar(String keyword) {

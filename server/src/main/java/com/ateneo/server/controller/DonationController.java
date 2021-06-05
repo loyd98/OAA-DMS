@@ -2,12 +2,19 @@ package com.ateneo.server.controller;
 
 import com.ateneo.server.domain.Donation;
 import com.ateneo.server.domain.Donor;
+import com.ateneo.server.helper.DonationPdfExporter;
 import com.ateneo.server.service.DonationService;
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -64,6 +71,11 @@ public class DonationController {
         return donationService.findDonationOfScholar(scholarId);
     }
 
+    @GetMapping("/years")
+    public List<String> getAllYears() {
+        return donationService.findAllYears();
+    }
+
     // Update
     @PatchMapping("/update")
     public Donation updateDonation(@RequestBody Donation donation) {
@@ -79,6 +91,41 @@ public class DonationController {
     @DeleteMapping
     public String deleteAllDonations() {
         return donationService.deleteAllDonations();
+    }
+
+    // PDF
+    @GetMapping("/export/total/all")
+    public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=all_donations_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Donation> donationList = donationService.findDonationsOfAll();
+        Double total = donationService.findTotalOfAll();
+
+        DonationPdfExporter exporter = new DonationPdfExporter(donationList, total);
+        exporter.export(response);
+    }
+
+    @GetMapping("/export/total/{year}")
+    public void exportToPDFbyYear(HttpServletResponse response, @PathVariable String year) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=" + year + "_donations_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Donation> donationList = donationService.findDonationsOfYear(year);
+        Double total = donationService.findTotalOfYear(year);
+
+        DonationPdfExporter exporter = new DonationPdfExporter(donationList, total);
+        exporter.export(response);
     }
 
 //    @PostMapping("/add")

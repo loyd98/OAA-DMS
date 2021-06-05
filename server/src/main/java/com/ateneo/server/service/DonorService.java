@@ -21,7 +21,8 @@ public class DonorService {
         Donor savedDonor = donorRepository.save(donor);
 
         if (savedDonor.getConnectionId() == null) {
-            savedDonor.setConnectionId(savedDonor.getId());
+            Long id = System.currentTimeMillis();
+            savedDonor.setConnectionId(id);
         }
 
         return donorRepository.save(savedDonor);

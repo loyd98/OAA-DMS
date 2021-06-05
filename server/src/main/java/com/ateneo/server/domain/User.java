@@ -29,8 +29,6 @@ public class User implements UserDetails {
     @NonNull
     private String password;
 
-    private String email;
-
     @Override
     public String getUsername() {
         return this.username;

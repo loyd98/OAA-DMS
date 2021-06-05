@@ -53,7 +53,8 @@ public class DonorDonationService {
         DonorDonation savedDonorDonation = donorDonationRepository.save(donorDonation);
 
         if (savedDonorDonation.getConnectionId() == null) {
-            savedDonorDonation.setConnectionId(savedDonorDonation.getId());
+            Long id = System.currentTimeMillis();
+            savedDonorDonation.setConnectionId(id);
         }
 
         return donorDonationRepository.save(savedDonorDonation);

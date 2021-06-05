@@ -22,7 +22,7 @@ public interface MoaRepository extends JpaRepository<MOA, Long> {
     @Query(value = "SELECT * FROM moa\n" +
             "WHERE foreign_donor_account_number IN\n" +
             "(SELECT donor_account_number FROM \n" +
-            "donor_donation WHERE donation_id = ?1)", nativeQuery = true)
+            "donor_donation WHERE foreign_donation_id = ?1)", nativeQuery = true)
     List<MOA> findMoasOfDonation(Long donationId);
 
     @Query(value =
@@ -31,7 +31,7 @@ public interface MoaRepository extends JpaRepository<MOA, Long> {
             "(SELECT donor_account_number FROM donor_donation\n" +
             "WHERE foreign_donation_id IN\n" +
             "(SELECT foreign_donation_id FROM scholarship\n" +
-            "WHERE id IN\n" +
+            "WHERE connection_id IN\n" +
             "(SELECT foreign_scholarship_id FROM scholar\n" +
             "WHERE id = ?1)))", nativeQuery = true)
     List<MOA> findMoasOfScholar(Long scholarId);
@@ -39,7 +39,7 @@ public interface MoaRepository extends JpaRepository<MOA, Long> {
     @Query(value = "SELECT * FROM moa\n" +
             "WHERE foreign_donor_account_number IN\n" +
             "(SELECT donor_account_number FROM donor_donation\n" +
-            "WHERE donation_id IN \n" +
+            "WHERE foreign_donation_id IN \n" +
             "(SELECT foreign_donation_id FROM scholarship\n" +
             "WHERE id = ?1))", nativeQuery = true)
     List<MOA> findMoasOfScholarship(Long scholarshipId);

@@ -47,6 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/register").permitAll();
         http.authorizeRequests().antMatchers("/").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/donors").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/donations").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/connections").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/moas").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/scholarships").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/scholars").permitAll();
+        http.authorizeRequests().antMatchers("/csv/export/documents").permitAll();
         http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
         http.csrf().disable().authorizeRequests().antMatchers("/login")
                 .permitAll().anyRequest().authenticated()

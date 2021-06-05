@@ -8,6 +8,9 @@ import com.ateneo.server.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +25,8 @@ public class DonationService {
         Donation savedDonation = donationRepository.save(donation);
 
         if (savedDonation.getConnectionId() == null) {
-            System.out.println("HIT");
-            savedDonation.setConnectionId(savedDonation.getId());
+            Long id = System.currentTimeMillis();
+            savedDonation.setConnectionId(id);
         }
 
         return donationRepository.save(savedDonation);
@@ -69,9 +72,13 @@ public class DonationService {
         existingDonation.setAccountName(donation.getAccountName());
         existingDonation.setOrNumber(donation.getOrNumber());
         existingDonation.setDate(donation.getDate());
+        existingDonation.setAmount(donation.getAmount());
         existingDonation.setNotes(donation.getNotes());
         existingDonation.setNeedCertificate(donation.getNeedCertificate());
         existingDonation.setPurposeOfDonation(donation.getPurposeOfDonation());
+        existingDonation.setOrFiles(donation.getOrFiles());
+        existingDonation.setTyFiles(donation.getTyFiles());
+        existingDonation.setCodFiles(donation.getCodFiles());
 
         for (DonorDonation donorDonation: donation.getDonorDonationList()) {
             donorDonation.setDonorAccountNumber(donation.getAccountNumber());
@@ -110,6 +117,28 @@ public class DonationService {
         donationRepository.truncate();
         return "Successfully truncated donation table";
     }
+
+    // Export
+    public List<String> findAllYears() {
+        return donationRepository.findAllYears();
+    }
+
+    public List<Donation> findDonationsOfAll() {
+        return donationRepository.findDonationsOfAll();
+    }
+
+    public List<Donation> findDonationsOfYear(String year) {
+        return donationRepository.findDonationsOfYear(year);
+    }
+
+    public Double findTotalOfAll() {
+        return donationRepository.getTotal();
+    }
+
+    public Double findTotalOfYear(String year) {
+        return donationRepository.getTotalOfYear(year);
+    }
+
 //    public List<Donation> getAllDonationsAsc() {
 //        return donationRepository.findAllByOrderByIdAsc();
 //    }

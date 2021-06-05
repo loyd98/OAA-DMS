@@ -27,7 +27,8 @@ public class ScholarshipService {
         Scholarship savedScholarship = scholarshipRepository.save(scholarship);
 
         if (savedScholarship.getConnectionId() == null) {
-            savedScholarship.setConnectionId(savedScholarship.getId());
+            Long id = System.currentTimeMillis();
+            savedScholarship.setConnectionId(id);
         }
 
         return scholarshipRepository.save(savedScholarship);

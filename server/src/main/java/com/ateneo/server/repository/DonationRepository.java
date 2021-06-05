@@ -27,14 +27,14 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     List<Donation> findDonationsOfMoa(Long moaId);
 
     @Query(value =
-            "SELECT * FROM donation WHERE id =\n" +
+            "SELECT * FROM donation WHERE connection_id =\n" +
             "(SELECT foreign_donation_id FROM scholarship\n" +
             "WHERE id = ?1)", nativeQuery = true)
     List<Donation> findDonationOfScholarship(Long scholarshipId);
 
     @Query(value =
-            "SELECT * FROM donation WHERE id =\n" +
-            "(SELECT foreign_donation_id FROM scholarship WHERE id =\n" +
+            "SELECT * FROM donation WHERE connection_id =\n" +
+            "(SELECT foreign_donation_id FROM scholarship WHERE connection_id =\n" +
             "(SELECT foreign_scholarship_id FROM scholar\n" +
             "WHERE id = ?1))", nativeQuery = true)
     List<Donation> findDonationOfScholar(Long scholarId);
@@ -46,4 +46,19 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     @Transactional
     @Query(value = "TRUNCATE TABLE donation", nativeQuery = true)
     void truncate();
+
+    @Query(value = "SELECT DISTINCT year(date) FROM donation", nativeQuery = true)
+    List<String> findAllYears();
+
+    @Query(value = "SELECT cast(SUM(amount) as DECIMAL(19,2)) as total FROM donation WHERE year(date) = ?1", nativeQuery = true)
+    Double getTotalOfYear(String year);
+
+    @Query(value = "SELECT cast(SUM(amount) as DECIMAL(19,2)) as total FROM donation", nativeQuery = true)
+    Double getTotal();
+
+    @Query(value = "SELECT * FROM donation WHERE year(date) = ?1 ORDER BY date ASC", nativeQuery = true)
+    List<Donation> findDonationsOfYear(String year);
+
+    @Query(value = "SELECT * FROM donation ORDER BY date ASC", nativeQuery = true)
+    List<Donation> findDonationsOfAll();
 }
